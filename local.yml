@@ -6,10 +6,9 @@
   tasks:
   - name: Creating a file with content
     copy:
-      dest: "/home/ams/knaddle"
+      dest: "/home/ams/runansible.sh"
       content: |
-        line 01
-        line 02
+        /usr/bin/ansible-pull -d /ansibleconfig -vvv -i /ansibleconfig/inventory -U https://github.com/amscamp/AMS_Debian_Ansible
   - name: Install packages
     apt:
       state: latest
