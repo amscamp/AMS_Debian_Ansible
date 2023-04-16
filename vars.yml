@@ -1,0 +1,6 @@
+packages:
+ - plymouth 
+ - plymouth-themes
+ - plymouth-theme-breeze
+ - kde-config-plymouth
+ - firmware-linux

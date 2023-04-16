@@ -1,5 +1,6 @@
 ---
 - hosts: all
+- include_vars: vars.yml
 
   tasks:
   - name: Creating a file with content
@@ -8,3 +9,8 @@
       content: |
         line 01
         line 02
+  - name: Install packages
+    apt:
+      state: latest
+      update_cache: true
+      name: "{{ packages }}" 
