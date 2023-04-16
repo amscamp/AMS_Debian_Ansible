@@ -1,0 +1,10 @@
+---
+- hosts: all
+
+  tasks:
+  - name: Creating a file with content
+    copy:
+      dest: "/home/ams/knaddle"
+      content: |
+        line 01
+        line 02
