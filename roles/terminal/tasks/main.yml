@@ -122,3 +122,10 @@
     - MesloLGS NF Italic.ttf
     - MesloLGS NF Regular.ttf
   notify: 'rebuild fonts cache'
+
+- name: Set global configuration
+  community.general.ini_file:
+    path: "/home/{{ terminal_username }}/.config/kdeglobals"
+    section: General
+    option: "TerminalApplication"
+    value: "tilix"
