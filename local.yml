@@ -17,5 +17,6 @@
   roles:
   - role: plymouth
   - role: terminal
+    terminal_username: "{{ username }}"
   - role: ansible-pull
     ansible_pull_url: https://github.com/amscamp/AMS_Debian_Ansible
