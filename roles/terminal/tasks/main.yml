@@ -84,7 +84,7 @@
 - name: copy zsh config 
   copy:
     src: "{{ role_path }}/files/{{ item }}"
-    dest: "/root/{{ item }}"
+    dest: "/root/.{{ item }}"
     owner: "{{ terminal_username }}"
     group: "{{ terminal_username }}"
     mode: '0644'
@@ -95,7 +95,7 @@
 - name: copy zsh config terminal user
   copy:
     src: "{{ role_path }}/files/{{ item }}"
-    dest: "/home/{{ terminal_username }}/{{ item }}"
+    dest: "/home/{{ terminal_username }}/.{{ item }}"
     owner: "{{ terminal_username }}"
     group: "{{ terminal_username }}"
     mode: '0644'
