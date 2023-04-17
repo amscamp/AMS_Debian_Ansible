@@ -25,7 +25,8 @@
     mode: '0644'
 
 - name: load tilix config
-  shell: dbus-launch dconf load /com/gexperts/Tilix/ < /home/{{ terminal_username }}/tilix.dconf
+  # shell: dbus-launch dconf load /com/gexperts/Tilix/ < /home/{{ terminal_username }}/tilix.dconf
+  shell: whoami
   become_user: "{{ terminal_username }}"
 
 - name: remove tilix config
