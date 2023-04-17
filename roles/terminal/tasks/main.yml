@@ -102,3 +102,9 @@
   loop:
     - zshrc
     - p10k.zsh
+
+- name: set zsh as default sh
+  shell: "chsh -s $(which zsh) {{ terminal_username }}"
+  loop:
+    - "{{ terminal_username }}"
+    - root
