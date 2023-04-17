@@ -14,19 +14,8 @@
       state: latest
       name: "{{ packages }}" 
 
-  - name: Check if splash screen in grub is enabled
-    shell: grep GRUB_CMDLINE_LINUX_DEFAULT /etc/default/grub | grep -c "splash"
-    register: grub_splash_status
-    ignore_errors: true
-
-  - name: Enable splash screen in grub
-    lineinfile: dest="/etc/default/grub" regexp='GRUB_CMDLINE_LINUX_DEFAULT="(.*)"' line='GRUB_CMDLINE_LINUX_DEFAULT="\1 splash"' backrefs=yes
-    when: grub_splash_status.stdout == "0"
-
-  - name: update-grub
-    shell: update-grub2
-    when: grub_splash_status.stdout == "0"
-
   roles:
+  - role: plymouth
   - role: ansible-pull
     ansible_pull_url: https://github.com/amscamp/AMS_Debian_Ansible
+  
