@@ -28,5 +28,5 @@
     when: grub_splash_status.stdout == "0"
 
   roles:
-    - role: ansible-pull
-      ansible_pull_url: https://github.com/amscamp/AMS_Debian_Ansible
+  - role: ansible-pull
+    ansible_pull_url: https://github.com/amscamp/AMS_Debian_Ansible
