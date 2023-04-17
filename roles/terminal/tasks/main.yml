@@ -12,3 +12,7 @@
   apt:
     state: absent
     name: "konsole" 
+
+
+- name: load tilix config
+  shell: dbus-launch dconf load /com/gexperts/Tilix/ < {{ role_path }}/files/tilix.dconf

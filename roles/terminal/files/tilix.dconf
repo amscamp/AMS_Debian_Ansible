@@ -1,0 +1,25 @@
+[/]
+focus-follow-mouse=true
+prompt-on-close-process=false
+quake-specific-monitor=0
+theme-variant='dark'
+warn-vte-config-issue=false
+
+[keybindings]
+session-add-down='<Primary><Alt>v'
+session-add-right='<Primary><Alt>h'
+
+[profiles/2b7c4080-0ddd-46c5-8f23-563fd3ba789d]
+background-color='#263238'
+background-transparency-percent=3
+badge-color='#AC7EA8'
+badge-color-set=false
+bold-color-set=false
+bold-is-bright=true
+cursor-colors-set=false
+dim-transparency-percent=25
+foreground-color='#A1B0B8'
+highlight-colors-set=false
+palette=['#252525', '#FF5252', '#C3D82C', '#FFC135', '#42A5F5', '#D81B60', '#00ACC1', '#F5F5F5', '#708284', '#FF5252', '#C3D82C', '#FFC135', '#42A5F5', '#D81B60', '#00ACC1', '#F5F5F5']
+use-theme-colors=false
+visible-name='Default'
