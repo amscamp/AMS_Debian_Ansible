@@ -9,6 +9,7 @@
     - zsh
     - dbus-x11
     - dconf-service
+    - dconf-cli
 
 - name: remove kde konsole
   apt:
