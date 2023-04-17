@@ -1,4 +1,3 @@
-#ansible_pull_url: https://git.example.com/ansible.git
 ansible_pull_timer: |
   OnBootSec=5m
   OnCalendar=daily

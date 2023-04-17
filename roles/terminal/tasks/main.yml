@@ -1,0 +1,14 @@
+---
+
+- name: Install needed packages
+  apt:
+    state: latest
+    name: "{{ item }}" 
+  loop:
+    - tilix
+    - zsh
+
+- name: remove kde konsole
+  apt:
+    state: absent
+    name: "konsole" 
