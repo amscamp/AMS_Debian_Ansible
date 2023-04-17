@@ -10,6 +10,7 @@
     - dbus-x11
     - dconf-service
     - dconf-cli
+    - git
 
 - name: remove kde konsole
   apt:
@@ -25,12 +26,44 @@
     mode: '0644'
 
 - name: load tilix config
-  shell: dbus-launch dconf load /com/gexperts/Tilix/ < /home/{{ terminal_username }}/tilix.dconf
   become: true
   become_method: su
   become_user: "{{ terminal_username }}"
+  shell: dbus-launch dconf load /com/gexperts/Tilix/ < /home/{{ terminal_username }}/tilix.dconf
 
 - name: remove tilix config
   file:
     path: "/home/{{ terminal_username }}/tilix.dconf"
     state: absent
+
+- name: Install/update Oh My Zsh
+  git:
+    repo: 'https://github.com/robbyrussell/oh-my-zsh.git'
+    dest: ~/.oh-my-zsh
+    depth: 1
+
+- name: Install zsh-autosuggestions
+  git:
+    repo: 'https://github.com/zsh-users/zsh-autosuggestions'
+    dest: ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+    depth: 1
+
+- name: Install/update Oh My Zsh terminal user
+  become: true
+  become_method: su
+  become_user: "{{ terminal_username }}"
+  git:
+    repo: 'https://github.com/robbyrussell/oh-my-zsh.git'
+    dest: ~/.oh-my-zsh
+    depth: 1
+
+- name: Install zsh-autosuggestions terminal user
+  become: true
+  become_method: su
+  become_user: "{{ terminal_username }}"
+  git:
+    repo: 'https://github.com/zsh-users/zsh-autosuggestions'
+    dest: ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+    depth: 1
+    
+  
