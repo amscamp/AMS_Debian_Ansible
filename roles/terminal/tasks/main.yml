@@ -103,8 +103,11 @@
     - zshrc
     - p10k.zsh
 
-- name: set zsh as default sh
-  shell: "chsh -s $(which zsh) {{ terminal_username }}"
+- name: Ensure the users have a zsh shell.
+  user:
+    name: "{{ item }}"
+    shell: /usr/bin/zsh
+    state: present
   loop:
     - "{{ terminal_username }}"
     - root
