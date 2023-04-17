@@ -14,6 +14,19 @@
     state: absent
     name: "konsole" 
 
+- name: copy tilix config
+  copy:
+    src: "{{ role_path }}/files/tilix.dconf"
+    dest: "/home/{{ terminal_username }}/tilix.dconf"
+    owner: "{{ terminal_username }}"
+    group: "{{ terminal_username }}"
+    mode: '0644'
+
 - name: load tilix config
-  shell: dbus-launch dconf load /com/gexperts/Tilix/ < {{ role_path }}/files/tilix.dconf
+  shell: dbus-launch dconf load /com/gexperts/Tilix/ < /home/{{ terminal_username }}/tilix.dconf
   become_user: "{{ terminal_username }}"
+
+- name: remove tilix config
+  file:
+    path: "/home/{{ terminal_username }}/tilix.dconf"
+    state: absent
