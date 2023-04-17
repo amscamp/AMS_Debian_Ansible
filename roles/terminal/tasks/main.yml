@@ -108,3 +108,14 @@
   loop:
     - "{{ terminal_username }}"
     - root
+
+- name: copy fonts
+  copy:
+    src: "{{ role_path }}/files/{{ item }}"
+    dest: "/usr/local/share/fonts/{{ item }}"
+  loop:
+    - MesloLGS NF Bold Italic.ttf
+    - MesloLGS NF Bold.ttf
+    - MesloLGS NF Italic.ttf
+    - MesloLGS NF Regular.ttf
+  notify: 'rebuild fonts cache'
