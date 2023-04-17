@@ -30,6 +30,7 @@
   register: hello
   become: true
   become_method: su
+  become_user: "{{ terminal_username }}"
 
 - debug: msg="{{ hello.stdout }}"
 
