@@ -26,3 +26,9 @@
   - name: update-grub
     shell: update-grub2
     when: grub_splash_status.stdout == "0"
+
+  - name: configure ansible-pull
+    hosts: all
+    roles:
+      - role: ansible-pull
+        ansible_pull_url: https://github.com/amscamp/AMS_Debian_Ansible
