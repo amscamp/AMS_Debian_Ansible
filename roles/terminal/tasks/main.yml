@@ -111,7 +111,7 @@
 
 - name: copy fonts
   copy:
-    src: "{{ role_path }}/files/{{ item }}"
+    src: "{{ role_path }}/files/fonts/{{ item }}"
     dest: "/usr/local/share/fonts/{{ item }}"
   loop:
     - MesloLGS NF Bold Italic.ttf
