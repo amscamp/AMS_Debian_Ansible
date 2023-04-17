@@ -66,4 +66,39 @@
     dest: ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
     depth: 1
     
-  
+- name: Install Powelevel10k
+  git:
+    repo: 'https://github.com/romkatv/powerlevel10k.git'
+    dest: ~/.oh-my-zsh/custom/themes/powerlevel10k
+    depth: 1
+
+- name: Install Powelevel10k terminal user
+  become: true
+  become_method: su
+  become_user: "{{ terminal_username }}"
+  git:
+    repo: 'https://github.com/romkatv/powerlevel10k.git'
+    dest: ~/.oh-my-zsh/custom/themes/powerlevel10k
+    depth: 1
+
+- name: copy zsh config 
+  copy:
+    src: "{{ role_path }}/files/{{ item }}"
+    dest: "/root/{{ item }}"
+    owner: "{{ terminal_username }}"
+    group: "{{ terminal_username }}"
+    mode: '0644'
+  loop:
+    - zshrc
+    - p10k.zsh
+
+- name: copy zsh config terminal user
+  copy:
+    src: "{{ role_path }}/files/{{ item }}"
+    dest: "/home/{{ terminal_username }}/{{ item }}"
+    owner: "{{ terminal_username }}"
+    group: "{{ terminal_username }}"
+    mode: '0644'
+  loop:
+    - zshrc
+    - p10k.zsh
