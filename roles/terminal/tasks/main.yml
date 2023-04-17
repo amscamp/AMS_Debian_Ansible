@@ -29,9 +29,8 @@
   shell: whoami
   register: hello
   become: true
-  become_method: sudo
-  become_flags: "su - {{ terminal_username }} -c"
-  
+  become_method: su
+
 - debug: msg="{{ hello.stdout }}"
 
 - name: remove tilix config
