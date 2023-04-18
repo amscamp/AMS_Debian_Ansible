@@ -31,6 +31,9 @@
     - sweeper
     - plasma-nm
     - print-manager
+    - dolphin
+    - kdialog
+    - kfind
 
 
 - name: install libreoffice packages
