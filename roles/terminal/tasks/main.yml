@@ -12,10 +12,6 @@
     - dconf-cli
     - git
 
-# - name: remove kde konsole
-#   apt:
-#     state: absent
-#     name: "konsole" 
 
 - name: copy tilix config
   copy:

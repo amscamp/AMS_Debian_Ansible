@@ -30,11 +30,32 @@
     - polkit-kde-agent-1
     - sweeper
     - plasma-nm
-    - apper
     - print-manager
+
+
+- name: install libreoffice packages
+  apt:
+    state: latest
+    name: "{{ item }}" 
+  loop:
     - libreoffice-help-en-us
     - libreoffice-impress
     - libreoffice-kf5
     - libreoffice-plasma
     - libreoffice-writer
+    - libreoffice-calc
+    - libreoffice-base
     - mythes-en-us
+
+- name: install additional packages
+  apt:
+    state: latest
+    name: "{{ item }}" 
+  loop:
+    - gimp
+    - firefox-esr
+
+- name: remove termit
+  apt:
+    state: absent
+    name: "termit" 
