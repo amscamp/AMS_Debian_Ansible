@@ -8,8 +8,17 @@
     - ansible-pull.service
     - ansible-pull.timer
 
+# - name: enable ansible-pull timer
+#   service:
+#     name: ansible-pull.timer
+#     state: started
+#     enabled: yes
+
 - name: enable ansible-pull timer
-  service:
-    name: ansible-pull.timer
-    # state: started
-    enabled: yes
+  ansible.builtin.file:
+    src: /etc/systemd/system/ansible-pull.timer
+    dest: /etc/systemd/system/multi-user.target.wants/ansible-pull.timer
+    owner: root
+    group: root
+    state: link
+
