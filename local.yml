@@ -16,6 +16,7 @@
 
   roles:
   - role: kde-desktop
+  - role: basic-applications
   - role: plymouth
   - role: terminal
     terminal_username: "{{ username }}"
