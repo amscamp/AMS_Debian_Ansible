@@ -12,3 +12,29 @@
     - kwin-x11
     - sddm
     - xserver-xorg
+    - ark
+    - dragonplayer
+    - gwenview
+    - juk
+    - kate
+    - kcalc
+    - kde-spectacle
+    - khelpcenter
+    - kwalletmanager
+    - okular
+    - plasma-dataengines-addons 
+    - plasma-pa
+    - plasma-runners-addons
+    - plasma-wallpapers-addons
+    - plasma-widgets-addons
+    - polkit-kde-agent-1
+    - sweeper
+    - plasma-nm
+    - apper
+    - print-manager
+    - libreoffice-help-en-us
+    - libreoffice-impress
+    - libreoffice-kf5
+    - libreoffice-plasma
+    - libreoffice-writer
+    - mythes-en-us
