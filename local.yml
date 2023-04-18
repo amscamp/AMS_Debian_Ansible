@@ -15,6 +15,7 @@
       name: "{{ packages }}" 
 
   roles:
+  - role: kde-desktop
   - role: plymouth
   - role: terminal
     terminal_username: "{{ username }}"

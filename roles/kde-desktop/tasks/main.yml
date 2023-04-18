@@ -1,0 +1,14 @@
+---
+
+- name: install needed packages
+  apt:
+    state: latest
+    name: "{{ item }}" 
+  loop:
+    - plasma-desktop
+    - plasma-workspace
+    - udisks2
+    - upower
+    - kwin-x11
+    - sddm
+    - xserver-xorg
