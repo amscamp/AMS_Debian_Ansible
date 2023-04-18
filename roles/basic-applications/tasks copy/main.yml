@@ -1,0 +1,42 @@
+---
+- name: install libreoffice packages
+  apt:
+    state: latest
+    name: "{{ item }}" 
+  loop:
+    - libreoffice-help-en-us
+    - libreoffice-impress
+    - libreoffice-kf5
+    - libreoffice-plasma
+    - libreoffice-writer
+    - libreoffice-calc
+    - libreoffice-base
+    - mythes-en-us
+
+- name: install additional packages
+  apt:
+    state: latest
+    name: "{{ item }}" 
+  loop:
+    - gimp
+    - firefox-esr
+    - nextcloud-desktop
+    - chromium
+    - simple-scan
+    - xournal
+    - audacity
+    - enigmail
+    - arandr
+
+- name: determinate free-pdf-editor link
+  shell: echo "https://code-industry.net/public/$(curl -s https://code-industry.net/free-pdf-editor/ | grep -o 'master-pdf-editor-[0-9]*\.[0-9]*\.[0-9]*\-qt5.x86_64.deb' | head -1)"
+  register: tempurl
+- name: Install .deb files
+  apt: deb={{ tempurl.stdout }}
+
+# - name: determinate link
+#   shell: echo $({{ item.value.expr }})
+#   register: tempurl
+# - name: Install .deb files
+#   become: yes
+#   apt: deb={{ tempurl.stdout }}

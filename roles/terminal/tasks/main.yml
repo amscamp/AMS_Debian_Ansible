@@ -11,7 +11,11 @@
     - dconf-service
     - dconf-cli
     - git
-
+    
+- name: remove termit
+  apt:
+    state: absent
+    name: "termit" 
 
 - name: copy tilix config
   copy:
