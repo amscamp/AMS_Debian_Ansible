@@ -4,12 +4,12 @@
     - vars.yml
 
   pre_tasks:
-
-  tasks:
   - name: Check if this is the first run
     stat:
       path: /etc/ansible_was_already_executed
-    register: ansible_was_already_executed
+    register: ansible_was_already_executed_check
+  - name: Set hostname of command server as fact
+    set_fact: ansible_was_already_executed="{{ ansible_was_already_executed_check.stat.exists }}"
   - name: Creating a file with content
     copy:
       dest: "/home/ams/runansible.sh"
@@ -26,7 +26,7 @@
       mode: 0644
       owner: root
       group: root
-    when: not ansible_was_already_executed.stat.exists
+    when: not ansible_was_already_executed
 
 
   roles:
@@ -35,6 +35,6 @@
   - role: plymouth
   - role: terminal
     terminal_username: "{{ username }}"
-    when: ansible_was_already_executed.stat.exists
+    when: ansible_was_already_executed
   - role: ansible-pull
     ansible_pull_url: https://github.com/amscamp/AMS_Debian_Ansible
