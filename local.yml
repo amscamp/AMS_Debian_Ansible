@@ -3,6 +3,13 @@
   vars_files:
     - vars.yml
 
+  pre_tasks:
+  - name: Check if this is the first run
+  stat:
+    path: /etc/ansible_was_already_executed
+  register: ansible_was_already_executed
+
+
   tasks:
   - name: Creating a file with content
     copy:
@@ -13,10 +20,6 @@
     apt:
       state: latest
       name: "{{ packages }}" 
-  - name: Check if this is the first run
-    stat:
-      path: /etc/ansible_was_already_executed
-    register: ansible_was_already_executed
 
 
   roles:
