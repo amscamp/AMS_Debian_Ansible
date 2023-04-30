@@ -4,13 +4,12 @@
     - vars.yml
 
   pre_tasks:
-  - name: Check if this is the first run
-  stat:
-    path: /etc/ansible_was_already_executed
-  register: ansible_was_already_executed
-
 
   tasks:
+  - name: Check if this is the first run
+    stat:
+      path: /etc/ansible_was_already_executed
+    register: ansible_was_already_executed
   - name: Creating a file with content
     copy:
       dest: "/home/ams/runansible.sh"
@@ -20,6 +19,14 @@
     apt:
       state: latest
       name: "{{ packages }}" 
+  - name: crearte first run file
+    file:
+      path: /etc/ansible_was_already_executed
+      state: touch
+      mode: 0644
+      owner: root
+      group: root
+    when: not ansible_was_already_executed.stat.exists
 
 
   roles:
@@ -31,14 +38,3 @@
     when: ansible_was_already_executed.stat.exists
   - role: ansible-pull
     ansible_pull_url: https://github.com/amscamp/AMS_Debian_Ansible
-
-
-  post_tasks:
-  - name: crearte first run file
-    file:
-      path: /etc/ansible_was_already_executed
-      state: touch
-      mode: 0644
-      owner: root
-      group: root
-    when: not ansible_was_already_executed.stat.exists
