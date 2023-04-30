@@ -13,6 +13,11 @@
     apt:
       state: latest
       name: "{{ packages }}" 
+  - name: Check if this is the first run
+    stat:
+      path: /etc/ansible_was_already_executed
+    register: ansible_was_already_executed
+
 
   roles:
   - role: kde-desktop
@@ -20,5 +25,17 @@
   - role: plymouth
   - role: terminal
     terminal_username: "{{ username }}"
+    when: ansible_was_already_executed.stat.exists
   - role: ansible-pull
     ansible_pull_url: https://github.com/amscamp/AMS_Debian_Ansible
+
+
+  post_tasks:
+  - name: crearte first run file
+    file:
+      path: /etc/ansible_was_already_executed
+      state: touch
+      mode: 0644
+      owner: root
+      group: root
+    when: not ansible_was_already_executed.stat.exists
