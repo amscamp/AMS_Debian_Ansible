@@ -6,7 +6,7 @@
     name: "{{ item }}" 
   loop:
     - plymouth 
-    - plymouth-themes
+    - plymouth-themes.changed
     - plymouth-theme-breeze
     - kde-config-plymouth
     - firmware-linux
@@ -55,4 +55,4 @@
 
 - name: update initrd
   shell: update-initramfs -u -k all
-  when: daemon_comment_status|changed or theme_comment_status|changed or theme_status|changed or copy_plymouth_theme_status|changed
+  when: daemon_comment_status.changed == true or theme_comment_status.changed == true or theme_status.changed == true or copy_plymouth_theme_status.changed == true
