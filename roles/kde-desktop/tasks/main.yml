@@ -37,6 +37,21 @@
     - gdebi
 
 
+- name: Check if .configfolder exists
+  stat:
+    path: "/home/{{ desktop_username }}/.config"
+  register: config_exists
+
+- name: creating .config folder
+  file:
+   path: "/home/{{ desktop_username }}/.config"
+   state: directory
+   owner: "{{ desktop_username }}"
+   group: "{{ desktop_username }}"
+   mode: '0755'
+  when: not config_exists.stat.exists
+
+
 - name: Check if .config/gtk-3.0 folder exists
   stat:
     path: "/home/{{ desktop_username }}/.config/gtk-3.0"
@@ -48,7 +63,7 @@
    state: directory
    owner: "{{ desktop_username }}"
    group: "{{ desktop_username }}"
-   mode: '0644'
+   mode: '0755'
   when: not config_gtk3_exists.stat.exists
 
 - name: copy gtk3 color config
