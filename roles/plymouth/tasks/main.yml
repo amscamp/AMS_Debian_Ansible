@@ -50,6 +50,6 @@
   lineinfile: dest="/etc/plymouth/plymouthd.conf" regexp='Theme=(.*)' line='Theme=breeze' backrefs=yes
   register: theme_status
 
-- name: update-grub
+- name: update initrd
   shell: dracut -f
   when: daemon_comment_status.changed or theme_comment_status.changed or theme_status.changed
