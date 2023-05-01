@@ -33,7 +33,7 @@
 - name: copy plymouth theme
   copy:
     src: "{{ role_path }}/files/ams"
-    dest: "/usr/share/plymouth/themes/ams"
+    dest: "/usr/share/plymouth/themes/"
     owner: "root"
     group: "root"
   when: not ams_theme_exists.stat.exists
