@@ -35,3 +35,26 @@
     - kfind
     - k3b
     - gdebi
+
+
+- name: Check if .config/gtk-3.0 folder exists
+  stat:
+    path: "/home/{{ desktop_username }}/.config/gtk-3.0"
+  register: config_gtk3_exists
+
+- name: creating .config/gtk-3.0 folder
+  file:
+   path: "/home/{{ desktop_username }}/.config/gtk-3.0"
+   state: directory
+   owner: "{{ desktop_username }}"
+   group: "{{ desktop_username }}"
+   mode: '0644'
+  when: not config_gtk3_exists.stat.exists
+
+- name: copy gtk3 color config
+  copy:
+    src: "{{ role_path }}/files/colors.css"
+    dest: "/home/{{ desktop_username }}/.config/gtk-3.0/colors.css"
+    owner: "{{ desktop_username }}"
+    group: "{{ desktop_username }}"
+    mode: '0644'
