@@ -7,8 +7,6 @@
   loop:
     - plymouth 
     - plymouth-themes
-    - plymouth-theme-breeze
-    - kde-config-plymouth
     - firmware-linux
 
 - name: Check if splash screen in grub is enabled
@@ -23,7 +21,6 @@
 - name: update-grub
   shell: update-grub2
   when: grub_splash_status.stdout == "0"
-
 
 - name: Check if theme exists
   stat:
