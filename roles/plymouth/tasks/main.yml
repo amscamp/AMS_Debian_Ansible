@@ -37,6 +37,7 @@
     owner: "root"
     group: "root"
   when: not ams_theme_exists.stat.exists
+  register: copy_plymouth_theme_status
 
 - name: Enable plymouth daemon config
   lineinfile: dest="/etc/plymouth/plymouthd.conf" regexp='#\[Daemon\]' line='[Daemon]' backrefs=yes
@@ -54,4 +55,4 @@
 
 - name: update initrd
   shell: update-initramfs -u -k all
-  when: daemon_comment_status.changed or theme_comment_status.changed or theme_status.changed
+  when: daemon_comment_status.changed or theme_comment_status.changed or theme_status.changed or copy_plymouth_theme_status.changed
