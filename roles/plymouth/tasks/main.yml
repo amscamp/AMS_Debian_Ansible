@@ -6,7 +6,7 @@
     name: "{{ item }}" 
   loop:
     - plymouth 
-    - plymouth-themes.changed
+    - plymouth-themes
     - plymouth-theme-breeze
     - kde-config-plymouth
     - firmware-linux
