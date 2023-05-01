@@ -1,7 +1,6 @@
 nicer dbus config for Tilix (https://docs.ansible.com/ansible/latest/collections/community/general/dconf_module.html ggf)
 kde style
 startup style
-test initial seeding: tilix zeile
 pull timer zeitcheck
 
 

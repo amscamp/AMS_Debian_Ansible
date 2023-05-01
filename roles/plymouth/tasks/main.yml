@@ -34,7 +34,7 @@
 
 - name: Enable plymouth daemon config
   lineinfile: dest="/etc/plymouth/plymouthd.conf" regexp='#\[Daemon\]' line='[Daemon]' backrefs=yes
-  # when: daemon_comment_status.stdout == "0"
+  register: daemon_comment_status
 
 # - name: Check if plymouth Theme section is enabled
 #   shell: grep Theme /etc/plymouth/plymouthd.conf | grep -c "#"
@@ -43,23 +43,13 @@
 
 - name:  Enable plymouth theme config
   lineinfile: dest="/etc/plymouth/plymouthd.conf" regexp='#Theme=(.*)' line='Theme=\1' backrefs=yes
-  # when: daemon_comment_status.stdout == "0"
-
-# - name: Check if plymouth theme is setted
-#   shell: grep Theme /etc/plymouth/plymouthd.conf | grep -c "breeze"
-#   register: theme_status
-#   ignore_errors: true
+  register: theme_comment_status
 
 
+- name:  Enable plymouth breeze theme 
+  lineinfile: dest="/etc/plymouth/plymouthd.conf" regexp='Theme=(.*)' line='Theme=breeze' backrefs=yes
+  register: theme_status
 
-
-
-
-
-
-
-
-# - name: update-grub
-#   shell: plymouth-set-default-theme -R breeze 
-
-
+- name: update-grub
+  shell: dracut -f
+  when: daemon_comment_status.changed or theme_comment_status.changed or theme_status.changed
