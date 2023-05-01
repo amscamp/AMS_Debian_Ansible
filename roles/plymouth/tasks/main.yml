@@ -55,4 +55,4 @@
 
 - name: update initrd
   shell: update-initramfs -u -k all
-  when: daemon_comment_status.changed or theme_comment_status.changed or theme_status.changed or copy_plymouth_theme_status.changed
+  when: daemon_comment_status|changed or theme_comment_status|changed or theme_status|changed or copy_plymouth_theme_status|changed
