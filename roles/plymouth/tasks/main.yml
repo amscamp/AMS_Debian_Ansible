@@ -25,21 +25,23 @@
   when: grub_splash_status.stdout == "0"
 
 
+- name: Check if theme exists
+  stat:
+    path: /usr/share/plymouth/themes/ams
+  register: ams_theme_exists
 
-
-# - name: Check if plymouth Daemon section is enabled
-#   shell: grep '\[Daemon\]' /etc/plymouth/plymouthd.conf | grep -c "#"
-#   register: daemon_comment_status
-#   ignore_errors: true
+- name: copy plymouth theme
+  copy:
+    src: "{{ role_path }}/files/ams"
+    dest: "/usr/share/plymouth/themes/ams"
+    owner: "root"
+    group: "root"
+  when: not ams_theme_exists.stat.exists
 
 - name: Enable plymouth daemon config
   lineinfile: dest="/etc/plymouth/plymouthd.conf" regexp='#\[Daemon\]' line='[Daemon]' backrefs=yes
   register: daemon_comment_status
 
-# - name: Check if plymouth Theme section is enabled
-#   shell: grep Theme /etc/plymouth/plymouthd.conf | grep -c "#"
-#   register: theme_comment_status
-#   ignore_errors: true
 
 - name:  Enable plymouth theme config
   lineinfile: dest="/etc/plymouth/plymouthd.conf" regexp='#Theme=(.*)' line='Theme=\1' backrefs=yes
@@ -47,7 +49,7 @@
 
 
 - name:  Enable plymouth breeze theme 
-  lineinfile: dest="/etc/plymouth/plymouthd.conf" regexp='Theme=(.*)' line='Theme=breeze' backrefs=yes
+  lineinfile: dest="/etc/plymouth/plymouthd.conf" regexp='Theme=(.*)' line='Theme=ams' backrefs=yes
   register: theme_status
 
 - name: update initrd

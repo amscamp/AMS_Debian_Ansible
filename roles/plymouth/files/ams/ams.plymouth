@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=AMS
+Description=A ams Splash
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes//ams
+ScriptFile=/usr/share/plymouth/themes//ams/ams.script
