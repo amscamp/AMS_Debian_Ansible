@@ -33,7 +33,7 @@
 #   ignore_errors: true
 
 - name: Enable plymouth daemon config
-  lineinfile: dest="/etc/plymouth/plymouthd.conf" regexp='#[Daemon]' line='[Daemon]' backrefs=yes
+  lineinfile: dest="/etc/plymouth/plymouthd.conf" regexp='#\[Daemon\]' line='[Daemon]' backrefs=yes
   # when: daemon_comment_status.stdout == "0"
 
 # - name: Check if plymouth Theme section is enabled
