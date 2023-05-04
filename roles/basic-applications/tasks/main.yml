@@ -27,6 +27,9 @@
     - audacity
     - enigmail
     - arandr
+    - libavcodec-extra
+    - ffmpeg
+    - libav-tools 
 
 
 - name: install libreoffice packages
@@ -53,8 +56,10 @@
 - name: install deb-multimedia packages
   apt:
     state: latest
+    allow_unauthenticated: true
     name: "{{ item }}" 
   loop:
+    - deb-multimedia-keyring
     - avidemux
 
 # - name: determinate link
