@@ -13,20 +13,20 @@
     - libreoffice-base
     - mythes-en-us
 
-- name: install additional packages
-  apt:
-    state: latest
-    name: "{{ item }}" 
-  loop:
-    - jq
-    - gimp
-    - firefox-esr
-    - nextcloud-desktop
-    - chromium
-    - simple-scan
-    - xournal
-    - enigmail
-    - arandr
+# - name: install additional packages
+#   apt:
+#     state: latest
+#     name: "{{ item }}" 
+#   loop:
+#     - jq
+#     - gimp
+#     - firefox-esr
+#     - nextcloud-desktop
+#     - chromium
+#     - simple-scan
+#     - xournal
+#     - enigmail
+#     - arandr
 
 
 
@@ -58,14 +58,14 @@
     state: present
     filename: deb-multimedia
 
-- name: install deb-multimedia packages
-  apt:
-    state: latest
-    name: "{{ item }}" 
-  loop:
-    - avidemux
-    - ffmpeg
-    - audacity
+# - name: install deb-multimedia packages
+#   apt:
+#     state: latest
+#     name: "{{ item }}" 
+#   loop:
+#     - avidemux
+#     - ffmpeg
+#     - audacity
 
 - name: determinate zoom link
   shell: echo "https://zoom.us/client/$(curl -s https://zoom.us/rest/download?os=linux | jq '.result.downloadVO.zoom.version' -r)/zoom_amd64.deb"
