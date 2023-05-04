@@ -49,7 +49,7 @@
 
 
 - debug:
-    msg: "{{ lookup('vars', item) }}"
+    msg: "{{ lookup('ansible_facts.packages', item) }}"
   loop: "{{ ansible_facts.packages.keys() | select('match', '^master-pdf-editor.*') | list }}"
 
 
