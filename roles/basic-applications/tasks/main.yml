@@ -18,7 +18,6 @@
     state: latest
     name: "{{ item }}" 
   loop:
-    - jq
     - gimp
     - firefox-esr
     - nextcloud-desktop
@@ -30,12 +29,24 @@
 
 
 
-- name: install libreoffice packages
+- name: install packages
   apt:
     state: latest
     name: "{{ item }}" 
   loop:
     - curl
+    - jq
+
+
+- name: Gather the package facts
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: Check whether a package called foobar is installed
+  ansible.builtin.debug:
+    # msg: "{{ ansible_facts.packages['foobar'] | length }} versions of foobar are installed!"
+    msg: "beeee"
+  when: "'master-pdf-editor*' in ansible_facts.packages"
 
 
 - name: determinate free-pdf-editor link
