@@ -42,11 +42,22 @@
   ansible.builtin.package_facts:
     manager: auto
 
-- name: Check whether a package called foobar is installed
-  ansible.builtin.debug:
-    # msg: "{{ ansible_facts.packages['foobar'] | length }} versions of foobar are installed!"
-    msg: "beeee"
-  when: "'master-pdf-editor*' in ansible_facts.packages"
+# - name: Filter package names
+#   set_fact:
+#     filtered_package_names: "{{ ansible_facts.packages | list 
+#       | map('regex_search', '^master-pdf-editor.*') | select('string') | list }}"
+
+
+- debug:
+    msg: "{{ lookup('vars', item) }}"
+  loop: "{{ ansible_facts.packages.keys() | select('match', '^master-pdf-editor.*') | list }}"
+
+
+# - name: Check whether a package called foobar is installed
+#   ansible.builtin.debug:
+#     # msg: "{{ ansible_facts.packages['foobar'] | length }} versions of foobar are installed!"
+#     msg: "beeee"
+#   when: "ansible_facts.packages.keys()"
 
 
 - name: determinate free-pdf-editor link
