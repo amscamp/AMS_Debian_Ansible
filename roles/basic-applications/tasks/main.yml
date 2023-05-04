@@ -25,11 +25,9 @@
     - chromium
     - simple-scan
     - xournal
-    - audacity
     - enigmail
     - arandr
-    - libavcodec-extra
-    - ffmpeg
+
 
 
 - name: install libreoffice packages
@@ -66,6 +64,8 @@
     name: "{{ item }}" 
   loop:
     - avidemux
+    - ffmpeg
+    - audacity
 
 - name: determinate zoom link
   shell: echo "https://zoom.us/client/$(curl -s https://zoom.us/rest/download?os=linux | jq '.result.downloadVO.zoom.version' -r)/zoom_amd64.deb"
