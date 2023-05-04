@@ -50,7 +50,7 @@
 
 - debug:
     msg: "{{ ansible_facts.packages[item] }}"
-  loop: "{{ ansible_facts.packages.keys() | select('match', '^master-pdf-editor.*') | list }}"
+  loop: "{{ ansible_facts.packages.keys() | select('match', '^master-pdf-editors.*') | list }}"
 
 
 # - name: Check whether a package called foobar is installed
