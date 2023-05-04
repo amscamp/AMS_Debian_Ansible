@@ -51,12 +51,12 @@
 
 
 - ansible.builtin.set_fact:
-    master-pdf-editor: "{{ ansible_facts.packages[item] }}"
+    master_pdf_editor: "{{ ansible_facts.packages[item] }}"
   loop: "{{ ansible_facts.packages.keys() | select('match', '^master-pdf-editor.*') | list }}"
 
 - debug:
-    msg: "{{ ansible_facts.master-pdf-editor }}"
-    
+    msg: "{{ ansible_facts.master_pdf_editor }}"
+
 # - name: Check whether a package called foobar is installed
 #   ansible.builtin.debug:
 #     # msg: "{{ ansible_facts.packages['foobar'] | length }} versions of foobar are installed!"
