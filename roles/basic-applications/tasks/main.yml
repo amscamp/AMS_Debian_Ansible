@@ -68,13 +68,13 @@
     repo: deb https://www.deb-multimedia.org bullseye main non-free
     state: present
     filename: deb-multimedia
-  register: deb-multimedia
+  register: deb_multimedia
 
 - name: Upgrade the OS (apt-get dist-upgrade)
   ansible.builtin.apt:
     upgrade: dist
     update_cache: yes
-  when: aptkey.changed
+  when: deb_multimedia.changed
 
 - name: install deb-multimedia packages
   apt:
