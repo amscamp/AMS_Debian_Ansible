@@ -29,7 +29,6 @@
     - arandr
     - libavcodec-extra
     - ffmpeg
-    - libav-tools 
 
 
 - name: install libreoffice packages
