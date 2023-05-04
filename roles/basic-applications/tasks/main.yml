@@ -46,6 +46,13 @@
 - name: Install free-pdf-editor
   apt: deb={{ tempurl.stdout }}
 
+- name: determinate deb-multimedia kering link
+  shell: echo "https://www.deb-multimedia.org/pool/main/d/deb-multimedia-keyring/$(curl -s https://www.deb-multimedia.org/pool/main/d/deb-multimedia-keyring/ | grep -o 'deb-multimedia-keyring_[0-9]*\.[0-9]*\.[0-9]*\_all.deb' | head -1)"
+  register: tempurl
+
+- name: Install deb-multimedia kering
+  apt: deb={{ tempurl.stdout }}
+
 - name: Add deb-multimedia repository
   ansible.builtin.apt_repository:
     repo: deb https://www.deb-multimedia.org bullseye main non-free
@@ -55,10 +62,8 @@
 - name: install deb-multimedia packages
   apt:
     state: latest
-    allow_unauthenticated: true
     name: "{{ item }}" 
   loop:
-    - deb-multimedia-keyring
     - avidemux
 
 # - name: determinate link
