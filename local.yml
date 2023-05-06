@@ -33,9 +33,10 @@
   - role: kde-desktop
     desktop_username: "{{ username }}"
   - role: basic-applications
+  - role: media-applications
+    when: ansible_was_already_executed
   - role: plymouth
   - role: terminal
     terminal_username: "{{ username }}"
-    # when: ansible_was_already_executed
   - role: ansible-pull
     ansible_pull_url: https://github.com/amscamp/AMS_Debian_Ansible

@@ -1,0 +1,25 @@
+---
+- name: Install deb-multimedia keyring
+  apt: deb={{ tempurl.stdout }}
+
+- name: Add deb-multimedia repository
+  ansible.builtin.apt_repository:
+    repo: deb https://www.deb-multimedia.org bullseye main non-free
+    state: present
+    filename: deb-multimedia
+  register: deb_multimedia
+
+- name: Upgrade the OS (apt-get dist-upgrade)
+  ansible.builtin.apt:
+    upgrade: dist
+    update_cache: yes
+  when: deb_multimedia.changed
+
+- name: install deb-multimedia packages
+  apt:
+    state: latest
+    name: "{{ item }}" 
+  loop:
+    - avidemux
+    - ffmpeg
+    - audacity
