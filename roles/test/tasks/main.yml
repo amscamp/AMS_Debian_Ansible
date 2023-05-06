@@ -20,7 +20,7 @@
 
 - name: debug
   ansible.builtin.debug:
-    msg: "{{ tempurl }}"
+    msg: "{{ tempversion }}"
 
 
 
