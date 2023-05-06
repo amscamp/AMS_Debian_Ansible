@@ -30,7 +30,7 @@
   ansible.builtin.debug:
     # msg: "{{ ansible_facts.packages['foobar'] | length }} versions of foobar are installed!"
     msg: "beeee"
-  when: ansible_facts.vvvmaster_pdf_editor is defined
+  when: hostvars[inventory_hostname].vvvmaster_pdf_editor is defined
 
 
 # - name: determinate free-pdf-editor link
