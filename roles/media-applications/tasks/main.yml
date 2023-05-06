@@ -1,10 +1,36 @@
 ---
-- name: determinate deb-multimedia keyring link
-  shell: echo "https://www.deb-multimedia.org/pool/main/d/deb-multimedia-keyring/$(curl -s https://www.deb-multimedia.org/pool/main/d/deb-multimedia-keyring/ | grep -o 'deb-multimedia-keyring_[0-9]*\.[0-9]*\.[0-9]*\_all.deb' | head -1)"
-  register: tempurl
 
-- name: Install deb-multimedia keyring
+- name: Gather the package facts
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: check if deb_multimedia_keyring is already installed
+  ansible.builtin.set_fact:
+    deb_multimedia_keyring: "{{ ansible_facts.packages[item] }}"
+  loop: "{{ ansible_facts.packages.keys() | select('match', '^deb_multimedia_keyring') | list }}"
+
+- name: determinate deb_multimedia_keyring version
+  shell: echo $(curl -s https://www.deb-multimedia.org/pool/main/d/deb-multimedia-keyring/ | grep -o 'deb-multimedia-keyring_[0-9]*\.[0-9]*\.[0-9]*\_all.deb' | head -1| grep -o '[0-9]*\.[0-9]*\.[0-9]*')
+  warn: false
+  register: tempversion
+
+- name: Check if external deb_multimedia_keyring version could be received
+  ansible.builtin.fail:
+    msg: The current online version of deb_multimedia_keyring could not be received, check role!
+  when: tempversion.stdout == ""
+
+- name: determinate deb_multimedia_keyring link
+  shell: echo "https://www.deb-multimedia.org/pool/main/d/deb-multimedia-keyring/deb-multimedia-keyring_{{ tempversion.stdout }}_all.deb"
+  register: tempurl
+  when: tempversion.stdout != ""
+
+- name: Install deb_multimedia_keyring if not installed
   apt: deb={{ tempurl.stdout }}
+  when: ( tempurl is defined and tempurl.stdout != "" and hostvars[inventory_hostname].deb_multimedia_keyring is not defined )
+
+- name: Install deb_multimedia_keyring if newer version
+  apt: deb={{ tempurl.stdout }}
+  when: ( tempurl is defined and tempurl.stdout != "" and hostvars[inventory_hostname].deb_multimedia_keyring is defined and ( hostvars[inventory_hostname].deb_multimedia_keyring[0].version < tempversion.stdout ))
 
 - name: Add deb-multimedia repository
   ansible.builtin.apt_repository:

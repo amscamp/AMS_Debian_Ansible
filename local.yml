@@ -30,12 +30,13 @@
 
 
   roles:
-  - role: test
   # - role: kde-desktop
   #   desktop_username: "{{ username }}"
   # - role: basic-applications
-  # - role: media-applications
-  #   when: ansible_was_already_executed
+  - role: media-applications
+    when: ansible_was_already_executed
+  - role: master-pdf-editor
+  - role: zoom
   # - role: plymouth
   # - role: terminal
   #   terminal_username: "{{ username }}"

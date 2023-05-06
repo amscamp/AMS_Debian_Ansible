@@ -1,0 +1,32 @@
+---
+- name: Gather the package facts
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: check if zoom is already installed
+  ansible.builtin.set_fact:
+    zoom: "{{ ansible_facts.packages[item] }}"
+  loop: "{{ ansible_facts.packages.keys() | select('match', '^zoom') | list }}"
+
+- name: determinate zoom version
+  shell: echo $(curl -s https://zoom.us/rest/download?os=linux | jq '.result.downloadVO.zoom.version' -r)
+  warn: false
+  register: tempversion
+
+- name: Check if external zoom version could be received
+  ansible.builtin.fail:
+    msg: The current online version of zoom could not be received, check role!
+  when: tempversion.stdout == ""
+
+- name: determinate zoom link
+  shell: echo "https://zoom.us/client/{{ tempversion.stdout }}/zoom_amd64.deb"
+  register: tempurl
+  when: tempversion.stdout != ""
+
+- name: Install zoom if not installed
+  apt: deb={{ tempurl.stdout }}
+  when: ( tempurl is defined and tempurl.stdout != "" and hostvars[inventory_hostname].zoom is not defined )
+
+- name: Install zoom if newer version
+  apt: deb={{ tempurl.stdout }}
+  when: ( tempurl is defined and tempurl.stdout != "" and hostvars[inventory_hostname].zoom is defined and ( hostvars[inventory_hostname].zoom[0].version < tempversion.stdout ))

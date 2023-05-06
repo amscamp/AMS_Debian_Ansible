@@ -1,0 +1,32 @@
+---
+- name: Gather the package facts
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: check if master_pdf_editor is already installed
+  ansible.builtin.set_fact:
+    master_pdf_editor: "{{ ansible_facts.packages[item] }}"
+  loop: "{{ ansible_facts.packages.keys() | select('match', '^master-pdf-editor.*') | list }}"
+
+- name: determinate master-pdf-editor version
+  shell: curl -s https://code-industry.net/master-pdf-editor/ | grep -o 'master-pdf-editor-[0-9]*\.[0-9]*\.[0-9]*\-qt5.x86_64.deb' | head -1 | grep -o '[0-9]*\.[0-9]*\.[0-9]*'
+  warn: false
+  register: tempversion
+
+- name: Check if external master-pdf-editor version could be received
+  ansible.builtin.fail:
+    msg: The current online version of master-pdf-editor could not be received, check role!
+  when: tempversion.stdout == ""
+
+- name: determinate master-pdf-editor link
+  shell: echo "https://code-industry.net/public/master-pdf-editor-{{ tempversion.stdout }}-qt5.x86_64.deb"
+  register: tempurl
+  when: tempversion.stdout != ""
+
+- name: Install master-pdf-editor if not installed
+  apt: deb={{ tempurl.stdout }}
+  when: ( tempurl is defined and tempurl.stdout != "" and hostvars[inventory_hostname].master_pdf_editor is not defined )
+
+- name: Install master-pdf-editor if newer version
+  apt: deb={{ tempurl.stdout }}
+  when: ( tempurl is defined and tempurl.stdout != "" and hostvars[inventory_hostname].master_pdf_editor is defined and ( hostvars[inventory_hostname].master_pdf_editor[0].version < tempversion.stdout ))
