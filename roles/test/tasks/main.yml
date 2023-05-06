@@ -12,9 +12,10 @@
 
 - name: determinate free-pdf-editor version
   shell: curl -s https://code-industry.net/free-pdf-editor/ | grep -o 'master-pdf-editor-[0-9]*\.[0-9]*\.[0-9]*\-qt5.x86_64.deb' | head -1 | grep -o '[0-9]*\.[0-9]*\.[0-9]*'
+  warn: false
   register: tempversion
 
-- name: Check free-pdf-editor version 
+- name: Check if external free-pdf-editor version could be received
   ansible.builtin.fail:
     msg: The current online version of free-pdf-editor could not be received, check role!
   when: tempversion.stdout == ""
