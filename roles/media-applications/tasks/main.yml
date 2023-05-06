@@ -7,7 +7,7 @@
 - name: check if deb_multimedia_keyring is already installed
   ansible.builtin.set_fact:
     deb_multimedia_keyring: "{{ ansible_facts.packages[item] }}"
-  loop: "{{ ansible_facts.packages.keys() | select('match', '^deb_multimedia_keyring') | list }}"
+  loop: "{{ ansible_facts.packages.keys() | select('match', '^deb-multimedia-keyring') | list }}"
 
 - name: determinate deb_multimedia_keyring version
   shell: echo $(curl -s https://www.deb-multimedia.org/pool/main/d/deb-multimedia-keyring/ | grep -o 'deb-multimedia-keyring_[0-9]*\.[0-9]*\.[0-9]*\_all.deb' | head -1| grep -o '[0-9]*\.[0-9]*\.[0-9]*')
