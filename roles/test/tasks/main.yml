@@ -13,22 +13,21 @@
 
 
 
-# kindof works
-# - ansible.builtin.set_fact:
-#     vvvmaster_pdf_editor: "{{ ansible_facts.packages[item] }}"
-#   loop: "{{ ansible_facts.packages.keys() | select('match', '^master-pdf-editor.*') | list }}"
+- ansible.builtin.set_fact:
+    vvvmaster_pdf_editor: "{{ ansible_facts.packages[item] }}"
+  loop: "{{ ansible_facts.packages.keys() | select('match', '^master-pdf-editor.*') | list }}"
 
-# - debug:
-#      var: ansible_facts
-
+- debug:
+     var: ansible_facts
 
 
 
-# - name: Check whether a package called foobar is installed
-#   ansible.builtin.debug:
-#     # msg: "{{ ansible_facts.packages['foobar'] | length }} versions of foobar are installed!"
-#     msg: "beeee"
-#   when: "ansible_facts.packages.keys()"
+
+- name: Check whether a package called foobar is installed
+  ansible.builtin.debug:
+    # msg: "{{ ansible_facts.packages['foobar'] | length }} versions of foobar are installed!"
+    msg: "beeee"
+  when: ansible_facts.vvvmaster_pdf_editor is defined
 
 
 - name: determinate free-pdf-editor link
