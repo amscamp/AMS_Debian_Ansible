@@ -3,10 +3,10 @@
   ansible.builtin.package_facts:
     manager: auto
 
-- name: check if zoom is already installed
-  ansible.builtin.set_fact:
-    zoom: "{{ ansible_facts.packages[item] }}"
-  loop: "{{ ansible_facts.packages.keys() | select('match', '^zoom') | list }}"
+# - name: check if zoom is already installed
+#   ansible.builtin.set_fact:
+#     zoom: "{{ ansible_facts.packages[item] }}"
+#   loop: "{{ ansible_facts.packages.keys() | select('match', '^zoom') | list }}"
 
 - name: determinate zoom version
   shell: echo $(curl -s https://zoom.us/rest/download?os=linux | jq '.result.downloadVO.zoom.version' -r)
