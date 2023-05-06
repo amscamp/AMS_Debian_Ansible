@@ -9,8 +9,7 @@
   loop: "{{ ansible_facts.packages.keys() | select('match', '^master-pdf-editor.*') | list }}"
 
 - name: determinate master-pdf-editor version
-  shell: curl -s https://code-industry.net/master-pdf-editor/ | grep -o 'master-pdf-editor-[0-9]*\.[0-9]*\.[0-9]*\-qt5.x86_64.deb' | head -1 | grep -o '[0-9]*\.[0-9]*\.[0-9]*'
-  warn: false
+  shell: echo $(curl -s https://code-industry.net/master-pdf-editor/ | grep -o 'master-pdf-editor-[0-9]*\.[0-9]*\.[0-9]*\-qt5.x86_64.deb' | head -1 | grep -o '[0-9]*\.[0-9]*\.[0-9]*')
   register: tempversion
 
 - name: Check if external master-pdf-editor version could be received
