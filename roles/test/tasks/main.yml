@@ -28,7 +28,7 @@
 
 - name: Check whether a package called foobar is installed
   ansible.builtin.debug:
-    msg: "{{ hostvars[inventory_hostname].master_pdf_editor[0] }} of mpe is installed!"
+    msg: "{{ hostvars[inventory_hostname].master_pdf_editor[0].version }} of mpe is installed!"
   when: hostvars[inventory_hostname].master_pdf_editor is defined
 
 
