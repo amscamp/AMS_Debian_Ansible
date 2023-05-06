@@ -14,23 +14,22 @@
 
 
 - ansible.builtin.set_fact:
-    vvvmaster_pdf_editor: "{{ ansible_facts.packages[item] }}"
+    master_pdf_editor: "{{ ansible_facts.packages[item] }}"
   loop: "{{ ansible_facts.packages.keys() | select('match', '^master-pdf-editor.*') | list }}"
 
 # - debug:
 #      var: ansible_facts
 
 
-- name: Dump
-  copy:
-    content: "{{ hostvars[inventory_hostname] | to_nice_json }}"
-    dest: /tmp/setup-dump.json
+# - name: Dump
+#   copy:
+#     content: "{{ hostvars[inventory_hostname] | to_nice_json }}"
+#     dest: /tmp/setup-dump.json
 
 - name: Check whether a package called foobar is installed
   ansible.builtin.debug:
-    # msg: "{{ ansible_facts.packages['foobar'] | length }} versions of foobar are installed!"
-    msg: "beeee"
-  when: hostvars[inventory_hostname].vvvmaster_pdf_editor is defined
+    msg: "{{ hostvars[inventory_hostname].master_pdf_editor.version }} of mpe is installed!"
+  when: hostvars[inventory_hostname].master_pdf_editor is defined
 
 
 # - name: determinate free-pdf-editor link
