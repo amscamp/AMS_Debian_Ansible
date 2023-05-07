@@ -1,6 +1,7 @@
 passwd_wallet: kdewallet
 passwd_folder: system
-wallet_username: user
+wallet_username: root
+password_username: user
 
 default_entries:
   - key: "Encryption"
