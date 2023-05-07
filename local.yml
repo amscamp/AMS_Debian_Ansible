@@ -49,4 +49,6 @@
     firefox_username: "{{ username }}"
     extensions:
       - id: "uBlock0@raymondhill.net"
-        url: "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi" 
+        url: "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi"       
+      - id: "firefox@betterttv.net"
+        url: "addons.mozilla.org/firefox/downloads/latest/betterttv/6194382-latest.xpi" 
