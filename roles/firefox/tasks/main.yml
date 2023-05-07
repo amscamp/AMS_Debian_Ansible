@@ -15,4 +15,4 @@
 
 - name: install firefox store xpis
   shell: /usr/local/bin/firefox-extension-manager --install --url $({{ item }}) --path {{ firefoxdefaultprofile.stdout }}$(echo "/extensions")
-  loop: extensions_urlbuilder
+  loop: {{ extensions_urlbuilder }} 
