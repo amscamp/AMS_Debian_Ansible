@@ -2,6 +2,9 @@
 
 - name: check if kdewalletfolder exists
   shell: qdbus org.kde.kwalletd5 /modules/kwalletd5 folderList "$(qdbus org.kde.kwalletd5 /modules/kwalletd5 org.kde.KWallet.open {{ passwd_wallet }} 0 "{{ passwd_folder }}")" "{{ passwd_folder }}" 
+  become: true
+  become_method: su
+  become_user: "{{ wallet_username }}"
   register: walletfolders
 
 - name: does kdewalletfolder exists
