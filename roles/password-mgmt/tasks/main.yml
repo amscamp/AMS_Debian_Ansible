@@ -122,11 +122,15 @@
 
 - name: change root password if entry exists
   shell: pass show {{ passwd_folder }}/RootPW | passwd root --stdin
+  environment:
+    HOME: "{{ wallet_userhome }}"
   when: wallet_entrys.stdout is search("RootPW")
 
 
 - name: change {{ password_username }} password if entry exists
   shell: pass show {{ passwd_folder }}/UserPW | passwd {{ password_username }} --stdin
+  environment:
+    HOME: "{{ wallet_userhome }}"
   when: wallet_entrys.stdout is search("UserPW")
 
 
