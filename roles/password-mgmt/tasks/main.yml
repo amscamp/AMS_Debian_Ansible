@@ -30,7 +30,7 @@
   become_method: su
   become_user: "{{ wallet_username }}"
   when: not wallet_entrys.stdout is search(item.key)
-  loop: default_entries
+  loop: "{{default_entries}}"
 
 
 
