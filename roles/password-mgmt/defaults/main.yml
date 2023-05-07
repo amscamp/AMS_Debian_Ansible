@@ -1,6 +1,7 @@
 passwd_wallet: kdewallet
 passwd_folder: system
 wallet_username: root
+wallet_userhome: /root
 password_username: user
 
 default_entries:
@@ -10,3 +11,16 @@ default_entries:
     value: "rootpw"
   - key: "UserPW"
     value: "userpw"
+
+
+
+gpg_keylength: 2048
+gpg_subkeylength: 2048
+gpg_expire: 360
+
+gpg_realname: "{{ wallet_username }}"
+gpg_useremail: "{{ wallet_username }}@localhost"
+gpg_pubkeyfile: "{{ wallet_username }}.pub"
+gpg_privkeyfile: "{{ wallet_username }}.priv"
+gpg_pubkeyfileexport: "{{ wallet_username }}.asc"
+gpg_fingerprint: "{{ wallet_username }}-fingerprint"

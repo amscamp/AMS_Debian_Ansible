@@ -1,69 +1,141 @@
 ---
-- name: get wallet folders
-  shell: qdbus org.kde.kwalletd5 /modules/kwalletd5 folderList "$(qdbus org.kde.kwalletd5 /modules/kwalletd5 org.kde.KWallet.open {{ passwd_wallet }} 0 "{{ passwd_folder }}")" "{{ passwd_folder }}" 
+
+
+- name: install pass
+  shell: {{ item }}
+  loop:
+    - pass
+    - pwgen
+    - rng-tools
+    - gnupg
+    - acl
+
+
+- name: Check if .password-store exists
+  stat:
+    path: "/{{ wallet_userhome }}/.password-store"
+  register: password_store_exists
+
+
+- name: Ensure .gnupg config directory exists with right permissions
+  ansible.builtin.file:
+    dest: "{{ wallet_userhome }}/.gnupg"
+    state: directory
+    mode: "0700"
+    owner: "{{ wallet_username }}"
+  when: not password_store_exists.stat.exists
+
+- name: Set default gpg options
+  ansible.builtin.template:
+    src: "gpg.conf.j2"
+    dest: "{{ wallet_userhome }}/.gnupg/gpg.conf"
+    mode: "0600"
+    owner: "{{ wallet_username }}"
+  when: not password_store_exists.stat.exists
+
+- name: Copy default template for gpg key generation
+  ansible.builtin.template:
+    src: "gen-key-script.j2"
+    dest: "{{ wallet_userhome }}/.gnupg/gen-key-script-{{ wallet_username }}"
+    mode: "0600"
+    owner: "{{ wallet_username }}"
+  when: not password_store_exists.stat.exists
+
+- name: GnuPG 2.1 | Enable loopback pinentry mode in gpg-agent.conf
+  ansible.builtin.lineinfile:
+    dest: "{{ wallet_userhome }}/.gnupg/gpg-agent.conf"
+    owner: "{{ wallet_username }}"
+    mode: '0600'
+    regexp: "{{ item.re }}"
+    line: "{{ item.l }}"
+    create: yes
+  with_items:
+    - { re: '^allow-loopback-pinentry', l: 'allow-loopback-pinentry' }
+  when: not password_store_exists.stat.exists
+
+- name: Generate gpg key 
+  ansible.builtin.command: "gpg --batch --gen-key {{ wallet_userhome }}/.gnupg/gen-key-script-{{ wallet_username }}"
+  args:
+    chdir: "{{ wallet_userhome }}"
   become: true
-  become_method: su
   become_user: "{{ wallet_username }}"
-  register: walletfolders
-  environment:
-      DISPLAY: ":0"
-
-- name: create wallet folder
-  shell: qdbus org.kde.kwalletd5 /modules/kwalletd5 createFolder "$(qdbus org.kde.kwalletd5 /modules/kwalletd5 org.kde.KWallet.open {{ passwd_wallet }} 0 "{{ passwd_folder }}")" "{{ passwd_folder }}" "{{ passwd_folder }}"
+  when: not password_store_exists.stat.exists
+  register: genkey
+ 
+- name: GPG2.1+ | import generated keys  # noqa no-changed-when
+  ansible.builtin.command: "gpg --import {{ wallet_userhome }}/{{ gpg_pubkeyfile }}"
   become: true
-  become_method: su
   become_user: "{{ wallet_username }}"
-  when: not walletfolders.stdout is search(passwd_folder)
-  environment:
-      DISPLAY: ":0"
+  when: not password_store_exists.stat.exists
 
-
-- name: get wallet folder entrys
-  shell: qdbus org.kde.kwalletd5 /modules/kwalletd5 entryList "$(qdbus org.kde.kwalletd5 /modules/kwalletd5 org.kde.KWallet.open {{ passwd_wallet }} 0 "{{ passwd_folder }}")" "{{ passwd_folder }}" "{{ passwd_folder }}"
+- name: Get user gpg fingerprint
+  ansible.builtin.shell: |
+    set -o pipefail
+    gpg --list-keys --keyid-format LONG {{ gpg_useremail }} | awk -F'[ /]' '/sub/ { print $5 }' | tee {{ wallet_userhome }}/{{ gpg_fingerprint }}
+  args:
+    executable: /bin/bash
+    creates: "{{ wallet_userhome }}/{{ gpg_fingerprint }}"
+  register: gpg_user_fingerprint
   become: true
-  become_method: su
-  become_user: "{{ wallet_username }}"
-  register: wallet_entrys
-  environment:
-      DISPLAY: ":0"
-
-
-- name: create wallet entrys if they not exist
-  shell: qdbus org.kde.kwalletd5 /modules/kwalletd5 writePassword "$(qdbus org.kde.kwalletd5 /modules/kwalletd5 org.kde.KWallet.open {{ passwd_wallet }} 0 "{{ passwd_folder }}")" "{{ passwd_folder }}" "{{ item.key }}" "{{ item.value }}" "{{ passwd_folder }}"
-  become: true
-  become_method: su
-  become_user: "{{ wallet_username }}"
-  when: not wallet_entrys.stdout is search(item.key)
-  loop: "{{default_entries}}"
-  environment:
-      DISPLAY: ":0"
+  become_user: "{{ wallet_userhome }}"
+  when: not password_store_exists.stat.exists
 
 
 
-- name: get wallet folder entrys
-  shell: qdbus org.kde.kwalletd5 /modules/kwalletd5 entryList "$(qdbus org.kde.kwalletd5 /modules/kwalletd5 org.kde.KWallet.open {{ passwd_wallet }} 0 "{{ passwd_folder }}")" "{{ passwd_folder }}" "{{ passwd_folder }}"
-  become: true
-  become_method: su
-  become_user: "{{ wallet_username }}"
-  register: wallet_entrys
-  environment:
-      DISPLAY: ":0"
 
-- name: change root password if entry exists
-  shell: qdbus org.kde.kwalletd5 /modules/kwalletd5 readPassword "$(qdbus org.kde.kwalletd5 /modules/kwalletd5 org.kde.KWallet.open {{ passwd_wallet }} 0 "{{ passwd_folder }}")" "{{ passwd_folder }}" "RootPW" "{{ passwd_folder }}" | passwd root --stdin
-  when: wallet_entrys.stdout is search("RootPW")
-  environment:
-      DISPLAY: ":0"
 
-- name: change {{ password_username }} password if entry exists
-  shell: qdbus org.kde.kwalletd5 /modules/kwalletd5 readPassword "$(qdbus org.kde.kwalletd5 /modules/kwalletd5 org.kde.KWallet.open {{ passwd_wallet }} 0 "{{ passwd_folder }}")" "{{ passwd_folder }}" "UserPW" "{{ passwd_folder }}" | passwd {{ password_username }} --stdin
-  when: wallet_entrys.stdout is search("UserPW")
-  environment:
-      DISPLAY: ":0"
+# - name: get wallet folders
+#   shell: qdbus org.kde.kwalletd5 /modules/kwalletd5 folderList "$(qdbus org.kde.kwalletd5 /modules/kwalletd5 org.kde.KWallet.open {{ passwd_wallet }} 0 "{{ passwd_folder }}")" "{{ passwd_folder }}" 
+#   become: true
+#   become_method: su
+#   become_user: "{{ wallet_username }}"
+#   register: walletfolders
 
-- name: get default enc pw
-  debug:
-    msg: "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | list }}"
+# - name: create wallet folder
+#   shell: qdbus org.kde.kwalletd5 /modules/kwalletd5 createFolder "$(qdbus org.kde.kwalletd5 /modules/kwalletd5 org.kde.KWallet.open {{ passwd_wallet }} 0 "{{ passwd_folder }}")" "{{ passwd_folder }}" "{{ passwd_folder }}"
+#   become: true
+#   become_method: su
+#   become_user: "{{ wallet_username }}"
+#   when: not walletfolders.stdout is search(passwd_folder)
+
+
+# - name: get wallet folder entrys
+#   shell: qdbus org.kde.kwalletd5 /modules/kwalletd5 entryList "$(qdbus org.kde.kwalletd5 /modules/kwalletd5 org.kde.KWallet.open {{ passwd_wallet }} 0 "{{ passwd_folder }}")" "{{ passwd_folder }}" "{{ passwd_folder }}"
+#   become: true
+#   become_method: su
+#   become_user: "{{ wallet_username }}"
+#   register: wallet_entrys
+
+# - name: create wallet entrys if they not exist
+#   shell: qdbus org.kde.kwalletd5 /modules/kwalletd5 writePassword "$(qdbus org.kde.kwalletd5 /modules/kwalletd5 org.kde.KWallet.open {{ passwd_wallet }} 0 "{{ passwd_folder }}")" "{{ passwd_folder }}" "{{ item.key }}" "{{ item.value }}" "{{ passwd_folder }}"
+#   become: true
+#   become_method: su
+#   become_user: "{{ wallet_username }}"
+#   when: not wallet_entrys.stdout is search(item.key)
+#   loop: "{{default_entries}}"
+
+
+# - name: get wallet folder entrys
+#   shell: qdbus org.kde.kwalletd5 /modules/kwalletd5 entryList "$(qdbus org.kde.kwalletd5 /modules/kwalletd5 org.kde.KWallet.open {{ passwd_wallet }} 0 "{{ passwd_folder }}")" "{{ passwd_folder }}" "{{ passwd_folder }}"
+#   become: true
+#   become_method: su
+#   become_user: "{{ wallet_username }}"
+#   register: wallet_entrys
+
+
+# - name: change root password if entry exists
+#   shell: qdbus org.kde.kwalletd5 /modules/kwalletd5 readPassword "$(qdbus org.kde.kwalletd5 /modules/kwalletd5 org.kde.KWallet.open {{ passwd_wallet }} 0 "{{ passwd_folder }}")" "{{ passwd_folder }}" "RootPW" "{{ passwd_folder }}" | passwd root --stdin
+#   when: wallet_entrys.stdout is search("RootPW")
+
+
+# - name: change {{ password_username }} password if entry exists
+#   shell: qdbus org.kde.kwalletd5 /modules/kwalletd5 readPassword "$(qdbus org.kde.kwalletd5 /modules/kwalletd5 org.kde.KWallet.open {{ passwd_wallet }} 0 "{{ passwd_folder }}")" "{{ passwd_folder }}" "UserPW" "{{ passwd_folder }}" | passwd {{ password_username }} --stdin
+#   when: wallet_entrys.stdout is search("UserPW")
+
+
+# - name: get default enc pw
+#   debug:
+#     msg: "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | list }}"
 
 
 
