@@ -50,3 +50,4 @@
   #     - id: "uBlock0@raymondhill.net"
   #       url: "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi"       
   - role: password-mgmt
+    wallet_username: "{{ username }}"

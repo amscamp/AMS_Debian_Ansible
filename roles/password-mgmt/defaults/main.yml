@@ -1,3 +1,11 @@
 passwd_wallet: kdewallet
 passwd_folder: system
-wallet_username: ams
+wallet_username: user
+
+default_entries:
+  - key: "Encryption"
+    value: "encryptionpw"  
+  - key: "RootPW"
+    value: "rootpw"
+  - key: "UserPW"
+    value: "userpw"
