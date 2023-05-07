@@ -29,8 +29,11 @@
   with_dict: "{{ extensions }}"
 
 - name: enable firefox xpis
-  shell: jq '.addons[] |= ((select(.id=="{{ item.value.id }}") | .active=true | .userDisabled=false))' {{ firefoxdefaultprofile.stdout }}$(echo "/extensions.json") > {{ firefoxdefaultprofile.stdout }}$(echo "/extensions.json")
+  shell: jq '.addons[] |= ((select(.id=="{{ item.value.id }}") | .active=true | .userDisabled=false))' {{ firefoxdefaultprofile.stdout }}$(echo "/extensions.json") > /tmp/hallo
   become: true
   become_method: su
   become_user: "{{ firefox_username }}"
   with_dict: "{{ extensions }}"
+
+
+# > {{ firefoxdefaultprofile.stdout }}$(echo "/extensions.json")
