@@ -83,8 +83,6 @@
 
 - name: pass init
   ansible.builtin.shell: echo $PWD && pass init $(cat {{ wallet_userhome }}/{{ gpg_fingerprint }})
-  args:
-    chdir: "{{ wallet_userhome }}"
   environment:
     HOME: "{{ wallet_userhome }}"
   register: passinit
@@ -104,16 +102,22 @@
 
 - name: get wallet folder entrys
   shell: pass ls {{ passwd_folder }}
+  environment:
+    HOME: "{{ wallet_userhome }}"
   register: wallet_entrys
 
 - name: create wallet entrys if they not exist
   shell: echo "{{ item.value }}" | pass insert -e {{ passwd_folder }}/{{ item.key }}
+  environment:
+    HOME: "{{ wallet_userhome }}"
   when: not wallet_entrys.stdout is search(item.key)
   loop: "{{default_entries}}"
 
 
 - name: get wallet folder entrys
   shell: pass ls {{ passwd_folder }}
+  environment:
+    HOME: "{{ wallet_userhome }}"
   register: wallet_entrys
 
 
