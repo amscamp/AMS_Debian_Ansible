@@ -22,7 +22,7 @@
 #   loop: "{{ extensions_urlbuilder }}"
 
 - name: install firefox store xpis
-  shell: /usr/local/bin/firefox-extension-manager --install --url $({{ item.urlbuilder }}) --path {{ firefoxdefaultprofile.stdout }}$(echo "/extensions")
+  shell: /usr/local/bin/firefox-extension-manager --install --url $({{ item.value.urlbuilder }}) --path {{ firefoxdefaultprofile.stdout }}$(echo "/extensions")
   become: true
   become_method: su
   become_user: "{{ firefox_username }}"
