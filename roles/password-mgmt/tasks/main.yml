@@ -76,7 +76,6 @@
     gpg --list-keys --keyid-format LONG {{ gpg_useremail }} | awk -F'[ /]' '/sub/ { print $5 }' | tee {{ wallet_userhome }}/{{ gpg_fingerprint }}
   args:
     executable: /bin/bash
-    creates: "{{ wallet_userhome }}/{{ gpg_fingerprint }}"
   register: gpg_user_fingerprint
   become: true
   become_user: "{{ wallet_userhome }}"
