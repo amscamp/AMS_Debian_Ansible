@@ -15,7 +15,7 @@
 
 - name: Check if .password-store exists
   stat:
-    path: "/{{ wallet_userhome }}/.password-store"
+    path: "{{ wallet_userhome }}/.password-store"
   register: password_store_exists
 
 
@@ -76,7 +76,7 @@
   when: not password_store_exists.stat.exists
 
 - name: pass init
-  ansible.builtin.shell: pass init $(cat {{ wallet_userhome }}/{{ gpg_fingerprint }})
+  ansible.builtin.shell: echo $PWD && pass init $(cat {{ wallet_userhome }}/{{ gpg_fingerprint }})
   args:
     chdir: "{{ wallet_userhome }}"
   register: passinit
