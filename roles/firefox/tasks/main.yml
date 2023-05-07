@@ -6,6 +6,7 @@
   loop:
     - firefox-esr
     - wget
+    - jq
 
 - name: Download firefox-extension-manager
   # get_url: url="https://raw.githubusercontent.com/Apfelwurm/ubuntu-scripts/master/mozilla/firefox-extension-manager" dest=/usr/local/bin/firefox-extension-manager validate_certs=no mode=0755 force=yes
@@ -21,8 +22,12 @@
 #   loop: "{{ extensions_urlbuilder }}"
 
 - name: install firefox store xpis
-  shell: /usr/local/bin/firefox-extension-manager --install --url $({{ item }}) --path {{ firefoxdefaultprofile.stdout }}$(echo "/extensions")
+  shell: /usr/local/bin/firefox-extension-manager --install --url $({{ item.urlbuilder }}) --path {{ firefoxdefaultprofile.stdout }}$(echo "/extensions")
   become: true
   become_method: su
   become_user: "{{ firefox_username }}"
-  loop: "{{ extensions_urlbuilder }}"
+  loop: "{{ extensions }}"
+
+
+
+  # jq '.addons[] |= ((select(.id=="uBlock0@raymondhill.net") | .active=true | .userDisabled=false))' extension.json 

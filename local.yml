@@ -47,5 +47,7 @@
       - "cjpalhdlnbpafiamejdnhcphjbkeiagm" #ublock  
   - role: firefox
     firefox_username: "{{ username }}"
-    extensions_urlbuilder:
-      - "echo https://addons.mozilla.org/de/firefox/addon/ublock-origin/" #ublock
+    extensions:
+      ublock:
+        id: "uBlock0@raymondhill.net"
+        urlbuilder: "echo https://addons.mozilla.org/de/firefox/addon/ublock-origin/" 
