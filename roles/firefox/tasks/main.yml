@@ -13,11 +13,11 @@
   shell: echo $(find /home/{{ firefox_username }}/.mozilla -name "*default-esr")
   register: firefoxdefaultprofile
 
-- name: install firefox store xpis
-  debug: 
-    msg: "{{ item }}"
-  loop: "{{ extensions_urlbuilder }}"
-
 # - name: install firefox store xpis
-#   shell: /usr/local/bin/firefox-extension-manager --install --url $({{ item }}) --path {{ firefoxdefaultprofile.stdout }}$(echo "/extensions")
+#   debug: 
+#     msg: "{{ item }}"
 #   loop: "{{ extensions_urlbuilder }}"
+
+- name: install firefox store xpis
+  shell: /usr/local/bin/firefox-extension-manager --install --url $("{{ item }}") --path {{ firefoxdefaultprofile.stdout }}$(echo "/extensions")
+  loop: "{{ extensions_urlbuilder }}"
