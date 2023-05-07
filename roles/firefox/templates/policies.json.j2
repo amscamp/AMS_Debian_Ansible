@@ -2,9 +2,9 @@
   "policies": {
     "ExtensionSettings": {
 {% for item in extensions %}
-      "{{ item.value.id }}": {
+      "{{ item.id }}": {
         "installation_mode": "force_installed",
-        "install_url": "{{ item.value.url }}"
+        "install_url": "{{ item.url }}"
       },
 {% endfor %}
     }
