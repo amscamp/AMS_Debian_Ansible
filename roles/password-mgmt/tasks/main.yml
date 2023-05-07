@@ -88,9 +88,9 @@
   register: passinit
   when: not password_store_exists.stat.exists
 
-- name: debug
-  debug:
-    msg: "{{passinit.stdout}}"
+# - name: debug
+#   debug:
+#     msg: "{{passinit.stdout}}"
 
 - name: Ensure {{ passwd_folder }} exists
   ansible.builtin.file:
