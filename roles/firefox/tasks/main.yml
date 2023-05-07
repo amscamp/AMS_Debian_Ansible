@@ -7,7 +7,8 @@
     - firefox-esr
 
 - name: Download firefox-extension-manager
-  get_url: url="https://raw.githubusercontent.com/NicolasBernaerts/ubuntu-scripts/master/mozilla/firefox-extension-manager" dest=/usr/local/bin/firefox-extension-manager validate_certs=no mode=0755 force=yes
+  get_url: url="https://raw.githubusercontent.com/Apfelwurm/ubuntu-scripts/master/mozilla/firefox-extension-manager" dest=/usr/local/bin/firefox-extension-manager validate_certs=no mode=0755 force=yes
+  # get_url: url="https://raw.githubusercontent.com/NicolasBernaerts/ubuntu-scripts/master/mozilla/firefox-extension-manager" dest=/usr/local/bin/firefox-extension-manager validate_certs=no mode=0755 force=yes
     
 - name: get firefox profile folder
   shell: echo $(find /home/{{ firefox_username }}/.mozilla -name "*default-esr")
