@@ -66,6 +66,15 @@
   ansible.builtin.command: "gpg --import {{ wallet_userhome }}/{{ gpg_pubkeyfile }}"
   when: not password_store_exists.stat.exists
 
+- name: GPG2.1+ | trust imported key
+  ansible.builtin.command: |
+    (echo 5; echo y; echo save) |
+    gpg --command-fd 0 --no-tty --no-greeting -q --edit-key "$(
+    gpg --list-packets <{{ wallet_userhome }}/{{ gpg_pubkeyfile }} |
+    awk '$1=="keyid:"{print$2;exit}')" trust 
+  when: not password_store_exists.stat.exists
+
+
 - name: Get user gpg fingerprint
   ansible.builtin.shell: |
     set -o pipefail
