@@ -14,5 +14,9 @@
   register: firefoxdefaultprofile
 
 - name: install firefox store xpis
-  shell: /usr/local/bin/firefox-extension-manager --install --url $({{ item }}) --path {{ firefoxdefaultprofile.stdout }}$(echo "/extensions")
+  shell: echo  "{{ item }}"
   loop: "{{ extensions_urlbuilder }}"
+
+# - name: install firefox store xpis
+#   shell: /usr/local/bin/firefox-extension-manager --install --url $({{ item }}) --path {{ firefoxdefaultprofile.stdout }}$(echo "/extensions")
+#   loop: "{{ extensions_urlbuilder }}"
