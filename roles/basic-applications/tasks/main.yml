@@ -19,7 +19,6 @@
     name: "{{ item }}" 
   loop:
     - gimp
-    - firefox-esr
     - nextcloud-desktop
     - simple-scan
     - xournal

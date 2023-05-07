@@ -44,4 +44,8 @@
   # - role: zoom
   - role: chromium
     extensions:
-      - "cjpalhdlnbpafiamejdnhcphjbkeiagm"
+      - "cjpalhdlnbpafiamejdnhcphjbkeiagm" #ublock  
+  - role: firefox
+    firefox_username: "{{ username }}"
+    extensions_urlbuilder:
+      - "echo https://addons.mozilla.org/de/firefox/addon/ublock-origin/" #ublock
