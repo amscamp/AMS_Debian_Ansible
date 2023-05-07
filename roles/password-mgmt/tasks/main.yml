@@ -54,7 +54,7 @@
 
 - name: get default enc pw
   debug:
-    msg: {{ default_entries | selectattr("key", "equalto", "Encryption") | map(attribute='value') | list }}
+    msg: "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | list }}"
 
 
 
