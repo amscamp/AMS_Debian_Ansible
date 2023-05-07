@@ -30,21 +30,21 @@
 
 
   roles:
-  - role: kde-desktop
-    desktop_username: "{{ username }}"
-  - role: basic-applications
-  - role: plymouth
-  - role: terminal
-    terminal_username: "{{ username }}"
-  - role: ansible-pull
-    ansible_pull_url: https://github.com/amscamp/AMS_Debian_Ansible
-  - role: media-applications
-    when: ansible_was_already_executed
-  - role: master-pdf-editor
-  - role: zoom
-  - role: chromium
-    extensions:
-      - "cjpalhdlnbpafiamejdnhcphjbkeiagm" #ublock  
+  # - role: kde-desktop
+  #   desktop_username: "{{ username }}"
+  # - role: basic-applications
+  # - role: plymouth
+  # - role: terminal
+  #   terminal_username: "{{ username }}"
+  # - role: ansible-pull
+  #   ansible_pull_url: https://github.com/amscamp/AMS_Debian_Ansible
+  # - role: media-applications
+  #   when: ansible_was_already_executed
+  # - role: master-pdf-editor
+  # - role: zoom
+  # - role: chromium
+  #   extensions:
+  #     - "cjpalhdlnbpafiamejdnhcphjbkeiagm" #ublock  
   - role: firefox
     firefox_username: "{{ username }}"
     extensions:
