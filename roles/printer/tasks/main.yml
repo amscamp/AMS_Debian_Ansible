@@ -1,0 +1,23 @@
+---
+- name: install chromium
+  apt:
+    state: latest
+    name: "{{ item }}" 
+  loop:
+    - chromium
+
+- name: Creates chrome policy directory
+  file:
+    path: /etc/chromium/policies/managed
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Remove chrome policy file
+  ansible.builtin.file:
+    path: /etc/chromium/policies/managed/chrome.json
+    state: absent
+
+- name: Create chrome policy file
+  template: src=chrome.json.j2 dest=/etc/chromium/policies/managed/chrome.json
