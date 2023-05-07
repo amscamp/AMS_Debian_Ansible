@@ -2,7 +2,9 @@
 
 
 - name: install pass
-  shell: {{ item }}
+  apt:
+    state: latest
+    name: "{{ item }}" 
   loop:
     - pass
     - pwgen
