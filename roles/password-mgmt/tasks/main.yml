@@ -79,10 +79,12 @@
   ansible.builtin.shell: pass init $(cat {{ wallet_userhome }}/{{ gpg_fingerprint }})
   args:
     executable: /bin/bash
-  register: gpg_user_fingerprint
+  register: passinit
   when: not password_store_exists.stat.exists
 
-
+- name: debug
+  debug:
+    msg: "{{passinit.stdout}}"
 
 # - name: get wallet folders
 #   shell: qdbus org.kde.kwalletd5 /modules/kwalletd5 folderList "$(qdbus org.kde.kwalletd5 /modules/kwalletd5 org.kde.KWallet.open {{ passwd_wallet }} 0 "{{ passwd_folder }}")" "{{ passwd_folder }}" 
