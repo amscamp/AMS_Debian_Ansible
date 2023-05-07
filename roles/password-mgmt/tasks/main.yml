@@ -79,6 +79,8 @@
   ansible.builtin.shell: echo $PWD && pass init $(cat {{ wallet_userhome }}/{{ gpg_fingerprint }})
   args:
     chdir: "{{ wallet_userhome }}"
+  environment:
+    HOME: "{{ wallet_userhome }}"
   register: passinit
   when: not password_store_exists.stat.exists
 
