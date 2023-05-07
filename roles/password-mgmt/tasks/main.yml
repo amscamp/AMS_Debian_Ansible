@@ -121,14 +121,14 @@
   register: wallet_entrys
 
 - name: change root password if entry exists
-  shell: echo -e "$(pass show {{ passwd_folder }}/RootPW)\n$(pass show {{ passwd_folder }}/RootPW)" | passwd root
+  shell: echo -e "root:$(pass show {{ passwd_folder }}/RootPW)" | chpasswd
   environment:
     HOME: "{{ wallet_userhome }}"
   when: wallet_entrys.stdout is search("RootPW")
 
 
 - name: change {{ password_username }} password if entry exists
-  shell: cho -e "$(pass show {{ passwd_folder }}/RootPW)\n$(pass show {{ passwd_folder }}/UserPW)" | passwd {{ password_username }}
+  shell: echo "{{ password_username }}:$(pass show {{ passwd_folder }}/UserPW)" | chpasswd 
   environment:
     HOME: "{{ wallet_userhome }}"
   when: wallet_entrys.stdout is search("UserPW")
