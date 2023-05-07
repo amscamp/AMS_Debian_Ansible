@@ -12,7 +12,6 @@
     - gnupg
     - acl
 
-
 - name: Check if .password-store exists
   stat:
     path: "{{ wallet_userhome }}/.password-store"
@@ -95,43 +94,28 @@
   debug:
     msg: "{{passinit.stdout}}"
 
-# - name: get wallet folders
-#   shell: qdbus org.kde.kwalletd5 /modules/kwalletd5 folderList "$(qdbus org.kde.kwalletd5 /modules/kwalletd5 org.kde.KWallet.open {{ passwd_wallet }} 0 "{{ passwd_folder }}")" "{{ passwd_folder }}" 
-#   become: true
-#   become_method: su
-#   become_user: "{{ wallet_username }}"
-#   register: walletfolders
+- name: Ensure {{ passwd_folder }} exists
+  ansible.builtin.file:
+    dest: "{{ wallet_userhome }}/.password-store/{{ passwd_folder }}"
+    state: directory
+    mode: "0700"
+    owner: "{{ wallet_username }}"
+  when: not password_store_exists.stat.exists
 
-# - name: create wallet folder
-#   shell: qdbus org.kde.kwalletd5 /modules/kwalletd5 createFolder "$(qdbus org.kde.kwalletd5 /modules/kwalletd5 org.kde.KWallet.open {{ passwd_wallet }} 0 "{{ passwd_folder }}")" "{{ passwd_folder }}" "{{ passwd_folder }}"
-#   become: true
-#   become_method: su
-#   become_user: "{{ wallet_username }}"
-#   when: not walletfolders.stdout is search(passwd_folder)
+- name: get wallet folder entrys
+  shell: pass ls {{ passwd_folder }}
+  register: wallet_entrys
 
-
-# - name: get wallet folder entrys
-#   shell: qdbus org.kde.kwalletd5 /modules/kwalletd5 entryList "$(qdbus org.kde.kwalletd5 /modules/kwalletd5 org.kde.KWallet.open {{ passwd_wallet }} 0 "{{ passwd_folder }}")" "{{ passwd_folder }}" "{{ passwd_folder }}"
-#   become: true
-#   become_method: su
-#   become_user: "{{ wallet_username }}"
-#   register: wallet_entrys
-
-# - name: create wallet entrys if they not exist
-#   shell: qdbus org.kde.kwalletd5 /modules/kwalletd5 writePassword "$(qdbus org.kde.kwalletd5 /modules/kwalletd5 org.kde.KWallet.open {{ passwd_wallet }} 0 "{{ passwd_folder }}")" "{{ passwd_folder }}" "{{ item.key }}" "{{ item.value }}" "{{ passwd_folder }}"
-#   become: true
-#   become_method: su
-#   become_user: "{{ wallet_username }}"
-#   when: not wallet_entrys.stdout is search(item.key)
-#   loop: "{{default_entries}}"
+- name: create wallet entrys if they not exist
+  shell: echo "{{ item.value }}" | pass insert -e {{ passwd_folder }}/{{ item.key }}
+  when: not wallet_entrys.stdout is search(item.key)
+  loop: "{{default_entries}}"
 
 
-# - name: get wallet folder entrys
-#   shell: qdbus org.kde.kwalletd5 /modules/kwalletd5 entryList "$(qdbus org.kde.kwalletd5 /modules/kwalletd5 org.kde.KWallet.open {{ passwd_wallet }} 0 "{{ passwd_folder }}")" "{{ passwd_folder }}" "{{ passwd_folder }}"
-#   become: true
-#   become_method: su
-#   become_user: "{{ wallet_username }}"
-#   register: wallet_entrys
+- name: get wallet folder entrys
+  shell: pass ls {{ passwd_folder }}
+  register: wallet_entrys
+
 
 
 # - name: change root password if entry exists

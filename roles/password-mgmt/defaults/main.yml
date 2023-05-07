@@ -1,4 +1,3 @@
-passwd_wallet: kdewallet
 passwd_folder: system
 wallet_username: root
 wallet_userhome: /root
