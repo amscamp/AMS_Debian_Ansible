@@ -1,21 +1,10 @@
 ---
-- name: check if kdewalletfolder exists
+- name: get wallet folders
   shell: qdbus org.kde.kwalletd5 /modules/kwalletd5 folderList "$(qdbus org.kde.kwalletd5 /modules/kwalletd5 org.kde.KWallet.open {{ passwd_wallet }} 0 "{{ passwd_folder }}")" "{{ passwd_folder }}" 
   become: true
   become_method: su
   become_user: "{{ wallet_username }}"
   register: walletfolders
-
-- name: does kdewalletfolder exists
-  ansible.builtin.debug:
-    msg: "daag"
-  when: walletfolders.stdout is search(passwd_folder)
-
-- name: does kdewalletfolder not exists
-  ansible.builtin.debug:
-    msg: "not daag"
-  when: not walletfolders.stdout is search(passwd_folder)
-
 
 - name: create wallet folder
   shell: qdbus org.kde.kwalletd5 /modules/kwalletd5 createFolder "$(qdbus org.kde.kwalletd5 /modules/kwalletd5 org.kde.KWallet.open {{ passwd_wallet }} 0 "{{ passwd_folder }}")" "{{ passwd_folder }}" "{{ passwd_folder }}"
@@ -25,19 +14,48 @@
   when: not walletfolders.stdout is search(passwd_folder)
 
 
-- name: check if kdewalletfolder exists 2
-  shell: qdbus org.kde.kwalletd5 /modules/kwalletd5 folderList "$(qdbus org.kde.kwalletd5 /modules/kwalletd5 org.kde.KWallet.open {{ passwd_wallet }} 0 "{{ passwd_folder }}")" "{{ passwd_folder }}" 
+
+- name: get wallet folder entrys
+  shell: qdbus org.kde.kwalletd5 /modules/kwalletd5 entryList "$(qdbus org.kde.kwalletd5 /modules/kwalletd5 org.kde.KWallet.open {{ passwd_wallet }} 0 "{{ passwd_folder }}")" "{{ passwd_folder }}" "{{ passwd_folder }}"
   become: true
   become_method: su
   become_user: "{{ wallet_username }}"
-  register: walletfolders
+  register: wallet_entrys
 
-- name: does kdewalletfolder exists 2
-  ansible.builtin.debug:
-    msg: "daag 2"
-  when: walletfolders.stdout is search(passwd_folder)
 
-- name: does kdewalletfolder not exists 2
-  ansible.builtin.debug:
-    msg: "not daag 2"
-  when: not walletfolders.stdout is search(passwd_folder)
+
+- name: create wallet entrys if they not exist
+  shell: qdbus org.kde.kwalletd5 /modules/kwalletd5 writePassword "$(qdbus org.kde.kwalletd5 /modules/kwalletd5 org.kde.KWallet.open {{ passwd_wallet }} 0 "{{ passwd_folder }}")" "{{ passwd_folder }}" "{{ item }}" "beeeekat" "{{ passwd_folder }}"
+  become: true
+  become_method: su
+  become_user: "{{ wallet_username }}"
+  when: not wallet_entrys.stdout is search(item)
+  loop:
+    - "Encryption"
+    - "RootPW"
+    - "UserPW"
+
+
+
+
+
+
+
+
+
+# - name: check if kdewalletfolder exists 2
+#   shell: qdbus org.kde.kwalletd5 /modules/kwalletd5 folderList "$(qdbus org.kde.kwalletd5 /modules/kwalletd5 org.kde.KWallet.open {{ passwd_wallet }} 0 "{{ passwd_folder }}")" "{{ passwd_folder }}" 
+#   become: true
+#   become_method: su
+#   become_user: "{{ wallet_username }}"
+#   register: walletfolders
+
+# - name: does kdewalletfolder exists 2
+#   ansible.builtin.debug:
+#     msg: "daag 2"
+#   when: walletfolders.stdout is search(passwd_folder)
+
+# - name: does kdewalletfolder not exists 2
+#   ansible.builtin.debug:
+#     msg: "not daag 2"
+#   when: not walletfolders.stdout is search(passwd_folder)
