@@ -14,5 +14,10 @@
     group: root
     mode: 0755
 
-- name: Create the Jinja2 based template
+- name: Remove chrome policy file
+  ansible.builtin.file:
+    path: /etc/chromium/policies/managed/chrome.json
+    state: absent
+
+- name: Create chrome policy file
   template: src=chrome.json.j2 dest=/etc/chromium/policies/managed/chrome.json

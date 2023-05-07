@@ -1,0 +1,12 @@
+{
+  "policies": {
+    "ExtensionSettings": {
+{% for item in extensions %}
+      "{{ item.value.id }}": {
+        "installation_mode": "force_installed",
+        "install_url": "{{ item.value.url }}"
+      },
+{% endfor %}
+    }
+  }
+}
