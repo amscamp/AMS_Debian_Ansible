@@ -14,7 +14,7 @@
   register: firefoxdefaultprofile
 
 - name: install firefox store xpis
-  shell: echo  "{{ item }}"
+  debug: echo  "{{ item }}"
   loop: "{{ extensions_urlbuilder }}"
 
 # - name: install firefox store xpis
