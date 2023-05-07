@@ -59,15 +59,11 @@
   ansible.builtin.command: "gpg --batch --gen-key {{ wallet_userhome }}/.gnupg/gen-key-script-{{ wallet_username }}"
   args:
     chdir: "{{ wallet_userhome }}"
-  become: true
-  become_user: "{{ wallet_username }}"
   when: not password_store_exists.stat.exists
   register: genkey
  
-- name: GPG2.1+ | import generated keys  # noqa no-changed-when
+- name: GPG2.1+ | import generated keys  
   ansible.builtin.command: "gpg --import {{ wallet_userhome }}/{{ gpg_pubkeyfile }}"
-  become: true
-  become_user: "{{ wallet_username }}"
   when: not password_store_exists.stat.exists
 
 - name: Get user gpg fingerprint
@@ -77,8 +73,6 @@
   args:
     executable: /bin/bash
   register: gpg_user_fingerprint
-  become: true
-  become_user: "{{ wallet_userhome }}"
   when: not password_store_exists.stat.exists
 
 
