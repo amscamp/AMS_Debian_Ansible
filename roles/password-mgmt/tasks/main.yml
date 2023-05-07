@@ -1,23 +1,12 @@
 ---
-- name: install chromium
-  apt:
-    state: latest
-    name: "{{ item }}" 
-  loop:
-    - chromium
+- name: check if kdewalletfolder exists
+  shell: qdbus org.kde.kwalletd5 /modules/kwalletd5 folderList "$(qdbus org.kde.kwalletd5 /modules/kwalletd5 org.kde.KWallet.open {{ passwd_wallet }} 0 "{{ passwd_folder }}")" "{{ passwd_folder }}" 
+  become: true
+  become_method: su
+  become_user: "{{ wallet_username }}"
+  register: walletfolders
 
-- name: Creates chrome policy directory
-  file:
-    path: /etc/chromium/policies/managed
-    state: directory
-    owner: root
-    group: root
-    mode: 0755
-
-- name: Remove chrome policy file
-  ansible.builtin.file:
-    path: /etc/chromium/policies/managed/chrome.json
-    state: absent
-
-- name: Create chrome policy file
-  template: src=chrome.json.j2 dest=/etc/chromium/policies/managed/chrome.json
+- name: does kdewalletfolder exists
+  ansible.builtin.debug:
+    msg: System {{ inventory_hostname }} has gateway {{ ansible_default_ipv4.gateway }}
+  when: walletfolders.stdout is search(passwd_folder)

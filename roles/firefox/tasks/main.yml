@@ -1,37 +1,22 @@
 ---
-
-- name: check if kdewalletfolder exists
-  shell: qdbus org.kde.kwalletd5 /modules/kwalletd5 folderList "$(qdbus org.kde.kwalletd5 /modules/kwalletd5 org.kde.KWallet.open {{ passwd_wallet }} 0 "{{ passwd_folder }}")" "{{ passwd_folder }}" 
-  become: true
-  become_method: su
-  become_user: "{{ wallet_username }}"
-  register: walletfolders
-
-- name: does kdewalletfolder exists
-  ansible.builtin.debug:
-    msg: System {{ inventory_hostname }} has gateway {{ ansible_default_ipv4.gateway }}
-  when: walletfolders.stdout is search(passwd_folder)
+- name: install firefox-esr
+  shell: {{ item }}
+  loop:
+    - firefox-esr
 
 
+- name: Creates firefox policy directory
+  file:
+    path: /etc/firefox/policies
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
 
-# - name: install firefox-esr
-#   shell: {{ item }}
-#   loop:
-#     - firefox-esr
+- name: Remove firefox policy file
+  ansible.builtin.file:
+    path: /etc/firefox/policies/policies.json
+    state: absent
 
-
-# - name: Creates firefox policy directory
-#   file:
-#     path: /etc/firefox/policies
-#     state: directory
-#     owner: root
-#     group: root
-#     mode: 0755
-
-# - name: Remove firefox policy file
-#   ansible.builtin.file:
-#     path: /etc/firefox/policies/policies.json
-#     state: absent
-
-# - name: Create firefox policy file
-#   template: src=policies.json.j2 dest=/etc/firefox/policies/policies.json
+- name: Create firefox policy file
+  template: src=policies.json.j2 dest=/etc/firefox/policies/policies.json
