@@ -77,8 +77,6 @@
 
 - name: pass init
   ansible.builtin.shell: pass init $(cat {{ wallet_userhome }}/{{ gpg_fingerprint }})
-  args:
-    executable: /bin/bash
   register: passinit
   when: not password_store_exists.stat.exists
 
