@@ -26,7 +26,7 @@
   become: true
   become_method: su
   become_user: "{{ firefox_username }}"
-  loop: "{{ extensions }}"
+  with_dict: "{{ extensions }}"
 
 
 
