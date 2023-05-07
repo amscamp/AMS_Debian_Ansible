@@ -76,9 +76,7 @@
   when: not password_store_exists.stat.exists
 
 - name: GPG2.1+ | trust imported key
-  ansible.builtin.command: |
-    (echo 5; echo y; echo save) |
-    gpg --command-fd 0 --no-tty --no-greeting -q --edit-key "$(cat {{ wallet_userhome }}/{{ gpg_fingerprint }})" trust 
+  ansible.builtin.command: (echo 5; echo y; echo save) | gpg --command-fd 0 --no-tty --no-greeting -q --edit-key "$(cat {{ wallet_userhome }}/{{ gpg_fingerprint }})" trust 
   when: not password_store_exists.stat.exists
 
 
