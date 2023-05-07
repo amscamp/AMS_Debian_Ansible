@@ -16,8 +16,6 @@ default_entries:
 
 gpg_keylength: 2048
 gpg_subkeylength: 2048
-gpg_expire: 360
-
 gpg_realname: "{{ wallet_username }}"
 gpg_useremail: "{{ wallet_username }}@localhost"
 gpg_pubkeyfile: "{{ wallet_username }}.pub"

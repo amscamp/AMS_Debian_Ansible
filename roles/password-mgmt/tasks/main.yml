@@ -75,7 +75,12 @@
   register: gpg_user_fingerprint
   when: not password_store_exists.stat.exists
 
-
+- name: pass init
+  ansible.builtin.shell: pass init $(cat {{ wallet_userhome }}/{{ gpg_fingerprint }})
+  args:
+    executable: /bin/bash
+  register: gpg_user_fingerprint
+  when: not password_store_exists.stat.exists
 
 
 
