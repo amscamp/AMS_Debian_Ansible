@@ -138,14 +138,26 @@
   debug:
     msg: "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | list }}"
 
+- name: get luks device
+  shell: echo "/dev/disk/by-uuid/$(cat /etc/crypttab | sed -e "s|\(.*\) UUID=\(.*\) none.*|\2|g")""
+  register: luks_device
+
+- name: create luks keyfile
+  shell: pass show {{ passwd_folder }}/Encryption > {{ wallet_userhome }}/encrotemp
 
 
+- name: get default enc pw
+  community.crypto.luks_device:
+    device: "{{ luks_device.stdout }}"
+    state: "present"
+    passphrase: "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | list }}"
+    new_keyfile: "{{ wallet_userhome }}/encrotemp"
 
-- name: change encryption password if entry exists
-  shell: |
-    mkpipe fifo
-    echo -n "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | list }}" | cryptsetup luksChangeKey --key-file - /dev/disk/by-uuid/$(cat /etc/crypttab | sed -e "s|\(.*\) UUID=\(.*\) none.*|\2|g") fifo &
-    echo -m "$(pass show {{ passwd_folder }}/Encryption)" > fifo
+# - name: change encryption password if entry exists
+#   shell: |
+#     mkpipe fifo
+#     echo -n "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | list }}" | cryptsetup luksChangeKey --key-file - /dev/disk/by-uuid/$(cat /etc/crypttab | sed -e "s|\(.*\) UUID=\(.*\) none.*|\2|g") fifo &
+#     echo -m "$(pass show {{ passwd_folder }}/Encryption)" > fifo
   
   
   
