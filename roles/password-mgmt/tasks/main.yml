@@ -134,18 +134,18 @@
   when: wallet_entrys.stdout is search("UserPW")
 
 
-# - name: get default enc pw
-#   debug:
-#     msg: "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | list }}"
+- name: get default enc pw
+  debug:
+    msg: "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | list }}"
 
 
 
 
-# - name: change encryption password if entry exists
-#   shell: |
-#     mkpipe fifo
-#     echo -n "oldpass" | cryptsetup luksAddKey --key-file - test.img fifo &
-#     echo -m "newpass" > fifo
+- name: change encryption password if entry exists
+  shell: |
+    mkpipe fifo
+    echo -n "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | list }}" | cryptsetup luksChangeKey --key-file - /dev/disk/by-uuid/$(cat /etc/crypttab | sed -e "s|\(.*\) UUID=\(.*\) none.*|\2|g") fifo &
+    echo -m "$(pass show {{ passwd_folder }}/Encryption)" > fifo
   
   
   
