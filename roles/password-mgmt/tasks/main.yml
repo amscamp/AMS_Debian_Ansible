@@ -136,7 +136,7 @@
 
 - name: get default enc pw
   debug:
-    msg: "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | string }}"
+    msg: "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') }}"
 
 - name: get luks device
   shell: 'echo "/dev/disk/by-uuid/$(cat /etc/crypttab | sed -e "s|\(.*\) UUID=\(.*\) none.*|\2|g")"'
