@@ -138,18 +138,23 @@
 #   debug:
 #     msg: "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | list }}"
 
-# - name: get luks device
-#   shell: 'echo "/dev/disk/by-uuid/$(cat /etc/crypttab | sed -e "s|\(.*\) UUID=\(.*\) none.*|\2|g")"'
-#   register: luks_device
+- name: get luks device
+  shell: 'echo "/dev/disk/by-uuid/$(cat /etc/crypttab | sed -e "s|\(.*\) UUID=\(.*\) none.*|\2|g")"'
+  register: luks_device
 
-# - name: create luks keyfile
-#   shell: pass show {{ passwd_folder }}/Encryption > {{ wallet_userhome }}/encrotemp
-#   environment:
-#     HOME: "{{ wallet_userhome }}"
+- name: create luks keyfile
+  shell: pass show {{ passwd_folder }}/Encryption > {{ wallet_userhome }}/encrotemp
+  environment:
+    HOME: "{{ wallet_userhome }}"
 
-# - name: get default enc pw
-#   community.crypto.luks_device:
-#     device: "{{ luks_device.stdout }}"
-#     state: "present"
-#     passphrase: "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | list }}"
-#     new_keyfile: "{{ wallet_userhome }}/encrotemp"
+- name: get default enc pw
+  community.crypto.luks_device:
+    device: "{{ luks_device.stdout }}"
+    state: "present"
+    passphrase: "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | list }}"
+    new_keyfile: "{{ wallet_userhome }}/encrotemp"
+
+- name: Remove temp encro file
+  ansible.builtin.file:
+    path: "{{ wallet_userhome }}/encrotemp"
+    state: absent
