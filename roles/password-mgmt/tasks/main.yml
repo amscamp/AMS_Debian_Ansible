@@ -144,7 +144,8 @@
 
 - name: create luks keyfile
   shell: pass show {{ passwd_folder }}/Encryption > {{ wallet_userhome }}/encrotemp
-
+  environment:
+    HOME: "{{ wallet_userhome }}"
 
 - name: get default enc pw
   community.crypto.luks_device:
