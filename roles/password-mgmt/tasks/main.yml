@@ -151,7 +151,7 @@
   community.crypto.luks_device:
     device: "{{ luks_device.stdout }}"
     state: "present"
-    passphrase: "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') }}"
+    passphrase: "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | join }}"
     # passphrase: "amscampboot"
     new_keyfile: "{{ wallet_userhome }}/encrotemp"
 
