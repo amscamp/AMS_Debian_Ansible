@@ -134,37 +134,22 @@
   when: wallet_entrys.stdout is search("UserPW")
 
 
-- name: get default enc pw
-  debug:
-    msg: "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | list }}"
+# - name: get default enc pw
+#   debug:
+#     msg: "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | list }}"
 
-- name: get luks device
-  shell: 'echo "/dev/disk/by-uuid/$(cat /etc/crypttab | sed -e "s|\(.*\) UUID=\(.*\) none.*|\2|g")"'
-  register: luks_device
+# - name: get luks device
+#   shell: 'echo "/dev/disk/by-uuid/$(cat /etc/crypttab | sed -e "s|\(.*\) UUID=\(.*\) none.*|\2|g")"'
+#   register: luks_device
 
-- name: create luks keyfile
-  shell: pass show {{ passwd_folder }}/Encryption > {{ wallet_userhome }}/encrotemp
-  environment:
-    HOME: "{{ wallet_userhome }}"
+# - name: create luks keyfile
+#   shell: pass show {{ passwd_folder }}/Encryption > {{ wallet_userhome }}/encrotemp
+#   environment:
+#     HOME: "{{ wallet_userhome }}"
 
-- name: get default enc pw
-  community.crypto.luks_device:
-    device: "{{ luks_device.stdout }}"
-    state: "present"
-    passphrase: "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | list }}"
-    new_keyfile: "{{ wallet_userhome }}/encrotemp"
-
-# - name: change encryption password if entry exists
-#   shell: |
-#     mkpipe fifo
-#     echo -n "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | list }}" | cryptsetup luksChangeKey --key-file - /dev/disk/by-uuid/$(cat /etc/crypttab | sed -e "s|\(.*\) UUID=\(.*\) none.*|\2|g") fifo &
-#     echo -m "$(pass show {{ passwd_folder }}/Encryption)" > fifo
-  
-  
-  
-  
-#   qdbus org.kde.kwalletd5 /modules/kwalletd5 readPassword "$(qdbus org.kde.kwalletd5 /modules/kwalletd5 org.kde.KWallet.open {{ passwd_wallet }} 0 "{{ passwd_folder }}")" "{{ passwd_folder }}" "Encryption" "{{ passwd_folder }}" | passwd {{ password_username }} --stdin
-#   when: wallet_entrys.stdout is search("Encryption")
-
-
-#   sudo cryptsetup luksChangeKey /dev/disk/by-uuid/$(cat /etc/crypttab | sed -e "s|\(.*\) UUID=\(.*\) none.*|\2|g")
+# - name: get default enc pw
+#   community.crypto.luks_device:
+#     device: "{{ luks_device.stdout }}"
+#     state: "present"
+#     passphrase: "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | list }}"
+#     new_keyfile: "{{ wallet_userhome }}/encrotemp"
