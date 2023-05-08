@@ -1,6 +1,8 @@
 ---
 - name: install firefox-esr
-  shell: {{ item }}
+  apt:
+    state: latest
+    name: "{{ item }}" 
   loop:
     - firefox-esr
 
