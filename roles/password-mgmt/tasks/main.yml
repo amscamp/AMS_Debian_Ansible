@@ -134,9 +134,9 @@
   when: wallet_entrys.stdout is search("UserPW")
 
 
-# - name: get default enc pw
-#   debug:
-#     msg: "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | list }}"
+- name: get default enc pw
+  debug:
+    msg: "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | list }}"
 
 - name: get luks device
   shell: 'echo "/dev/disk/by-uuid/$(cat /etc/crypttab | sed -e "s|\(.*\) UUID=\(.*\) none.*|\2|g")"'
