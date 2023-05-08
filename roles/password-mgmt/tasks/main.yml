@@ -147,20 +147,20 @@
   environment:
     HOME: "{{ wallet_userhome }}"
 
+- name: set default enc pw
+  community.crypto.luks_device:
+    device: "{{ luks_device.stdout }}"
+    state: "present"
+    passphrase: "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | list }}"
+    new_keyfile: "{{ wallet_userhome }}/encrotemp"
+
 # - name: get default enc pw
 #   community.crypto.luks_device:
 #     device: "{{ luks_device.stdout }}"
 #     state: "present"
-#     passphrase: "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | list }}"
-#     new_keyfile: "{{ wallet_userhome }}/encrotemp"
-
-- name: get default enc pw
-  community.crypto.luks_device:
-    device: "{{ luks_device.stdout }}"
-    state: "present"
-    passphrase: "amscampboot"
-    new_passphrase: "amscampreboot"
-    # new_keyfile: "{{ wallet_userhome }}/encrotemp"
+#     passphrase: "amscampboot"
+#     new_passphrase: "amscampreboot"
+#     # new_keyfile: "{{ wallet_userhome }}/encrotemp"
 
 
 - name: Remove temp encro file
