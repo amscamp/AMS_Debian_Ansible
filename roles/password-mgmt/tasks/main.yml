@@ -103,6 +103,14 @@
     owner: "{{ wallet_username }}"
   when: not password_store_exists.stat.exists
 
+- name: Ensure {{ passwd_mandatory_folder }} exists
+  ansible.builtin.file:
+    dest: "{{ wallet_userhome }}/.password-store/{{ passwd_mandatory_folder }}"
+    state: directory
+    mode: "0700"
+    owner: "{{ wallet_username }}"
+  when: not password_store_exists.stat.exists
+
 - name: get wallet folder entrys
   shell: pass ls {{ passwd_folder }}
   environment:
