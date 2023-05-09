@@ -1,5 +1,9 @@
 ---
 
+- name: Update collection community.network
+  community.general.ansible_galaxy_install:
+    type: collection
+    name: community.crypto
 
 - name: install pass
   apt:
@@ -113,12 +117,30 @@
   when: not wallet_entrys.stdout is search(item.key)
   loop: "{{default_entries}}"
 
+- name: get mgmt wallet folder entrys
+  shell: pass ls {{ passwd_mandatory_folder }}
+  environment:
+    HOME: "{{ wallet_userhome }}"
+  register: wallet_mandatory_entrys
+
+- name: generate mgmt wallet entry if it does not exist
+  shell: pass generate {{ passwd_mandatory_folder }}/{{ item.key }}
+  environment:
+    HOME: "{{ wallet_userhome }}"
+  when: not wallet_mandatory_entrys.stdout is search(item.key)
+  loop: "{{default_mandatory_entries}}"
 
 - name: get wallet folder entrys
   shell: pass ls {{ passwd_folder }}
   environment:
     HOME: "{{ wallet_userhome }}"
   register: wallet_entrys
+
+- name: get mgmt wallet folder entrys
+  shell: pass ls {{ passwd_mandatory_folder }}
+  environment:
+    HOME: "{{ wallet_userhome }}"
+  register: wallet_mandatory_entrys
 
 - name: change root password if entry exists
   shell: echo "root:$(pass show {{ passwd_folder }}/RootPW)" | chpasswd
@@ -133,14 +155,31 @@
     HOME: "{{ wallet_userhome }}"
   when: wallet_entrys.stdout is search("UserPW")
 
-
-- name: get default enc pw
-  debug:
-    msg: "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | join }}"
-
 - name: get luks device
   shell: 'echo "/dev/disk/by-uuid/$(cat /etc/crypttab | sed -e "s|\(.*\) UUID=\(.*\) none.*|\2|g")"'
   register: luks_device
+
+- name: create managementluks keyfile
+  shell: pass show {{ passwd_mandatory_folder }}/encryptionmgmt > {{ wallet_userhome }}/encromgmttemp
+  environment:
+    HOME: "{{ wallet_userhome }}"
+  when: not password_store_exists.stat.exists
+
+- name: set management enc pw
+  community.crypto.luks_device:
+    device: "{{ luks_device.stdout }}"
+    state: "present"
+    passphrase: "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | join }}"
+    new_keyfile: "{{ wallet_userhome }}/encromgmttemp"
+  when: not password_store_exists.stat.exists
+
+- name: set management enc pw
+  community.crypto.luks_device:
+    device: "{{ luks_device.stdout }}"
+    state: "present"
+    remove_passphrase: "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | join }}"
+  when: not password_store_exists.stat.exists
+
 
 - name: create luks keyfile
   shell: pass show {{ passwd_folder }}/Encryption > {{ wallet_userhome }}/encrotemp
@@ -151,8 +190,7 @@
   community.crypto.luks_device:
     device: "{{ luks_device.stdout }}"
     state: "present"
-    passphrase: "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | join }}"
-    # passphrase: "amscampboot"
+    keyfile: "{{ wallet_userhome }}/encromgmttemp"
     new_keyfile: "{{ wallet_userhome }}/encrotemp"
 
 # - name: get default enc pw
@@ -167,4 +205,9 @@
 - name: Remove temp encro file
   ansible.builtin.file:
     path: "{{ wallet_userhome }}/encrotemp"
+    state: absent
+    
+- name: Remove temp encro mgmt file
+  ansible.builtin.file:
+    path: "{{ wallet_userhome }}/encromgmttemp"
     state: absent

@@ -20,6 +20,7 @@
   loop:
     - gimp
     - nextcloud-desktop
+    - dolphin-nextcloud
     - simple-scan
     - xournal
     - enigmail

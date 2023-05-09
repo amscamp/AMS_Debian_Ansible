@@ -1,0 +1,9 @@
+---
+- name: install firefox-esr
+  apt:
+    state: latest
+    name: "{{ item }}" 
+  loop:
+    - firmware-iwlwifi
+    - tlp
+    - powertop

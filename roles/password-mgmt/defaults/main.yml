@@ -1,4 +1,5 @@
 passwd_folder: system
+passwd_mandatory_folder: systemmandatory
 wallet_username: root
 wallet_userhome: /root
 password_username: user
@@ -11,6 +12,8 @@ default_entries:
   - key: "UserPW"
     value: "userpw"
 
+default_mandatory_entries:
+  - key: "encryptionmgmt"
 
 
 gpg_keylength: 2048

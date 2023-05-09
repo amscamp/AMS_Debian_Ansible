@@ -33,6 +33,7 @@
   - role: kde-desktop
     desktop_username: "{{ username }}"
   - role: basic-applications
+  - role: t460s
   - role: plymouth
   - role: terminal
     terminal_username: "{{ username }}"
