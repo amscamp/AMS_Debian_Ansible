@@ -1,8 +1,5 @@
 ---
 - name: Update collection community.network
-  shell: ansible-galaxy collection install community.general
-
-- name: Update collection community.network
   community.general.ansible_galaxy_install:
     type: collection
     name: community.crypto
