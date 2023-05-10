@@ -3,9 +3,9 @@
 widgets = ['org.kde.plasma.systemmonitor.cpu',
            'org.kde.plasma.systemmonitor.memory',
            'org.kde.plasma.panelspacer',
-           'org.kde.kargos',
-           'org.kde.plasma.panelspacer',
-           'org.kde.kargos',
+        //    'org.kde.kargos',
+        //    'org.kde.plasma.panelspacer',
+        //    'org.kde.kargos',
            'org.kde.plasma.panelspacer',
            'org.kde.plasma.systemmonitor.net',]
            
@@ -77,15 +77,15 @@ for (i=0; i<panel.widgetIds.length; i++) {
     } else if (widget.type == 'org.kde.plasma.systemmonitor.memory') {
         widget.currentConfigGroup = new Array('General')
         widget.writeConfig('sources', 'mem%2Fphysical%2Fapplication')
-    } else if (widget.type == 'org.kde.kargos' && kargoscount == 0) {
-        widget.currentConfigGroup = new Array('General')
-        widget.writeConfig('command', '/home/volza/scripts/checkts.sh')
-        widget.writeConfig('interval', '5')
-        kargoscount=1;
-    } else if (widget.type == 'org.kde.kargos' && kargoscount == 1) {
-        widget.currentConfigGroup = new Array('General')
-        widget.writeConfig('command', '/home/volza/scripts/covid.sh')
-        widget.writeConfig('interval', '7200')
+    // } else if (widget.type == 'org.kde.kargos' && kargoscount == 0) {
+    //     widget.currentConfigGroup = new Array('General')
+    //     widget.writeConfig('command', '/home/volza/scripts/checkts.sh')
+    //     widget.writeConfig('interval', '5')
+    //     kargoscount=1;
+    // } else if (widget.type == 'org.kde.kargos' && kargoscount == 1) {
+    //     widget.currentConfigGroup = new Array('General')
+    //     widget.writeConfig('command', '/home/volza/scripts/covid.sh')
+    //     widget.writeConfig('interval', '7200')
     } else if (widget.type == 'org.kde.plasma.systemmonitor.net') {
         widget.currentConfigGroup = new Array('General')
         widget.writeConfig('sources', 'enp6s0,network%2Finterfaces%2Fenp6s0%2Ftransmitter%2Fdata')
