@@ -73,3 +73,24 @@
     owner: "{{ desktop_username }}"
     group: "{{ desktop_username }}"
     mode: '0644'
+
+
+- name: Enable tapping for touchpad
+  community.general.ini_file:
+    path: "/home/{{ desktop_username }}/.config/touchpadrc"
+    section: parameters
+    option: Tapping
+    value: 'true'
+    mode: '0600'
+    state: present
+    exclusive: true
+
+- name: set breeze dark
+  community.general.ini_file:
+    path: "/home/{{ desktop_username }}/.config/touchpadrc"
+    section: Theme
+    option: name
+    value: 'breeze-dark'
+    mode: '0600'
+    state: present
+    exclusive: true

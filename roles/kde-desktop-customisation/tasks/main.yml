@@ -1,0 +1,34 @@
+---
+
+- name: clone repos
+  git:
+    repo: "https://github.com/lipido/kargos.git"
+    dest: '{{ desktop_username }}/software/kargos'
+
+- name: check if kargos already installed
+  stat:
+    path: '{{ desktop_username }}/.local/share/plasma/plasmoids/org.kde.kargos'
+  register: kargos_installed
+
+- shell: 'cd {{ desktop_username }}/software/kargos && kpackagetool5 -t Plasma/Applet --remove plasmoid'
+  args:
+    executable: /bin/bash
+  when: kargos_installed.stat.exists   
+- shell: 'cd {{ desktop_username }}/software/kargos && kpackagetool5 -t Plasma/Applet --install plasmoid'
+  args:
+    executable: /bin/bash
+- name: Configure Plasma shell
+  block:
+  - tempfile:
+      state: file
+    register: plasma_js
+    changed_when: false
+  - copy:
+      src: configure_plasma_shell.js
+      dest: '{{ plasma_js.path }}'
+    changed_when: false
+  - shell: 'qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "$(<{{ plasma_js.path }})"'
+    args:
+        executable: /bin/bash
+    # TODO: any easy way to tell when this changed?
+    changed_when: false
