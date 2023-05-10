@@ -30,8 +30,8 @@
 
 
   roles:
-  # - role: kde-desktop
-  #   desktop_username: "{{ username }}"
+  - role: kde-desktop
+    desktop_username: "{{ username }}"
   - role: kde-desktop-customisation
     desktop_username: "{{ username }}"
   # - role: basic-applications

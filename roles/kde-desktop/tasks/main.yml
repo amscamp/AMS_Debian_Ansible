@@ -81,16 +81,30 @@
     section: parameters
     option: Tapping
     value: 'true'
-    mode: '0600'
     state: present
     exclusive: true
 
+- name: set owner for touchpadrc
+  ansible.builtin.file:
+    path: "/home/{{ desktop_username }}/.config/touchpadrc"
+    state: file
+    owner: "{{ desktop_username }}"
+    group: "{{ desktop_username }}"
+    mode: '0644'
+
 - name: set breeze dark
   community.general.ini_file:
-    path: "/home/{{ desktop_username }}/.config/touchpadrc"
+    path: "/home/{{ desktop_username }}/.config/plasmarc"
     section: Theme
     option: name
     value: 'breeze-dark'
-    mode: '0600'
     state: present
     exclusive: true
+
+- name: set owner for touchpadrc
+  ansible.builtin.file:
+    path: "/home/{{ desktop_username }}/.config/plasmarc"
+    state: file
+    owner: "{{ desktop_username }}"
+    group: "{{ desktop_username }}"
+    mode: '0644'
