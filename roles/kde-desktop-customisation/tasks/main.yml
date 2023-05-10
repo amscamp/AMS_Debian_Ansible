@@ -6,17 +6,17 @@
   become_user: "{{ desktop_username }}"
   git:
     repo: "https://github.com/lipido/kargos.git"
-    dest: '{{ desktop_username }}/software/kargos'
+    dest: '/home/{{ desktop_username }}/software/kargos'
 
 - name: check if kargos already installed
   become: true
   become_method: su
   become_user: "{{ desktop_username }}"
   stat:
-    path: '{{ desktop_username }}/.local/share/plasma/plasmoids/org.kde.kargos'
+    path: '/home/{{ desktop_username }}/.local/share/plasma/plasmoids/org.kde.kargos'
   register: kargos_installed
 
-- shell: 'cd {{ desktop_username }}/software/kargos && kpackagetool5 -t Plasma/Applet --remove plasmoid'
+- shell: 'cd /home/{{ desktop_username }}/software/kargos && kpackagetool5 -t Plasma/Applet --remove plasmoid'
   args:
     executable: /bin/bash
   become: true
@@ -24,13 +24,13 @@
   become_user: "{{ desktop_username }}"
   when: kargos_installed.stat.exists   
 
-- shell: 'cd {{ desktop_username }}/software/kargos && kpackagetool5 -t Plasma/Applet --install plasmoid'
+- shell: 'cd /home/{{ desktop_username }}/software/kargos && kpackagetool5 -t Plasma/Applet --install plasmoid'
   args:
     executable: /bin/bash
   become: true
   become_method: su
   become_user: "{{ desktop_username }}"
-  
+
 - name: Configure Plasma shell
   become: true
   become_method: su
