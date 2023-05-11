@@ -82,4 +82,5 @@
   ansible.builtin.systemd:
     name: configure_plasma.service
     enabled: true
+    daemon_reload: true
     scope: user
