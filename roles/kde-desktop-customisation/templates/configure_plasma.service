@@ -6,4 +6,4 @@ WantedBy=xdg-desktop-autostart.target
 
 [Service]
 Type=oneshot
-ExecStart=/bin/bash -c 'qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "$(</home/{{ desktop_username }}/.config/ansible_distro/configure_plasma_shell.js)"'
+ExecStart=/bin/bash -c 'qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "$(</home/{{ desktop_username }}/.config/ansible_distro/configure_plasma_shell.js)" && echo "executed on $(date)"'
