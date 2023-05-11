@@ -1,7 +1,7 @@
 [Desktop Entry]
 Comment[en_US]=
 Comment=
-Exec= /bin/bash -c 'qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "$(</home/{{ desktop_username }}/.local/share/plasma/configure_plasma_shell.js)"'
+Exec= /bin/bash -c 'qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "$(</home/{{ desktop_username }}/.config/ansible_distro/configure_plasma_shell.js)"'
 GenericName[en_US]=
 GenericName=
 Icon=dialog-scripts

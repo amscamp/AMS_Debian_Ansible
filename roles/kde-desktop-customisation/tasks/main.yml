@@ -31,21 +31,34 @@
   become_method: su
   become_user: "{{ desktop_username }}"
 
-- name: Configure Plasma shell
-  become: true
-  become_method: su
-  become_user: "{{ desktop_username }}"
-  block:
-  - copy:
-      src: configure_plasma_shell.js
-      dest: '/home/{{ desktop_username }}/.local/share/plasma/configure_plasma_shell.js'
-    changed_when: false
-  - file:
-      path: "/home/{{ desktop_username }}/.config/autostart"
-      state: directory
-      owner: "{{ desktop_username }}"
-      group: "{{ desktop_username }}"
-      mode: '0755'
-  - template:
-      dest: '/home/{{ desktop_username }}/.config/autostart/configure_plasma.desktop'
-      src: configure_plasma.desktop
+
+- name: make sure .config/ansible_distro exists
+  file:
+    path: "/home/{{ desktop_username }}/.config/ansible_distro"
+    state: directory
+    owner: "{{ desktop_username }}"
+    group: "{{ desktop_username }}"
+    mode: '0755'
+
+- name: copy Plasma shell config
+  copy:
+    src: configure_plasma_shell.js
+    dest: '/home/{{ desktop_username }}/.config/ansible_distro/configure_plasma_shell.js'
+    owner: "{{ desktop_username }}"
+    group: "{{ desktop_username }}"
+    mode: '0755'
+
+- name: make sure .config/autostart exists
+  file:
+    path: "/home/{{ desktop_username }}/.config/autostart"
+    state: directory
+    owner: "{{ desktop_username }}"
+    group: "{{ desktop_username }}"
+    mode: '0755'
+    
+- template:
+    dest: '/home/{{ desktop_username }}/.config/autostart/configure_plasma.desktop'
+    src: configure_plasma.desktop
+    owner: "{{ desktop_username }}"
+    group: "{{ desktop_username }}"
+    mode: '0755'
