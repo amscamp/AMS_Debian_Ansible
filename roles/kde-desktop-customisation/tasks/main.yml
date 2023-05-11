@@ -48,6 +48,18 @@
     group: "{{ desktop_username }}"
     mode: '0755'
 
+- name: make sure /ansible_distro exists
+  file:
+    path: "/ansible_distro"
+    state: directory
+    mode: '0755'
+
+- name: copy wallpaper
+  copy:
+    src: KDE-Plasma-Dark-960-HD-WL.jpg
+    dest: '/ansible_distro/KDE-Plasma-Dark-960-HD-WL.jpg'
+    mode: '0755'
+
 - name: make sure .config/autostart exists
   file:
     path: "/home/{{ desktop_username }}/.config/autostart"

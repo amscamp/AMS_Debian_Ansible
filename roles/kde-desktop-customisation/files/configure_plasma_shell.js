@@ -140,9 +140,21 @@ for (i=0; i<panel2.widgetIds.length; i++) {
     widget = panel2.widgetById(panel2.widgetIds[i])
     if (widget.type == 'org.kde.plasma.digitalclock') {
         widget.currentConfigGroup = new Array('Appearance')
-        widget.writeConfig('showDate', 'false')
+        widget.writeConfig('showDate', 'true')
     } else if (widget.type == 'org.kde.plasma.kickoff') {
         widget.globalShortcut = 'Meta+F12'
     }
 
 }
+
+
+var allDesktops = desktops();
+    // print (allDesktops);
+    for (i=0;i<allDesktops.length;i++) {{
+        d = allDesktops[i];
+        d.wallpaperPlugin = "org.kde.image";
+        d.currentConfigGroup = Array("Wallpaper",
+                                     "org.kde.image",
+                                     "General");
+        d.writeConfig("Image", "file:///ansible_distro/KDE-Plasma-Dark-960-HD-WL.jpg")
+    }}
