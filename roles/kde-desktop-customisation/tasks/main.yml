@@ -40,10 +40,18 @@
     group: "{{ desktop_username }}"
     mode: '0755'
 
-- name: copy Plasma shell config
+- name: copy Plasma shell config script
   copy:
     src: configure_plasma_shell.js
     dest: '/home/{{ desktop_username }}/.config/ansible_distro/configure_plasma_shell.js'
+    owner: "{{ desktop_username }}"
+    group: "{{ desktop_username }}"
+    mode: '0755'
+
+- name: copy Plasma shell config runner script
+- template:
+    dest: '/home/{{ desktop_username }}/.config/ansible_distro/configure_plasma_shell.sh'
+    src: configure_plasma_shell.sh
     owner: "{{ desktop_username }}"
     group: "{{ desktop_username }}"
     mode: '0755'
