@@ -73,6 +73,7 @@
     owner: "{{ desktop_username }}"
     group: "{{ desktop_username }}"
     state: link
+    follow: False
 
 - name: make sure /ansible_distro exists
   file:
