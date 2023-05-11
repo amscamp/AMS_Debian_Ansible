@@ -49,7 +49,7 @@
     mode: '0755'
 
 - name: copy Plasma shell config runner script
-- template:
+  template:
     dest: '/home/{{ desktop_username }}/.config/ansible_distro/configure_plasma_shell.sh'
     src: configure_plasma_shell.sh
     owner: "{{ desktop_username }}"
