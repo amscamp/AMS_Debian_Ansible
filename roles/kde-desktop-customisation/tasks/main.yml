@@ -60,17 +60,17 @@
     dest: '/ansible_distro/KDE-Plasma-Dark-960-HD-WL.jpg'
     mode: '0755'
 
-- name: make sure .config/autostart exists
+- name: make sure .config/systemd/user exists
   file:
-    path: "/home/{{ desktop_username }}/.config/autostart"
+    path: "/home/{{ desktop_username }}/.config/systemd/user"
     state: directory
     owner: "{{ desktop_username }}"
     group: "{{ desktop_username }}"
     mode: '0755'
     
 - template:
-    dest: '/home/{{ desktop_username }}/.config/autostart/configure_plasma.desktop'
-    src: configure_plasma.desktop
+    dest: '/home/{{ desktop_username }}/.config/systemd/user/configure_plasma.service'
+    src: configure_plasma.service
     owner: "{{ desktop_username }}"
     group: "{{ desktop_username }}"
     mode: '0755'
