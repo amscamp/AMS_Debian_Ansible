@@ -7,8 +7,8 @@ widgets = ['org.kde.plasma.systemmonitor.cpu',
         //    'org.kde.plasma.panelspacer',
         //    'org.kde.kargos',
            'org.kde.plasma.panelspacer',
-        //    'org.kde.plasma.systemmonitor.net',]
-           'org.kde.plasma.panelspacer',]
+           'org.kde.plasma.systemmonitor.net',]
+        //    'org.kde.plasma.panelspacer',]
            
 widgets2 = ['org.kde.plasma.kickoff',
             'org.kde.plasma.taskmanager',
@@ -140,7 +140,7 @@ for (i=0; i<panel2.widgetIds.length; i++) {
     widget = panel2.widgetById(panel2.widgetIds[i])
     if (widget.type == 'org.kde.plasma.digitalclock') {
         widget.currentConfigGroup = new Array('Appearance')
-        widget.writeConfig('showDate', 'true')
+        widget.writeConfig('showDate', 'false')
     } else if (widget.type == 'org.kde.plasma.kickoff') {
         widget.globalShortcut = 'Meta+F12'
     }
