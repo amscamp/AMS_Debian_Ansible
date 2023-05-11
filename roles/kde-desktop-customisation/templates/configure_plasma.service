@@ -1,8 +1,8 @@
 [Unit]
-After=xdg-desktop-autostart.target
+After=default.target
 
 [Install]
-WantedBy=xdg-desktop-autostart.target
+After=default.target
 
 [Service]
 Type=oneshot
