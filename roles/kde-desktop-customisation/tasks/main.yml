@@ -81,6 +81,22 @@
   become_user: "{{ desktop_username }}"
   ansible.builtin.systemd:
     name: configure_plasma.service
-    enabled: true
+    enabled: false
+    scope: user
+    
+- name: enable configure_plasma.service
+  become: true
+  become_method: su
+  become_user: "{{ desktop_username }}"
+  ansible.builtin.systemd:
     daemon_reload: true
+    scope: user
+
+- name: enable configure_plasma.service
+  become: true
+  become_method: su
+  become_user: "{{ desktop_username }}"
+  ansible.builtin.systemd:
+    name: configure_plasma.service
+    enabled: true
     scope: user
