@@ -1,9 +1,9 @@
 [Unit]
 Description=configure plasma
-After=default.target
+After=xdg-desktop-autostart.target
 
 [Install]
-WantedBy=default.target
+WantedBy=xdg-desktop-autostart.target
 
 [Service]
 Type=simple
