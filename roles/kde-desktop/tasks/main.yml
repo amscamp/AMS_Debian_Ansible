@@ -101,7 +101,7 @@
     state: present
     exclusive: true
 
-- name: set owner for touchpadrc
+- name: set owner for plasmarc
   ansible.builtin.file:
     path: "/home/{{ desktop_username }}/.config/plasmarc"
     state: file
