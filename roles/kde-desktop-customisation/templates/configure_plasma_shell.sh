@@ -5,4 +5,4 @@ exec 1>/home/{{ desktop_username }}/configurelog 2>&1
 
 echo "executed on $(date)" 
 # sleep 20
-# qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "$(</home/{{ desktop_username }}/.config/ansible_distro/configure_plasma_shell.js)"
+qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "$(</home/{{ desktop_username }}/.config/ansible_distro/configure_plasma_shell.js)"
