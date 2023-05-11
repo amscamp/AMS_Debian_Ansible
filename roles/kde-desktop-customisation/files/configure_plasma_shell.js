@@ -7,7 +7,8 @@ widgets = ['org.kde.plasma.systemmonitor.cpu',
         //    'org.kde.plasma.panelspacer',
         //    'org.kde.kargos',
            'org.kde.plasma.panelspacer',
-           'org.kde.plasma.systemmonitor.net',]
+        //    'org.kde.plasma.systemmonitor.net',]
+           'org.kde.plasma.panelspacer',]
            
 widgets2 = ['org.kde.plasma.kickoff',
             'org.kde.plasma.taskmanager',
