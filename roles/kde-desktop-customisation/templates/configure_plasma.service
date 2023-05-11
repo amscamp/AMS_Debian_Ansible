@@ -1,9 +1,9 @@
 [Unit]
-After=graphical-session.target
+After=pulseaudio.service
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=default.target
 
 [Service]
-Type=oneshot
+Type=simple
 ExecStart=/bin/bash -c 'qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "$(</home/{{ desktop_username }}/.config/ansible_distro/configure_plasma_shell.js)" && echo "executed on $(date)"'
