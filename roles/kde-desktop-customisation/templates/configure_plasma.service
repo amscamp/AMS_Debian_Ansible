@@ -1,5 +1,5 @@
 [Unit]
-After=pulseaudio.service
+After=default.target
 
 [Install]
 WantedBy=default.target
