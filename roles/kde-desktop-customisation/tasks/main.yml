@@ -40,14 +40,6 @@
     group: "{{ desktop_username }}"
     mode: '0755'
 
-- name: make sure .config/autostart-scripts exists
-  file:
-    path: "/home/{{ desktop_username }}/.config/autostart-scripts"
-    state: directory
-    owner: "{{ desktop_username }}"
-    group: "{{ desktop_username }}"
-    mode: '0755'
-
 
 - name: copy Plasma shell config script
   copy:
@@ -65,6 +57,13 @@
     group: "{{ desktop_username }}"
     mode: '0755'
 
+- name: make sure .config/autostart-scripts exists
+  file:
+    path: "/home/{{ desktop_username }}/.config/autostart-scripts"
+    state: directory
+    owner: "{{ desktop_username }}"
+    group: "{{ desktop_username }}"
+    mode: '0755'
 
 - name: Create autostart symlink
   ansible.builtin.file:
@@ -86,62 +85,3 @@
     src: KDE-Plasma-Dark-960-HD-WL.jpg
     dest: '/ansible_distro/KDE-Plasma-Dark-960-HD-WL.jpg'
     mode: '0755'
-
-# - name: make sure .config/systemd/user exists
-#   file:
-#     path: "/home/{{ desktop_username }}/.config/systemd/user"
-#     state: directory
-#     owner: "{{ desktop_username }}"
-#     group: "{{ desktop_username }}"
-#     mode: '0755'
-    
-# - name: create configure_plasma service
-#   template:
-#     dest: '/home/{{ desktop_username }}/.config/systemd/user/configure_plasma.service'
-#     src: configure_plasma.service
-#     owner: "{{ desktop_username }}"
-#     group: "{{ desktop_username }}"
-#     mode: '0644'
-
-# - name: make sure .config/systemd/user exists
-#   file:
-#     path: "/home/{{ desktop_username }}/.config/systemd/user"
-#     state: directory
-#     owner: "{{ desktop_username }}"
-#     group: "{{ desktop_username }}"
-#     mode: '0755'
-    
-# - name: create configure_plasma service
-#   template:
-#     dest: '/home/{{ desktop_username }}/.config/systemd/user/configure_plasma.service'
-#     src: configure_plasma.service
-#     owner: "{{ desktop_username }}"
-#     group: "{{ desktop_username }}"
-#     mode: '0644'
-
-
-# - name: disable configure_plasma.service
-#   become: true
-#   become_method: su
-#   become_user: "{{ desktop_username }}"
-#   ansible.builtin.systemd:
-#     name: configure_plasma.service
-#     enabled: false
-#     scope: user
-    
-# - name: reload daemons
-#   become: true
-#   become_method: su
-#   become_user: "{{ desktop_username }}"
-#   ansible.builtin.systemd:
-#     daemon_reload: true
-#     scope: user
-
-# - name: enable configure_plasma.service
-#   become: true
-#   become_method: su
-#   become_user: "{{ desktop_username }}"
-#   ansible.builtin.systemd:
-#     name: configure_plasma.service
-#     enabled: true
-#     scope: user

@@ -30,30 +30,30 @@
 
 
   roles:
-  # - role: kde-desktop
-  #   desktop_username: "{{ username }}"
+  - role: kde-desktop
+    desktop_username: "{{ username }}"
   - role: kde-desktop-customisation
     desktop_username: "{{ username }}"
     when: ansible_was_already_executed
-  # - role: basic-applications
-  # - role: t460s
-  # - role: plymouth
-  # - role: terminal
-  #   terminal_username: "{{ username }}"
-  #   when: ansible_was_already_executed
-  # - role: ansible-pull
-  #   ansible_pull_url: https://github.com/amscamp/AMS_Debian_Ansible
-  # - role: media-applications
-  #   when: ansible_was_already_executed
-  # - role: master-pdf-editor
-  # - role: zoom
-  # - role: chromium
-  #   extensions:
-  #     - "cjpalhdlnbpafiamejdnhcphjbkeiagm" #ublock  
-  # - role: firefox
-  #   extensions:
-  #     - id: "uBlock0@raymondhill.net"
-  #       url: "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi"       
+  - role: basic-applications
+  - role: t460s
+  - role: plymouth
+  - role: terminal
+    terminal_username: "{{ username }}"
+    when: ansible_was_already_executed
+  - role: ansible-pull
+    ansible_pull_url: https://github.com/amscamp/AMS_Debian_Ansible
+  - role: media-applications
+    when: ansible_was_already_executed
+  - role: master-pdf-editor
+  - role: zoom
+  - role: chromium
+    extensions:
+      - "cjpalhdlnbpafiamejdnhcphjbkeiagm" #ublock  
+  - role: firefox
+    extensions:
+      - id: "uBlock0@raymondhill.net"
+        url: "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi"       
   # - role: password-mgmt
   #   password_username: "{{ username }}"
   #   default_entries:
