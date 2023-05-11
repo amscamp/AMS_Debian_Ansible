@@ -1,11 +1,9 @@
 [Unit]
-After=xdg-desktop-autostart.target
+Description=configure plasma
 
 [Install]
-WantedBy=xdg-desktop-autostart.target
+WantedBy=default.target
 
 [Service]
 Type=simple
 ExecStart=/home/{{ desktop_username }}/.config/ansible_distro/configure_plasma_shell.sh
-
-
