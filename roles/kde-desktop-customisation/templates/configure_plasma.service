@@ -6,6 +6,6 @@ WantedBy=xdg-desktop-autostart.target
 
 [Service]
 Type=simple
-ExecStart=/bin/bash -c 'echo >&4 "executed on $(date)" '
+ExecStart=/bin/bash -c 'echo "executed on $(date)" '
 
 
