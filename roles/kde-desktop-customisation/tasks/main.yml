@@ -76,6 +76,9 @@
     mode: '0755'
 
 - name: enable configure_plasma.service
+  become: true
+  become_method: su
+  become_user: "{{ desktop_username }}"
   ansible.builtin.systemd:
     name: configure_plasma.service
     enabled: true
