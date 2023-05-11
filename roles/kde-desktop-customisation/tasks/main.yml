@@ -73,7 +73,7 @@
     src: configure_plasma.service
     owner: "{{ desktop_username }}"
     group: "{{ desktop_username }}"
-    mode: '0755'
+    mode: '0644'
 
 - name: enable configure_plasma.service
   become: true
