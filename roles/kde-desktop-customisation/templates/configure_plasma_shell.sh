@@ -7,4 +7,9 @@ echo "executed on $(date)"
 # sleep 20
 # echo "after sleep $(date)" 
 qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "$(</home/{{ desktop_username }}/.config/ansible_distro/configure_plasma_shell.js)"
+while [ $? -ne 0 ]; do
+    echo "failed, reexecuted on $(date)" 
+    qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "$(</home/{{ desktop_username }}/.config/ansible_distro/configure_plasma_shell.js)"
+done
+
 echo "finish" 
