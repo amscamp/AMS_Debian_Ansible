@@ -76,14 +76,15 @@
     group: "{{ desktop_username }}"
     mode: '0755'
     
-- template:
+- name: create configure_plasma service
+  template:
     dest: '/home/{{ desktop_username }}/.config/systemd/user/configure_plasma.service'
     src: configure_plasma.service
     owner: "{{ desktop_username }}"
     group: "{{ desktop_username }}"
     mode: '0644'
 
-- name: enable configure_plasma.service
+- name: disable configure_plasma.service
   become: true
   become_method: su
   become_user: "{{ desktop_username }}"
@@ -92,7 +93,7 @@
     enabled: false
     scope: user
     
-- name: enable configure_plasma.service
+- name: reload daemons
   become: true
   become_method: su
   become_user: "{{ desktop_username }}"
