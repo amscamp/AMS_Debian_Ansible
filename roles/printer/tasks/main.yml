@@ -13,7 +13,7 @@
     dest: "/usr/lib/cups/filter/"
     owner: root
     group: root
-    mode: 0644
+    mode: 0755
 
 - name: Restart cups service
   ansible.builtin.systemd:
