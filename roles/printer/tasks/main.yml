@@ -1,8 +1,21 @@
 ---
-- name: Copy PPDs in the ppds_to_be_copied folder
+- name: Copy PPDs in the ppd folder
   copy:
     src: "ppd/"
     dest: "/usr/share/ppd/"
     owner: root
     group: root
     mode: 0644
+
+- name: Copy filter in the filter folder
+  copy:
+    src: "filter/"
+    dest: "/usr/lib/cups/filter/"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Restart cups service
+  ansible.builtin.systemd:
+    state: restarted
+    name: cupsd
