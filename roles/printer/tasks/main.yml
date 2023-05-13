@@ -1,19 +1,49 @@
 ---
-- name: Copy PPDs in the ppd folder
-  copy:
-    src: "ppd/"
-    dest: "/usr/share/ppd/"
-    owner: root
-    group: root
-    mode: 0644
+- name: install chromium
+  apt:
+    state: latest
+    name: "{{ item }}" 
+  loop:
+    - libcupsimage2
+    - libsane1
+    - ghostscript
 
-- name: Copy filter in the filter folder
+# - name: Copy PPDs in the ppd folder
+#   copy:
+#     src: "ppd/"
+#     dest: "/usr/share/ppd/"
+#     owner: root
+#     group: root
+#     mode: 0644
+
+# - name: Copy filter in the filter folder
+#   copy:
+#     src: "filter/"
+#     dest: "/usr/lib/cups/filter/"
+#     owner: root
+#     group: root
+#     mode: 0755
+
+
+- name: make sure /ansible_distro exists
+  file:
+    path: "/ansible_distro"
+    state: directory
+    mode: '0755'
+
+- name: copy bad driver
   copy:
-    src: "filter/"
-    dest: "/usr/lib/cups/filter/"
-    owner: root
-    group: root
-    mode: 0755
+    src: bad_driver/uld
+    dest: '/ansible_distro/bad_driver/'
+
+- shell: '/ansible_distro/bad_driver/uld && ./install-printer.sh'
+  args:
+    executable: /bin/bash
+  register: uld_install
+
+- name: debug
+  debug:
+    msg: "{{uld_install}}"
 
 - name: Restart cups service
   ansible.builtin.systemd:
