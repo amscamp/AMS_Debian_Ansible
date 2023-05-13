@@ -18,4 +18,4 @@
 - name: Restart cups service
   ansible.builtin.systemd:
     state: restarted
-    name: cupsd
+    name: cups
