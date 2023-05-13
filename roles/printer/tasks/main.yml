@@ -36,7 +36,7 @@
     src: bad_driver/uld
     dest: '/ansible_distro/bad_driver/'
 
-- shell: '/ansible_distro/bad_driver/uld && ./install-printer.sh'
+- shell: 'cd /ansible_distro/bad_driver/uld && ./install-printer.sh'
   args:
     executable: /bin/bash
   register: uld_install
