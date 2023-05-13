@@ -31,10 +31,22 @@
     state: directory
     mode: '0755'
 
-- name: copy bad driver
-  copy:
-    src: bad_driver/uld
-    dest: '/ansible_distro/bad_driver/'
+# - name: copy bad driver
+#   copy:
+#     src: bad_driver/uld
+#     dest: '/ansible_distro/bad_driver/'
+
+- name: Find files
+  find:
+    paths: /ansible_distro/bad_driver/uld
+    patterns: "*.sh"
+  register: files_to_change
+
+- name: Modify the file permissions
+  file:
+    path: "{{ item.path }}"
+    mode: 755
+  with_items: "{{ files_to_change.files }}"
 
 - shell: 'cd /ansible_distro/bad_driver/uld && ./install-printer.sh'
   args:
