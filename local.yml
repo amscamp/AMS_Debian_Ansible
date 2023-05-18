@@ -54,7 +54,7 @@
   #   extensions:
   #     - id: "uBlock0@raymondhill.net"
   #       url: "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi"
-  - role: printer
+  # - role: printer
   # - role: password-mgmt
   #   password_username: "{{ username }}"
   #   default_entries:
