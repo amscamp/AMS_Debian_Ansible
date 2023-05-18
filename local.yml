@@ -14,7 +14,7 @@
     copy:
       dest: "/home/ams/runansible.sh"
       content: |
-        /usr/bin/ansible-pull -d /ansibleconfig -vvv -i /ansibleconfig/inventory -U https://github.com/amscamp/AMS_Debian_Ansible
+        /usr/bin/ansible-pull -d /ansibleconfig -vvv -i /ansibleconfig/inventory -U https://github.com/amscamp/AMS_Debian_Ansible -c dev
   - name: Install packages
     apt:
       state: latest
