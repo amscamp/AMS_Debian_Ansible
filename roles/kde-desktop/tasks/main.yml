@@ -35,6 +35,8 @@
     - kfind
     - k3b
     - gdebi
+    - pulseaudio-module-bluetooth
+    - bluez-firmware
 
 
 - name: Check if .configfolder exists
