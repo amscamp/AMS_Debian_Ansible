@@ -26,6 +26,7 @@
   loop:
     - ansible_pull_disable.sh
     - ansible_pull_status.sh
+    - ansible_pull_disable_status.sh
     - ansible_pull_reenable.sh
 
 - name: install units for ansible-pull

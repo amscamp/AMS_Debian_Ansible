@@ -1,16 +1,15 @@
 #!/bin/bash
 
 
-if [ -f /ansiblepull/disabletemporaryuntil ]
+
+let last_run=($(date +%s)-$(date +%s -d "$(systemctl show ansible-pull.service --property=ActiveExitTimestamp | sed 's|ActiveEnterTimestamp=||g')" ))/86400
+
+if [[ $last_run -ge 1 ]]
 then
-    pull_disabled_until=$(cat /ansiblepull/disabletemporaryuntil)
-    let pull_disabled_until_difference=($(date +%s -d @$pull_disabled_until)-$(date +%s))/86400
-    echo "( $pull_disabled_until_difference ) | iconName=vcs-conflicting"
-
+    runtime="($last_run)"
 else
-    echo " | iconName=vcs-normal"
+    runtime=" "
 fi
-
 
 systemctl is-active ansible-pull.service --quiet
 is_active=$?
@@ -25,12 +24,12 @@ fi
 
 if [[ $is_active -eq 3 && $is_failed -eq 1 ]]
 then
-    echo " | iconName=vcs-normal" 
+    echo "$runtime | iconName=vcs-normal" 
 fi
 
 if [[ $is_active -eq 3 && $is_failed -eq 0 ]]
 then
 
-    echo " | iconName=vcs-removed" 
+    echo "$runtime | iconName=vcs-removed" 
 fi
 
