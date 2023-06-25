@@ -28,6 +28,7 @@
     - ansible_pull_status.sh
     - ansible_pull_disable_status.sh
     - ansible_pull_reenable.sh
+    - ansible_pull_reenable_user.sh
 
 - name: install units for ansible-pull
   template:
