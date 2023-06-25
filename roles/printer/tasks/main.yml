@@ -8,13 +8,13 @@
     group: root
     mode: 0644
 
-- name: Copy filter in the filter folder
-  copy:
-    src: "filter/"
-    dest: "/usr/lib/cups/filter/"
-    owner: root
-    group: root
-    mode: 0755
+# - name: Copy filter in the filter folder
+#   copy:
+#     src: "filter/"
+#     dest: "/usr/lib/cups/filter/"
+#     owner: root
+#     group: root
+#     mode: 0755
 
 - name: Install .deb packages
   ansible.builtin.apt:
@@ -33,3 +33,4 @@
 #   loop:
 #     - printer-driver-gutenprint
 
+- import_tasks: uld.yml

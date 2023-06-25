@@ -22,7 +22,7 @@ then
     echo " | iconName=vcs-update-required" 
 
     echo "---"
-    echo "Die Aktualisierung käuft gerade!"
+    echo "Die Aktualisierung läuft gerade!"
 fi
 
 if [[ $is_active -eq 3 && $is_failed -eq 1 ]]
