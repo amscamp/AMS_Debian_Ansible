@@ -12,3 +12,25 @@ else
 fi
 
 
+systemctl is-active ansible-pull.service --quiet
+is_active=$?
+systemctl is-failed ansible-pull.service --quiet
+is_failed=$?
+
+
+if [[ $is_active -eq 0 ]]
+then
+    echo " | iconName=vcs-update-required" 
+fi
+
+if [[ $is_active -eq 3 && $is_failed -eq 1 ]]
+then
+    echo " | iconName=vcs-normal" 
+fi
+
+if [[ $is_active -eq 3 && $is_failed -eq 0 ]]
+then
+
+    echo " | iconName=vcs-removed" 
+fi
+
