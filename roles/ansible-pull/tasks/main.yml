@@ -1,4 +1,4 @@
-  ---
+---
 
 - name: Creates ansiblepull directory
   file:
