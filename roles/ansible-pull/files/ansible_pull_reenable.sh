@@ -18,7 +18,7 @@ then
         rm -rf /ansiblepull/disabletemporaryuntil
     fi
 fi
-sleep 5m;
+sleep 30m;
 done
 
 
