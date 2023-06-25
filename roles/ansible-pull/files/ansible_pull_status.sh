@@ -15,7 +15,7 @@ fi
 
 
 
-if $pull_disabled
+if [ $pull_disabled ]
 then
     echo "( $pull_disabled_until_difference ) | iconName=vcs-conflicting"
 else

@@ -35,7 +35,6 @@
   loop:
     - ansible-pull.service
     - ansible-pull.timer
-    - ansible-pull_reenable.timer
     - ansible-pull_reenable.service
 
 # - name: enable ansible-pull timer
@@ -53,6 +52,6 @@
     state: link
   loop:
     - ansible-pull.timer
-    - ansible-pull_reenable.timer
+    - ansible-pull_reenable.service
 
 
