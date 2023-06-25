@@ -7,6 +7,7 @@
     - libcupsimage2
     - libsane1
     - ghostscript
+    - libusb-0.1-4
 
 - name: make sure /opt/samsung/printer/share/ppd exists
   file:
@@ -326,6 +327,30 @@
   ansible.builtin.file:
     src: "/usr/lib/sane/libsane-smfp.so.1"
     dest: "/usr/lib/sane/libsane-smfp.so"
+    owner: root
+    group: root
+    state: link
+
+- name: Create libsane links
+  ansible.builtin.file:
+    src: "/opt/smfp-common/scanner/lib/libsane-smfp.so.1.0.1"
+    dest: "/usr/lib/x86_64-linux-gnu/sane/libsane-smfp.so.1.0.1"
+    owner: root
+    group: root
+    state: link
+
+- name: Create libsane links
+  ansible.builtin.file:
+    src: "/usr/lib/x86_64-linux-gnu/sane/libsane-smfp.so.1.0.1"
+    dest: "/usr/lib/x86_64-linux-gnu/sane/libsane-smfp.so.1"
+    owner: root
+    group: root
+    state: link
+
+- name: Create libsane links
+  ansible.builtin.file:
+    src: "/usr/lib/x86_64-linux-gnu/sane/libsane-smfp.so.1"
+    dest: "/usr/lib/x86_64-linux-gnu/sane/libsane-smfp.so"
     owner: root
     group: root
     state: link
