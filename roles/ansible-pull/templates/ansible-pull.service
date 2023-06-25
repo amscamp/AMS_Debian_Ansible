@@ -6,5 +6,5 @@ After=network-online.target
 ConditionPathExists=!/ansiblepull/disabletemporaryuntil
  
 [Service]
-ExecStart=/bin/sh -c 'until host github.com; do sleep 1; done && ansible-galaxy collection install community.general && ansible-pull -C dev -U "{{ ansible_pull_url }}" -i "$(uname -n)," --diff'
+ExecStart=/bin/sh -c 'until host github.com; do sleep 1; done && ansible-galaxy collection install community.general && ansible-pull -d /ansibleconfig -vvv -C dev -i /ansibleconfig/inventory -U "{{ ansible_pull_url }}"'
 TimeoutStopSec=600

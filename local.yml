@@ -10,11 +10,6 @@
     register: ansible_was_already_executed_check
   - name: Set hostname of command server as fact
     set_fact: ansible_was_already_executed="{{ ansible_was_already_executed_check.stat.exists }}"
-  - name: Creating a file with content
-    copy:
-      dest: "/home/ams/runansible.sh"
-      content: |
-        /usr/bin/ansible-pull -d /ansibleconfig -vvv -i /ansibleconfig/inventory -U https://github.com/amscamp/AMS_Debian_Ansible -c dev
   - name: Install packages
     apt:
       state: latest
