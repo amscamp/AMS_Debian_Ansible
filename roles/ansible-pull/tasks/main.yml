@@ -1,4 +1,32 @@
----
+  ---
+
+- name: Creates ansiblepull directory
+  file:
+    path: /ansiblepull
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Creates ansiblepull directory
+  file:
+    path: /ansiblepull/scripts
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: copy pull scripts
+  copy:
+    src: "{{ item }}"
+    dest: "/ansiblepull/scripts/{{ item }}"
+    owner: "root"
+    group: "root"
+    mode: '0755'
+  loop:
+    - ansible_pull_disable.sh
+    - ansible_pull_status.sh
+    - ansible_pull_reenable.sh
 
 - name: install units for ansible-pull
   template:
@@ -7,6 +35,8 @@
   loop:
     - ansible-pull.service
     - ansible-pull.timer
+    - ansible-pull_reenable.timer
+    - ansible-pull_reenable.service
 
 # - name: enable ansible-pull timer
 #   service:
@@ -16,9 +46,13 @@
 
 - name: enable ansible-pull timer
   ansible.builtin.file:
-    src: /etc/systemd/system/ansible-pull.timer
-    dest: /etc/systemd/system/multi-user.target.wants/ansible-pull.timer
+    src: "/etc/systemd/system/{{ item }}"
+    dest: "/etc/systemd/system/multi-user.target.wants/{{ item }}"
     owner: root
     group: root
     state: link
+  loop:
+    - ansible-pull.timer
+    - ansible-pull_reenable.timer
+
 

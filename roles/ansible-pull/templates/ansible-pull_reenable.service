@@ -1,0 +1,10 @@
+{{ ansible_managed|comment }}
+
+[Unit]
+Description=system configuration upgrade
+After=network-online.target
+ConditionPathExists=/ansiblepull/disabletemporaryuntil
+ 
+[Service]
+ExecStart=/bin/sh -c '/ansiblepull/scripts/ansible_pull_reenable.sh'
+TimeoutStopSec=600

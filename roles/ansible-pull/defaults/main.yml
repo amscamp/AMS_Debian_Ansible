@@ -2,3 +2,8 @@ ansible_pull_timer: |
   OnBootSec=3m
   OnCalendar=daily
   RandomizedDelaySec=20s
+
+ansible_pull_reenable_timer: |
+  OnBootSec=1m
+  OnCalendar=daily
+  RandomizedDelaySec=10s
