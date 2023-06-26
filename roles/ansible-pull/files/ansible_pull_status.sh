@@ -22,7 +22,7 @@ then
     echo " ▼ | iconName=vcs-update-required" 
 
     echo "---"
-    echo "Die Aktualisierung läuft gerade!"
+    echo "Die Aktualisierung läuft seit $(date -d "$(systemctl show ansible-pull.service --property=ActiveEnterTimestamp | sed 's|ActiveEnterTimestamp=||g')") !"
 fi
 
 if [[ $is_active -eq 3 && $is_failed -eq 1 ]]

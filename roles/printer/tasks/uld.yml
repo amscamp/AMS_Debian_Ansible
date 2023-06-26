@@ -82,6 +82,7 @@
     - printer/lib
     - printer/.usedby
     - scanner/share/locale/fr
+    - scanner/lib
     - scanner/.usedby
     - security/.usedby
     - legacy_compat
