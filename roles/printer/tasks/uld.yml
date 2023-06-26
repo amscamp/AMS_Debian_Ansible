@@ -307,30 +307,31 @@
   loop:
     - pstosecps
     - rastertospl
+    
+# legacy
+# - name: Create libsane links
+#   ansible.builtin.file:
+#     src: "/opt/smfp-common/scanner/lib/libsane-smfp.so.1.0.1"
+#     dest: "/usr/lib/sane/libsane-smfp.so.1.0.1"
+#     owner: root
+#     group: root
+#     state: link
 
-- name: Create libsane links
-  ansible.builtin.file:
-    src: "/opt/smfp-common/scanner/lib/libsane-smfp.so.1.0.1"
-    dest: "/usr/lib/sane/libsane-smfp.so.1.0.1"
-    owner: root
-    group: root
-    state: link
+# - name: Create libsane links
+#   ansible.builtin.file:
+#     src: "/usr/lib/sane/libsane-smfp.so.1.0.1"
+#     dest: "/usr/lib/sane/libsane-smfp.so.1"
+#     owner: root
+#     group: root
+#     state: link
 
-- name: Create libsane links
-  ansible.builtin.file:
-    src: "/usr/lib/sane/libsane-smfp.so.1.0.1"
-    dest: "/usr/lib/sane/libsane-smfp.so.1"
-    owner: root
-    group: root
-    state: link
-
-- name: Create libsane links
-  ansible.builtin.file:
-    src: "/usr/lib/sane/libsane-smfp.so.1"
-    dest: "/usr/lib/sane/libsane-smfp.so"
-    owner: root
-    group: root
-    state: link
+# - name: Create libsane links
+#   ansible.builtin.file:
+#     src: "/usr/lib/sane/libsane-smfp.so.1"
+#     dest: "/usr/lib/sane/libsane-smfp.so"
+#     owner: root
+#     group: root
+#     state: link
 
 - name: Create libsane links
   ansible.builtin.file:
