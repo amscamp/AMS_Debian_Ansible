@@ -14,8 +14,8 @@
     ssid: "{{ item.key }}"
     wifi_sec:
       key-mgmt: wpa-psk
-      psk: "{{ pwdtemp }}"
+      psk: "{{ pwdtemp.stdout }}"
       autoconnect: true
     state: present
   # no_log: True
-  when:  pwdtemp != item.value
+  when:  pwdtemp.stdout != item.value
