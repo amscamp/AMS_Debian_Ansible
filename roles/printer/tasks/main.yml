@@ -18,7 +18,7 @@
 
 - name: Install .deb packages
   ansible.builtin.apt:
-    deb: "deb/{{ item }}"
+    deb: "{{ role_path }}/files/deb/{{ item }}"
   loop:
     - brother-udev-rule-type1-1.0.2-0.all.deb
     - brscan4-0.4.11-1.amd64.deb
