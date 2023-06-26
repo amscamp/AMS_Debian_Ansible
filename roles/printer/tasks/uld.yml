@@ -85,7 +85,7 @@
     - scanner/lib
     - scanner/.usedby
     - security/.usedby
-    - legacy_compat
+    - legacy_compat/.usedby
 
 - name: Creating an empty file
   ansible.builtin.file:
