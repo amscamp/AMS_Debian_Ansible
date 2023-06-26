@@ -65,3 +65,23 @@
     - ansible-pull_reenable.service
 
 
+- name: Ensure group "pulloperators" exists
+  ansible.builtin.group:
+    name: pulloperators
+    state: present
+
+- name: Adding user {{ pull_username }}  
+  user: name={{ pull_username }}
+        groups=pulloperators
+        append=yes
+
+- name: create sudoers file
+  copy:
+    content: |
+      %pulloperators ALL= NOPASSWD: /bin/systemctl start ansible-pull.service
+      %pulloperators ALL= NOPASSWD: /bin/systemctl stop ansible-pull.service
+      %pulloperators ALL= NOPASSWD: /bin/systemctl restart ansible-pull.service
+    dest: "/etc/sudoers.d/pulloperators"
+    owner: root
+    group: root
+    mode: 0644

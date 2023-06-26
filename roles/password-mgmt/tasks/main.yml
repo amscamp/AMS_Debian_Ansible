@@ -111,6 +111,14 @@
     owner: "{{ wallet_username }}"
   when: not password_store_exists.stat.exists
 
+- name: Ensure {{ passwd_wifi_folder }} exists
+  ansible.builtin.file:
+    dest: "{{ wallet_userhome }}/.password-store/{{ passwd_wifi_folder }}"
+    state: directory
+    mode: "0700"
+    owner: "{{ wallet_username }}"
+  when: not password_store_exists.stat.exists
+
 - name: get wallet folder entrys
   shell: pass ls {{ passwd_folder }}
   environment:
@@ -162,43 +170,43 @@
     HOME: "{{ wallet_userhome }}"
   when: wallet_entrys.stdout is search("UserPW")
 
-- name: get luks device
-  shell: 'echo "/dev/disk/by-uuid/$(cat /etc/crypttab | sed -e "s|\(.*\) UUID=\(.*\) none.*|\2|g")"'
-  register: luks_device
+# - name: get luks device
+#   shell: 'echo "/dev/disk/by-uuid/$(cat /etc/crypttab | sed -e "s|\(.*\) UUID=\(.*\) none.*|\2|g")"'
+#   register: luks_device
 
-- name: create managementluks keyfile
-  shell: pass show {{ passwd_mandatory_folder }}/encryptionmgmt > {{ wallet_userhome }}/encromgmttemp
-  environment:
-    HOME: "{{ wallet_userhome }}"
-  when: not password_store_exists.stat.exists
+# - name: create managementluks keyfile
+#   shell: pass show {{ passwd_mandatory_folder }}/encryptionmgmt > {{ wallet_userhome }}/encromgmttemp
+#   environment:
+#     HOME: "{{ wallet_userhome }}"
+#   when: not password_store_exists.stat.exists
 
-- name: set management enc pw
-  community.crypto.luks_device:
-    device: "{{ luks_device.stdout }}"
-    state: "present"
-    passphrase: "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | join }}"
-    new_keyfile: "{{ wallet_userhome }}/encromgmttemp"
-  when: not password_store_exists.stat.exists
+# - name: set management enc pw
+#   community.crypto.luks_device:
+#     device: "{{ luks_device.stdout }}"
+#     state: "present"
+#     passphrase: "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | join }}"
+#     new_keyfile: "{{ wallet_userhome }}/encromgmttemp"
+#   when: not password_store_exists.stat.exists
 
-- name: set management enc pw
-  community.crypto.luks_device:
-    device: "{{ luks_device.stdout }}"
-    state: "present"
-    remove_passphrase: "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | join }}"
-  when: not password_store_exists.stat.exists
+# - name: set management enc pw
+#   community.crypto.luks_device:
+#     device: "{{ luks_device.stdout }}"
+#     state: "present"
+#     remove_passphrase: "{{ default_entries | selectattr('key', 'equalto', 'Encryption') | map(attribute='value') | join }}"
+#   when: not password_store_exists.stat.exists
 
 
-- name: create luks keyfile
-  shell: pass show {{ passwd_folder }}/Encryption > {{ wallet_userhome }}/encrotemp
-  environment:
-    HOME: "{{ wallet_userhome }}"
+# - name: create luks keyfile
+#   shell: pass show {{ passwd_folder }}/Encryption > {{ wallet_userhome }}/encrotemp
+#   environment:
+#     HOME: "{{ wallet_userhome }}"
 
-- name: set default enc pw
-  community.crypto.luks_device:
-    device: "{{ luks_device.stdout }}"
-    state: "present"
-    keyfile: "{{ wallet_userhome }}/encromgmttemp"
-    new_keyfile: "{{ wallet_userhome }}/encrotemp"
+# - name: set default enc pw
+#   community.crypto.luks_device:
+#     device: "{{ luks_device.stdout }}"
+#     state: "present"
+#     keyfile: "{{ wallet_userhome }}/encromgmttemp"
+#     new_keyfile: "{{ wallet_userhome }}/encrotemp"
 
 # - name: get default enc pw
 #   community.crypto.luks_device:
@@ -209,12 +217,12 @@
 #     # new_keyfile: "{{ wallet_userhome }}/encrotemp"
 
 
-- name: Remove temp encro file
-  ansible.builtin.file:
-    path: "{{ wallet_userhome }}/encrotemp"
-    state: absent
+# - name: Remove temp encro file
+#   ansible.builtin.file:
+#     path: "{{ wallet_userhome }}/encrotemp"
+#     state: absent
     
-- name: Remove temp encro mgmt file
-  ansible.builtin.file:
-    path: "{{ wallet_userhome }}/encromgmttemp"
-    state: absent
+# - name: Remove temp encro mgmt file
+#   ansible.builtin.file:
+#     path: "{{ wallet_userhome }}/encromgmttemp"
+#     state: absent

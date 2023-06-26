@@ -1,4 +1,5 @@
 passwd_folder: system
+passwd_wifi_folder: wifi
 passwd_mandatory_folder: systemmandatory
 wallet_username: root
 wallet_userhome: /root
