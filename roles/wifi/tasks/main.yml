@@ -19,7 +19,7 @@
         HOME: "{{ wallet_userhome }}"
       when: wifi_wallet_entrys.stdout is search("{{ item.key }}")
       no_log: True
-      register: "pwd_{{ item.key }}"
+      register: vars[ 'pwd_' + item.key]
     - name: create wifi {{ item.key }}
       community.general.nmcli:
         type: wifi
@@ -28,8 +28,8 @@
         ssid: {{ item.key }}
         wifi_sec:
           key-mgmt: wpa-psk
-          psk: "{{ pwd_{{ item.key }} }}"
+          psk: "{{ vars[ 'pwd_' + item.key] }}"
           autoconnect: true
         state: present
-      when:  "{{ pwd_{{ item.key }} }}" != item.value
+      when:  vars[ 'pwd_' + item.key] != item.value
    loop: {{ ssids }}
