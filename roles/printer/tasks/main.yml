@@ -1,5 +1,12 @@
 ---
 
+- name: install apt driver
+  apt:
+    state: latest
+    name: "{{ item }}" 
+  loop:
+    - hplip
+
 - name: Copy PPDs in the ppd folder
   copy:
     src: "ppd/"
