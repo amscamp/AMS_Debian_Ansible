@@ -30,7 +30,7 @@ then
     echo "$runtime | iconName=vcs-normal" 
 
     echo "---"
-    echo "Die letzte Aktualisierung wurde am $(date -d \"$(systemctl show ansible-pull.service --property=ActiveExitTimestamp | sed 's|ActiveExitTimestamp=||g')\") erfolgreich beendet. "
+    echo "Die letzte Aktualisierung wurde am $(date -d "$(systemctl show ansible-pull.service --property=ActiveExitTimestamp | sed 's|ActiveExitTimestamp=||g')") erfolgreich beendet. "
 fi
 
 if [[ $is_active -eq 3 && $is_failed -eq 0 ]]
@@ -38,6 +38,6 @@ then
 
     echo "$runtime | iconName=vcs-removed" 
     echo "---"
-    echo "Die letzte Aktualisierung wurde am $(date -d \"$(systemctl show ansible-pull.service --property=ActiveExitTimestamp | sed 's|ActiveExitTimestamp=||g')\") mit Fehlern beendet. "
+    echo "Die letzte Aktualisierung wurde am $(date -d "$(systemctl show ansible-pull.service --property=ActiveExitTimestamp | sed 's|ActiveExitTimestamp=||g')") mit Fehlern beendet. "
 fi
 
