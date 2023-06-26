@@ -8,13 +8,21 @@
     group: root
     mode: 0755
 
-- name: Creates ansiblepull directory
+- name: Creates ansiblepull script directory
   file:
     path: /ansiblepull/scripts
     state: directory
     owner: root
     group: root
     mode: 0755
+
+- name: Creates ansiblepull status directory
+  file:
+    path: /ansiblepull/status
+    state: directory
+    owner: root
+    group: root
+    mode: 0777
 
 - name: copy pull scripts
   copy:

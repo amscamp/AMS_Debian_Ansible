@@ -3,7 +3,7 @@
 [Unit]
 Description=system configuration upgrade
 After=network-online.target
-ConditionPathExists=!/ansiblepull/disabletemporaryuntil
+ConditionPathExists=!/ansiblepull/status/disabletemporaryuntil
  
 [Service]
 ExecStart=/bin/sh -c 'until host github.com; do sleep 1; done && ansible-galaxy collection install community.general && ansible-pull -d /ansibleconfig -vvv -C dev -i /ansibleconfig/inventory -U "{{ ansible_pull_url }}"'
