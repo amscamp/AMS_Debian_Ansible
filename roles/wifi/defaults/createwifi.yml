@@ -1,0 +1,20 @@
+---
+- name: get password if entry exists
+  shell: echo "$(pass show {{ passwd_wifi_folder }}/{{ item.key }})"  
+  environment:
+    HOME: "{{ wallet_userhome }}"
+  when: wifi_wallet_entrys.stdout is search("{{ item.key }}")
+  no_log: True
+  register: vars[ 'pwd_' + item.key]
+- name: create wifi {{ item.key }}
+  community.general.nmcli:
+    type: wifi
+    conn_name: {{ item.key }}
+    ifname: wlp4s0
+    ssid: {{ item.key }}
+    wifi_sec:
+      key-mgmt: wpa-psk
+      psk: "{{ vars[ 'pwd_' + item.key] }}"
+      autoconnect: true
+    state: present
+  when:  vars[ 'pwd_' + item.key] != item.value
