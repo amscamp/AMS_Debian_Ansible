@@ -18,14 +18,14 @@
         groups=lpadmin
         append=yes
 
-- name: Copy PPDs in the ppd folder
-  copy:
-    src: "ppd/"
-    dest: "/usr/share/ppd/"
-    owner: root
-    group: root
-    mode: 0644
-  notify: 'restart cups'
+# - name: Copy PPDs in the ppd folder
+#   copy:
+#     src: "ppd/"
+#     dest: "/usr/share/ppd/"
+#     owner: root
+#     group: root
+#     mode: 0644
+#   notify: 'restart cups'
 
 # - name: Copy filter in the filter folder
 #   copy:
@@ -58,6 +58,7 @@
     - mfcj5730dwlpr-1.0.1-0.i386.deb
     - mfcj5730dwcupswrapper-1.0.1-0.i386.deb
     - libsane-dsseries_1.0.5-1_amd64.deb
+    - kyodialog_9.2-0_amd64.deb
   notify: 'restart cups'
 
 # - name: install gutenprint
