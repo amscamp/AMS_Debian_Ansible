@@ -31,5 +31,5 @@
           psk: "{{ pwd_{{ item.key }} }}"
           autoconnect: true
         state: present
-      when:  pwd_{{ item.key }} != item.value
+      when:  "{{ pwd_{{ item.key }} }}" != item.value
    loop: {{ ssids }}
