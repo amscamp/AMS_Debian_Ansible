@@ -61,7 +61,7 @@
       - key: "UserPW"
         value: "ams"
     when: ansible_was_already_executed
-    - role: wifi
+  - role: wifi
     ssids:
       - key: "fest.spiel.haus"
         value: "password"
