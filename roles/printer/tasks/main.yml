@@ -72,6 +72,6 @@
 - name: Ensure CreateIPPPrinterQueues is set to All
   ansible.builtin.lineinfile:
     path: /etc/cups/cups-browsed.conf
-    regexp: '^*CreateIPPPrinterQueues.*$'
-    line: CreateIPPPrinterQueues All
+    regexp: '^\s*#*\s*(CreateIPPPrinterQueues All.*)'
+    replace: '\1'
   notify: 'restart cups-browsed'
