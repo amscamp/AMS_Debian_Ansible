@@ -23,7 +23,17 @@ do
    if [[ $printername == "FS-1128MFP" && $availableprinters -eq 0 ]]; then
         echo $printerip
 
-        lpadmin -p FS-1128MFP -E -v socket://$printerip -m /usr/share/ppd/kyocera/Kyocera_FS-1128MFP.ppd
+        lpadmin -p "FS1128MFP" -E -v $i -i /usr/share/ppd/kyocera/Kyocera_FS-1128MFP.ppd
+   fi
+   if [[ $printername == "FS-1128MFP" && $availableprinters -eq 1 ]]; then
+        echo $printerip
+
+        if ping -c 1 $printerip &> /dev/null
+        then
+            echo "success"
+        else
+            lpadmin -x "FS1128MFP"
+        fi
    fi
 
 done
