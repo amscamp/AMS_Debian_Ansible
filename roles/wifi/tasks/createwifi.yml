@@ -15,7 +15,7 @@
     wifi_sec:
       key-mgmt: wpa-psk
       psk: "{{ pwdtemp.stdout }}"
-      autoconnect: true
+    autoconnect: true
     state: present
   # no_log: True
   when:  pwdtemp.stdout != item.value
