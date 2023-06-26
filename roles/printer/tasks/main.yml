@@ -7,6 +7,16 @@
   loop:
     - hplip
 
+- name: Adding user {{ print_username }} to lp
+  user: name={{ print_username }}
+        groups=lp
+        append=yes
+
+- name: Adding user {{ print_username }} to lpadmin
+  user: name={{ print_username }}
+        groups=lpadmin
+        append=yes
+
 - name: Copy PPDs in the ppd folder
   copy:
     src: "ppd/"
