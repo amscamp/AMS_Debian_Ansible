@@ -13,5 +13,5 @@
   loop: "{{ ssids }}"
 
 - name: create wifis
-  include_tasks: {{ role_path }}/tasks/createwifi.yml
+  include_tasks: "{{ role_path }}/tasks/createwifi.yml"
   loop: "{{ ssids }}"
