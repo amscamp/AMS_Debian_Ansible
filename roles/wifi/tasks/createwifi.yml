@@ -9,9 +9,9 @@
 - name: create wifi {{ item.key }}
   community.general.nmcli:
     type: wifi
-    conn_name: {{ item.key }}
+    conn_name: "{{ item.key }}"
     ifname: wlp4s0
-    ssid: {{ item.key }}
+    ssid: "{{ item.key }}"
     wifi_sec:
       key-mgmt: wpa-psk
       psk: "{{ vars[ 'pwd_' + item.key] }}"
