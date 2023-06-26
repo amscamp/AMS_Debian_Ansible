@@ -5,7 +5,7 @@
     HOME: "{{ wallet_userhome }}"
   when: wifi_wallet_entrys.stdout is search("{{ item.key }}")
   # no_log: True
-  register: vars[ 'pwd_' + item.key]
+  register: "pwd_{{ item.key }}"
 - name: create wifi {{ item.key }}
   community.general.nmcli:
     type: wifi
