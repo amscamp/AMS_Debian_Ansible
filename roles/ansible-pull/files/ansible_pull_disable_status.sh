@@ -5,7 +5,7 @@ if [ -f /ansiblepull/status/disabletemporaryuntil ]
 then
     pull_disabled_until=$(cat /ansiblepull/status/disabletemporaryuntil)
     let pull_disabled_until_difference=($(date +%s -d @$pull_disabled_until)-$(date +%s))/86400
-    echo "( $pull_disabled_until_difference ) | iconName=vcs-conflicting"
+    echo "( $pull_disabled_until_difference ) ▼ | iconName=vcs-conflicting"
 
 
     echo "---"
@@ -14,7 +14,7 @@ then
 
 
 else
-    echo " | iconName=vcs-normal"
+    echo " ▼ | iconName=vcs-normal"
 
     echo "---"
     echo "Aktualisierungsmechanismus ist aktiviert"

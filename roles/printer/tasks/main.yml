@@ -36,8 +36,8 @@
   loop:
     - brother-udev-rule-type1-1.0.2-0.all.deb
     - brscan4-0.4.11-1.amd64.deb
-    - mfcj5730dwcupswrapper-1.0.1-0.i386.deb
     - mfcj5730dwlpr-1.0.1-0.i386.deb
+    - mfcj5730dwcupswrapper-1.0.1-0.i386.deb
     - libsane-dsseries_1.0.5-1_amd64.deb
 
 # - name: install gutenprint
