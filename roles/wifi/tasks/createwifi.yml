@@ -4,7 +4,7 @@
   environment:
     HOME: "{{ wallet_userhome }}"
   when: wifi_wallet_entrys.stdout is search("{{ item.key }}")
-  no_log: True
+  # no_log: True
   register: vars[ 'pwd_' + item.key]
 - name: create wifi {{ item.key }}
   community.general.nmcli:
@@ -17,4 +17,5 @@
       psk: "{{ vars[ 'pwd_' + item.key] }}"
       autoconnect: true
     state: present
+  # no_log: True
   when:  vars[ 'pwd_' + item.key] != item.value
