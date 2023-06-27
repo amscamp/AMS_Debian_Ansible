@@ -1,0 +1,12 @@
+{{ ansible_managed|comment }}
+
+[Unit]
+Description=printer detection service
+ 
+[Timer]
+{{ printerdetection_timer }}
+Unit=printerdetection.service
+Persistent=true
+ 
+[Install]
+WantedBy=multi-user.target

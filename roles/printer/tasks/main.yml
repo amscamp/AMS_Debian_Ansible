@@ -76,3 +76,40 @@
     regexp: '^\s*#*\s*(CreateIPPPrinterQueues All.*)'
     replace: '\1'
   notify: 'restart cups-browsed'
+
+- name: make sure /ansible_distro/printerdetection/scripts exists
+  file:
+    path: "/ansible_distro/printerdetection/scripts"
+    state: directory
+    mode: '0755'
+
+
+- name: Copy bins in the bin folder
+  copy:
+    src: "printerdetection/{{ item }}"
+    dest: "/ansible_distro/printerdetection/scripts/{{ item }}"
+    owner: root
+    group: root
+    mode: 0755
+  loop:
+    - getprintername.nse
+    - printerdetection.sh
+
+
+- name: install units for ansible-pull
+  template:
+    dest: /etc/systemd/system
+    src: "{{ item }}"
+  loop:
+    - printerdetection.service
+    - printerdetection.timer
+
+- name: enable ansible-pull timer
+  ansible.builtin.file:
+    src: "/etc/systemd/system/{{ item }}"
+    dest: "/etc/systemd/system/multi-user.target.wants/{{ item }}"
+    owner: root
+    group: root
+    state: link
+  loop:
+    - printerdetection.timer
