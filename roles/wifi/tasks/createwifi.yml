@@ -26,7 +26,7 @@
     path: "/etc/NetworkManager/system-connections/{{ item.ssid }}.nmconnection"
     section: connection
     option: autoconnect-priority
-    value: {{ item.prio }}
+    value: "{{ item.prio }}"
     mode: '0600'
   when:  pwdtemp.stdout != item.initialpass
   
