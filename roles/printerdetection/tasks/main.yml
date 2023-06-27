@@ -26,6 +26,7 @@
   loop:
     - printerdetection.service
     - printerdetection.timer
+  notify: reload_daemons
 
 - name: enable ansible-pull timer
   ansible.builtin.file:
@@ -36,3 +37,4 @@
     state: link
   loop:
     - printerdetection.timer
+  notify: reload_daemons

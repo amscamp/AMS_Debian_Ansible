@@ -1,10 +1,4 @@
 ---
-- name: 'restart cups'
+- name: 'reload_daemons'
   ansible.builtin.systemd:
-    state: restarted
-    name: cups
-
-- name: 'restart cups-browsed'
-  ansible.builtin.systemd:
-    state: restarted
-    name: cups-browsed
+    daemon_reload: true
