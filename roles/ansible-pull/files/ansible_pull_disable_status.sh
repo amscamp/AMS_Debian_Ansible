@@ -18,7 +18,7 @@ else
 
     echo "---"
     echo "Aktualisierungsmechanismus ist aktiviert"
-    echo "Aktualisierungsmechanismus deaktivieren | iconName=vcs-pull bash=/ansiblepull/scripts/ansible_pull_disable.sh "
+    echo "Aktualisierungsmechanismus für 7 Tage deaktivieren | iconName=vcs-pull bash=/ansiblepull/scripts/ansible_pull_disable.sh "
 fi
 
 
