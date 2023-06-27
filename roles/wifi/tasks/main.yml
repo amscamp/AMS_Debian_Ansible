@@ -6,10 +6,10 @@
     HOME: "{{ wallet_userhome }}"
   register: wifi_wallet_entrys
 - name: create wallet entrys if they not exist
-  shell: echo "{{ item.value }}" | pass insert -e {{ passwd_wifi_folder }}/{{ item.key }}
+  shell: echo "{{ item.initialpass }}" | pass insert -e {{ passwd_wifi_folder }}/{{ item.ssid }}
   environment:
     HOME: "{{ wallet_userhome }}"
-  when: not wifi_wallet_entrys.stdout is search(item.key)
+  when: not wifi_wallet_entrys.stdout is search(item.ssid)
   loop: "{{ ssids }}"
 
 - name: create wifis
