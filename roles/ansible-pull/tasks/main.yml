@@ -46,12 +46,8 @@
     - ansible-pull.service
     - ansible-pull.timer
     - ansible-pull_reenable.service
+    - ansible-pull_reenable.timer
 
-# - name: enable ansible-pull timer
-#   service:
-#     name: ansible-pull.timer
-#     state: started
-#     enabled: yes
 
 - name: enable ansible-pull timer
   ansible.builtin.file:
@@ -62,7 +58,7 @@
     state: link
   loop:
     - ansible-pull.timer
-    - ansible-pull_reenable.service
+    - ansible-pull_reenable.timer
 
 
 - name: Ensure group "pulloperators" exists

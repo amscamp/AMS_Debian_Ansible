@@ -1,9 +1,6 @@
 #!/bin/bash
 
 
-while :
-do
-
 if [ -f /ansiblepull/status/disabletemporaryuntil ]
 then
     echo "disabled pull detected"
@@ -18,8 +15,7 @@ then
         rm -rf /ansiblepull/status/disabletemporaryuntil
     fi
 fi
-sleep 30m;
-done
+
 
 
 
