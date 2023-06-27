@@ -68,7 +68,7 @@
     ssids:
       - ssid: "fest.spiel.haus"
         initialpass: "password"
-        prio: 0
+        prio: 2
       - ssid: "fest.spiel.haus.gast"
         initialpass: "password"
         prio: 1
