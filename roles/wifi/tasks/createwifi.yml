@@ -4,7 +4,7 @@
   environment:
     HOME: "{{ wallet_userhome }}"
   when: wifi_wallet_entrys.stdout is search("{{ item.ssid }}")
-  # no_log: True
+  no_log: True
   register: "pwdtemp"
 - name: create wifi {{ item.ssid }}
   community.general.nmcli:
@@ -13,11 +13,11 @@
     ifname: wlp4s0
     ssid: "{{ item.ssid }}"
     wifi_sec:
-      ssid-mgmt: wpa-psk
+      key-mgmt: wpa-psk
       psk: "{{ pwdtemp.stdout }}"
     autoconnect: true
     state: present
-  # no_log: True
+  no_log: True
   when:  pwdtemp.stdout != item.initialpass
 
 
