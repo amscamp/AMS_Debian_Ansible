@@ -5,7 +5,7 @@ Description=ansible pull reenabler
  
 [Timer]
 {{ ansible_pull_reenable_timer }}
-Unit=printerdetection.service
+Unit=ansible-pull_reenable.service
 Persistent=true
  
 [Install]
