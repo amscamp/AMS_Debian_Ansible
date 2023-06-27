@@ -12,6 +12,11 @@
     state: directory
     mode: '0755'
 
+- name: make sure /ansible_distro/printerdetection/status exists
+  ansible.builtin.file:
+    path: /ansible_distro/printerdetection/status
+    state: touch
+    mode: u=rw,g=r,o=r
 
 - name: Copy bins in the bin folder
   copy:

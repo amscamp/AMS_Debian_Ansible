@@ -32,8 +32,8 @@ done
 #handle cleanup
 cat /ansible_distro/printerdetection/status | while read line 
 do
-    printername=$($line | cut -d ":" -f 1)
-    printerip=$($line | cut -d ":" -f 2)
+    printername=$(echo "$line" | cut -d ":" -f 1)
+    printerip=$(echo "$line" | cut -d ":" -f 2)
     availableprinters=$(lpstat -v | grep $printerip | wc -l)
 
     if [[ $availableprinters -eq 1 ]]; then
