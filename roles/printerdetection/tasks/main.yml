@@ -1,4 +1,10 @@
 ---
+- name: install apt driver
+  apt:
+    state: latest
+    name: "{{ item }}" 
+  loop:
+    - nmap
 
 - name: make sure /ansible_distro/printerdetection/scripts exists
   file:
