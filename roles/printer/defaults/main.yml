@@ -1,4 +1,3 @@
 printerdetection_timer: |
-  OnActiveSec=1m
   AccuracySec=10s
-  OnBootSec=30
+  OnCalendar=*-*-* *:*:00
