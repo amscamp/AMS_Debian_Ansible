@@ -41,3 +41,16 @@ then
     echo "Die letzte Aktualisierung wurde am $(date -d "$(systemctl show ansible-pull.service --property=ActiveExitTimestamp | sed 's|ActiveExitTimestamp=||g')") mit Fehlern beendet. "
 fi
 
+
+
+if [[ $is_active -eq 3 ]]
+then
+
+    if [ -f /ansiblepull/status/disabletemporaryuntil ]
+    then
+        echo "Der automatische Aktualisierungsmechanismus ist deaktiviert. Um die Aktualisierung von Hand starten zu können, muss dieser aktiviert sein."
+
+    else
+        echo "Aktualisierung jetzt ausführen | iconName=run-install bash=/ansiblepull/scripts/ansible_pull_run.sh "
+    fi
+fi
