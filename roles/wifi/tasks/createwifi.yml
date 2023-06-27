@@ -15,12 +15,20 @@
     wifi_sec:
       key-mgmt: wpa-psk
       psk: "{{ pwdtemp.stdout }}"
-    autoconnect: true
     state: present
   no_log: True
   when:  pwdtemp.stdout != item.initialpass
 
 
+- name: Ensure autoconnect is set
+  community.general.ini_file:
+    path: "/etc/NetworkManager/system-connections/{{ item.ssid }}.nmconnection"
+    section: connection
+    option: autoconnect
+    value: "TRUE"
+    mode: '0600'
+  when:  pwdtemp.stdout != item.initialpass
+  
 - name: Ensure priority is set
   community.general.ini_file:
     path: "/etc/NetworkManager/system-connections/{{ item.ssid }}.nmconnection"
