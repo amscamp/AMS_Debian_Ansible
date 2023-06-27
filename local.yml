@@ -50,9 +50,9 @@
   #   extensions:
   #     - id: "uBlock0@raymondhill.net"
   #       url: "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi"
-  - role: signal
-  - role: printer
-    print_username: "{{ username }}"
+    - role: signal
+    - role: printer
+      print_username: "{{ username }}"
   # - role: password-mgmt
   #   password_username: "{{ username }}"
   #   default_entries:
@@ -63,11 +63,11 @@
   #     - key: "UserPW"
   #       value: "ams"
   #   when: ansible_was_already_executed
-  - role: wifi
-    ssids:
-      - key: "fest.spiel.haus"
-        value: "password"
-      - key: "fest.spiel.haus.gast"
-        value: "password"
-    when: ansible_was_already_executed
+    - role: wifi
+      ssids:
+        - key: "fest.spiel.haus"
+          value: "password"
+        - key: "fest.spiel.haus.gast"
+          value: "password"
+      when: ansible_was_already_executed
 
