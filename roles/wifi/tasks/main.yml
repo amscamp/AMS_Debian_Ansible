@@ -11,6 +11,7 @@
     HOME: "{{ wallet_userhome }}"
   when: not wifi_wallet_entrys.stdout is search(item.ssid)
   loop: "{{ ssids }}"
+  no_log: True
 
 - name: create wifis
   include_tasks: createwifi.yml
