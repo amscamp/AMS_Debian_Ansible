@@ -64,11 +64,13 @@
   #     - key: "UserPW"
   #       value: "ams"
   #   when: ansible_was_already_executed
-  # - role: wifi
-  #   ssids:
-  #     - key: "fest.spiel.haus"
-  #       value: "password"
-  #     - key: "fest.spiel.haus.gast"
-  #       value: "password"
-  #   when: ansible_was_already_executed
+  - role: wifi
+    ssids:
+      - ssid: "fest.spiel.haus"
+        initialpass: "password"
+        prio: 0
+      - ssid: "fest.spiel.haus.gast"
+        initialpass: "password"
+        prio: 1
+    when: ansible_was_already_executed
 
