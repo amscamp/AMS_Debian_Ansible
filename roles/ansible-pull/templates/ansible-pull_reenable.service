@@ -3,7 +3,6 @@
 [Unit]
 Description=system configuration upgrade
 After=network-online.target
-Type=simple
  
 [Service]
 ExecStart=/bin/bash -c '/ansiblepull/scripts/ansible_pull_reenable.sh'
