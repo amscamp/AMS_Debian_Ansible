@@ -68,9 +68,6 @@
     ssids:
       - ssid: "fest.spiel.haus"
         initialpass: "password"
-        prio: 1
-      - ssid: "fest.spiel.haus.gast"
-        initialpass: "password"
-        prio: 2
+        prio: 0
     when: ansible_was_already_executed
 
