@@ -4,4 +4,4 @@
 Description=pull-journal-central-client Service logger
 
 [Service]
-ExecStart=/bin/sh -c 'if [ "$MONITOR_EXIT_STATUS" != 0 ]; then pull-journal-central-client log --baseURL {{ pjc_base_url }} --class error --source $MONITOR_UNIT --service $MONITOR_UNIT ; fi'
+ExecStart=/bin/sh -c 'if [ "$MONITOR_EXIT_STATUS" != 0 ]; then pull-journal-central-client log --baseURL {{ pjc_base_url }} --class error --source $MONITOR_UNIT --invocationid $MONITOR_INVOCATION_ID ; fi'
