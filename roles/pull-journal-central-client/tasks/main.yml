@@ -38,9 +38,3 @@
     src: "{{ item }}"
   loop:
     - pull-journal-central-client.service
-
-- name: Enable service pull-journal-central-client and ensure it is not masked
-  ansible.builtin.systemd:
-    name: pull-journal-central-client
-    enabled: true
-    masked: no
