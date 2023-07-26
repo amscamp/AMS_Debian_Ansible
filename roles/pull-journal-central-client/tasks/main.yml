@@ -31,3 +31,10 @@
   when: ( tempurl is defined and tempurl.stdout != "" and hostvars[inventory_hostname].pull_journal_central_client is defined and ( hostvars[inventory_hostname].pull_journal_central_client[0].version < tempversion.stdout ))
 
 - import_tasks: register.yml
+
+- name: install unit for pull-journal-central-client
+  template:
+    dest: /etc/systemd/system
+    src: "{{ item }}"
+  loop:
+    - pull-journal-central-client.service
