@@ -1,0 +1,9 @@
+---
+- name: Check if authorisation exists
+  stat:
+    path: /root/.pull-journal-central
+  register: pull_journal_central_athorisation
+
+- name: register on pull_journal_central
+  shell: pull-journal-central-client register --baseURL {{ pjc_base_url }}  --name $(hostname) --organisationID {{ pjc_organisation_id }} --organisationpassword {{ pjc_organisation_password }}
+  when: pull_journal_central_athorisation.stat.exists   
