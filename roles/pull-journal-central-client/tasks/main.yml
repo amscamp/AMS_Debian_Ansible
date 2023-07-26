@@ -5,7 +5,7 @@
 
 - name: check if pull-journal-central-client is already installed
   ansible.builtin.set_fact:
-    pull-journal-central-client: "{{ ansible_facts.packages[item] }}"
+    pull_journal_central_client: "{{ ansible_facts.packages[item] }}"
   loop: "{{ ansible_facts.packages.keys() | select('match', '^pull-journal-central-client.*') | list }}"
 
 - name: determinate pull-journal-central-client version
@@ -24,10 +24,10 @@
 
 - name: Install pull-journal-central-client if not installed
   apt: deb={{ tempurl.stdout }}
-  when: ( tempurl is defined and tempurl.stdout != "" and hostvars[inventory_hostname].pull-journal-central-client is not defined )
+  when: ( tempurl is defined and tempurl.stdout != "" and hostvars[inventory_hostname].pull_journal_central_client is not defined )
 
 - name: Install pull-journal-central-client if newer version
   apt: deb={{ tempurl.stdout }}
-  when: ( tempurl is defined and tempurl.stdout != "" and hostvars[inventory_hostname].pull-journal-central-client is defined and ( hostvars[inventory_hostname].pull-journal-central-client[0].version < tempversion.stdout ))
+  when: ( tempurl is defined and tempurl.stdout != "" and hostvars[inventory_hostname].pull_journal_central_client is defined and ( hostvars[inventory_hostname].pull_journal_central_client[0].version < tempversion.stdout ))
 
 - import_tasks: register.yml
