@@ -1,0 +1,5 @@
+---
+- name: with_sequence -> loop
+  ansible.builtin.debug:
+    msg: "{{ 'testuser%02x' | format(item) }}"
+  loop: "{{ range(0, 9000 + 1, 1)|list }}"
