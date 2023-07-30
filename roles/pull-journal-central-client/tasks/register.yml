@@ -1,7 +1,7 @@
 ---
 - name: Check if authorisation exists
   stat:
-    path: /root/.pull-journal-central
+    path: /root/.pull-journal-central-client/authorisation
   register: pull_journal_central_athorisation
 
 - name: register on pull_journal_central
