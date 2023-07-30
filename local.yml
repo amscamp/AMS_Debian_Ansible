@@ -58,20 +58,16 @@
   - role: printer
     print_username: "{{ username }}"
   - role: printerdetection
-  - role: testlogging
-
-
-
-  # - role: password-mgmt
-  #   password_username: "{{ username }}"
-  #   default_entries:
-  #     - key: "Encryption"
-  #       value: "amscampboot"  
-  #     - key: "RootPW"
-  #       value: "ams"
-  #     - key: "UserPW"
-  #       value: "ams"
-  #   when: ansible_was_already_executed
+  - role: password-mgmt
+    password_username: "{{ username }}"
+    default_entries:
+      - key: "Encryption"
+        value: "amscampboot"  
+      - key: "RootPW"
+        value: "ams"
+      - key: "UserPW"
+        value: "ams"
+    when: ansible_was_already_executed
   - role: wifi
     ssids:
       - ssid: "fest.spiel.haus"
