@@ -11,7 +11,7 @@
   - name: Print mac
     ansible.builtin.debug:
       msg: in list
-    when:  hostvars[inventory_hostname].ansible_default_ipv4.macaddress[0] not in lookup('vars', macs)
+    when: "{{ hostvars[inventory_hostname].ansible_default_ipv4.macaddress | first }} not in lookup('vars', macs)"
 
   - name: Example using fail and when together
     ansible.builtin.fail:
