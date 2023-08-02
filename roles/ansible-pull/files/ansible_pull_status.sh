@@ -24,7 +24,7 @@ then
     if (( $(date +%s) % 3 == 0 )); then
         echo "$runtime ▼ | iconName=data-error" 
     else
-        echo "$runtime ▼ " 
+        echo "$runtime !!!!!! ▼ " 
     fi
     echo "---"
     echo "Das senden des Fehlerberichts am $(date -d "$(systemctl show pull-journal-central-client --property=ActiveExitTimestamp | sed 's|ActiveExitTimestamp=||g')") wurde mit Fehlern beendet. Bitte unbedingt den Betreibenden Menschen bescheid sagen!"
