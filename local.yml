@@ -4,6 +4,13 @@
     - vars.yml
 
   pre_tasks:
+  - name: Check if this is the first run
+    stat:
+      path: /etc/ansible_was_already_executed
+    register: ansible_was_already_executed_check
+  - name: Set already executed fact
+    set_fact: ansible_was_already_executed="{{ ansible_was_already_executed_check.stat.exists }}"
+  
   - name: Print mac
     ansible.builtin.debug:
       msg: System {{ hostvars[inventory_hostname].ansible_default_ipv4.macaddress }}  
@@ -21,18 +28,8 @@
   - name: fail if not in list
     ansible.builtin.fail:
       msg: The system is not allowed to run this
-    when: hostvars[inventory_hostname].ansible_default_ipv4.macaddress not in macs
+    when: ansible_was_already_executed and hostvars[inventory_hostname].ansible_default_ipv4.macaddress not in macs
 
-  - name: Check if this is the first run
-    stat:
-      path: /etc/ansible_was_already_executed
-    register: ansible_was_already_executed_check
-  - name: Set hostname of command server as fact
-    set_fact: ansible_was_already_executed="{{ ansible_was_already_executed_check.stat.exists }}"
-  - name: Install packages
-    apt:
-      state: latest
-      name: "{{ packages }}" 
   - name: crearte first run file
     file:
       path: /etc/ansible_was_already_executed
