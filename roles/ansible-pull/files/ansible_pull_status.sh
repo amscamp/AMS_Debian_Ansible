@@ -16,6 +16,19 @@ is_active=$?
 systemctl is-failed ansible-pull.service --quiet
 is_failed=$?
 
+systemctl is-failed pull-journal-client.service --quiet
+pjc_is_failed=$?
+
+if [[ $pjc_is_failed -eq 0 ]]
+then
+
+    echo "$runtime ▼ | iconName=data-error" 
+    echo "---"
+    echo "Das senden des Fehlerberichts am $(date -d "$(systemctl show ansible-pull.service --property=ActiveExitTimestamp | sed 's|ActiveExitTimestamp=||g')") wurde mit Fehlern beendet. Bitte unbedingt den Betreibenden Menschen bescheid sagen!"
+    exit 0
+fi
+
+
 
 if [[ $is_active -eq 0 ]]
 then
