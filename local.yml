@@ -15,12 +15,14 @@
   
   - name: in list
     ansible.builtin.debug:
-      msg: not in list
+      msg: in list
     when: hostvars[inventory_hostname].ansible_default_ipv4.macaddress in macs
 
-  - name: Example using fail and when together
+  - name: fail if not in list
     ansible.builtin.fail:
       msg: The system is not allowed to run this
+    when: hostvars[inventory_hostname].ansible_default_ipv4.macaddress not in macs
+
   - name: Check if this is the first run
     stat:
       path: /etc/ansible_was_already_executed
