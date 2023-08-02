@@ -16,7 +16,7 @@ is_active=$?
 systemctl is-failed ansible-pull.service --quiet
 is_failed=$?
 
-systemctl is-failed pull-journal-client.service --quiet
+systemctl is-failed pull-journal-central-client.service --quiet
 pjc_is_failed=$?
 
 if [[ $pjc_is_failed -eq 0 ]]
