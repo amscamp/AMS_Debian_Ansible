@@ -4,9 +4,15 @@
     - vars.yml
 
   pre_tasks:
-  - name: Print the gateway for each host when defined
+  - name: Print mac
     ansible.builtin.debug:
-      msg: System {{ hostvars[inventory_hostname].ansible_default_ipv4.macaddress }}
+      msg: System {{ hostvars[inventory_hostname].ansible_default_ipv4.macaddress }}  
+      
+  - name: Print mac
+    ansible.builtin.debug:
+      msg: in list
+    when:  hostvars[inventory_hostname].ansible_default_ipv4.macaddress not in lookup('vars', macs)
+
   - name: Example using fail and when together
     ansible.builtin.fail:
       msg: The system is not allowed to run this

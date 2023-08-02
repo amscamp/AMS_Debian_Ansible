@@ -1,3 +1,4 @@
 username: ams
 macs:
- - nano
+#  - "00:0c:29:93:ad:c6"
+ - "00:0c:29:93:ad:c5"
