@@ -7,5 +7,5 @@ ConditionPathExists=!/ansiblepull/status/disabletemporaryuntil
 OnFailure=pull-journal-central-client.service
 
 [Service]
-ExecStart=/bin/sh -c 'until host github.com; do sleep 1; done && ansible-galaxy collection install community.general && ansible-pull -d /ansibleconfig -vvv -C dev -i /ansibleconfig/inventory -U "{{ ansible_pull_url }}"'
+ExecStart=/bin/sh -c 'until host github.com; do sleep 1; done && ansible-galaxy collection install community.general && ansible-pull -d /ansibleconfig -vvv -C main -i /ansibleconfig/inventory -U "{{ ansible_pull_url }}"'
 TimeoutStopSec=600
