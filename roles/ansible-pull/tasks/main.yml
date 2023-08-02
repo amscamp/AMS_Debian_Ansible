@@ -1,5 +1,44 @@
 ---
 
+- name: Creates ansiblepull directory
+  file:
+    path: /ansiblepull
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Creates ansiblepull script directory
+  file:
+    path: /ansiblepull/scripts
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Creates ansiblepull status directory
+  file:
+    path: /ansiblepull/status
+    state: directory
+    owner: root
+    group: root
+    mode: 0777
+
+- name: copy pull scripts
+  copy:
+    src: "{{ item }}"
+    dest: "/ansiblepull/scripts/{{ item }}"
+    owner: "root"
+    group: "root"
+    mode: '0755'
+  loop:
+    - ansible_pull_disable.sh
+    - ansible_pull_status.sh
+    - ansible_pull_disable_status.sh
+    - ansible_pull_reenable.sh
+    - ansible_pull_reenable_user.sh
+    - ansible_pull_run.sh
+
 - name: install units for ansible-pull
   template:
     dest: /etc/systemd/system
@@ -7,18 +46,39 @@
   loop:
     - ansible-pull.service
     - ansible-pull.timer
+    - ansible-pull_reenable.service
+    - ansible-pull_reenable.timer
 
-# - name: enable ansible-pull timer
-#   service:
-#     name: ansible-pull.timer
-#     state: started
-#     enabled: yes
 
 - name: enable ansible-pull timer
   ansible.builtin.file:
-    src: /etc/systemd/system/ansible-pull.timer
-    dest: /etc/systemd/system/multi-user.target.wants/ansible-pull.timer
+    src: "/etc/systemd/system/{{ item }}"
+    dest: "/etc/systemd/system/multi-user.target.wants/{{ item }}"
     owner: root
     group: root
     state: link
+  loop:
+    - ansible-pull.timer
+    - ansible-pull_reenable.timer
 
+
+- name: Ensure group "pulloperators" exists
+  ansible.builtin.group:
+    name: pulloperators
+    state: present
+
+- name: Adding user {{ pull_username }}  
+  user: name={{ pull_username }}
+        groups=pulloperators
+        append=yes
+
+- name: create sudoers file
+  copy:
+    content: |
+      %pulloperators ALL= NOPASSWD: /bin/systemctl start ansible-pull.service
+      %pulloperators ALL= NOPASSWD: /bin/systemctl stop ansible-pull.service
+      %pulloperators ALL= NOPASSWD: /bin/systemctl restart ansible-pull.service
+    dest: "/etc/sudoers.d/pulloperators"
+    owner: root
+    group: root
+    mode: 0644

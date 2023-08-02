@@ -1,0 +1,40 @@
+---
+- name: get password if entry exists
+  shell: echo "$(pass show {{ passwd_wifi_folder }}/{{ item.ssid }})"  
+  environment:
+    HOME: "{{ wallet_userhome }}"
+  when: wifi_wallet_entrys.stdout is search("{{ item.ssid }}")
+  no_log: True
+  register: "pwdtemp"
+- name: create wifi {{ item.ssid }}
+  community.general.nmcli:
+    type: wifi
+    conn_name: "{{ item.ssid }}"
+    ifname: wlp4s0
+    ssid: "{{ item.ssid }}"
+    wifi_sec:
+      key-mgmt: wpa-psk
+      psk: "{{ pwdtemp.stdout }}"
+    state: present
+  no_log: True
+  when:  pwdtemp.stdout != item.initialpass
+
+
+- name: Ensure autoconnect is set
+  community.general.ini_file:
+    path: "/etc/NetworkManager/system-connections/{{ item.ssid }}.nmconnection"
+    section: connection
+    option: autoconnect
+    value: "TRUE"
+    mode: '0600'
+  when:  pwdtemp.stdout != item.initialpass
+  
+- name: Ensure priority is set
+  community.general.ini_file:
+    path: "/etc/NetworkManager/system-connections/{{ item.ssid }}.nmconnection"
+    section: connection
+    option: autoconnect-priority
+    value: "{{ item.prio }}"
+    mode: '0600'
+  when:  pwdtemp.stdout != item.initialpass
+  

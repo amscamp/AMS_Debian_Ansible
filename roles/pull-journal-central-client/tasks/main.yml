@@ -1,0 +1,43 @@
+---
+- name: Gather the package facts
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: check if pull-journal-central-client is already installed
+  ansible.builtin.set_fact:
+    pull_journal_central_client: "{{ ansible_facts.packages[item] }}"
+  loop: "{{ ansible_facts.packages.keys() | select('match', '^pull-journal-central-client.*') | list }}"
+
+- name: determinate pull-journal-central-client version
+  shell: echo $(curl -s -L https://api.github.com/repos/Apfelwurm/pull-journal-central-client/releases/latest | jq -r '.tag_name')
+  register: tempversion
+
+- name: Check if external pull-journal-central-client version could be received
+  ansible.builtin.fail:
+    msg: The current online version of pull-journal-central-client could not be received, check role!
+  when: tempversion.stdout == ""
+
+- name: determinate pull-journal-central-client link
+  shell: echo $(curl -s -L https://api.github.com/repos/Apfelwurm/pull-journal-central-client/releases/latest | jq -r '.assets[].browser_download_url' | grep "/pull-journal-central-client.*.deb")
+  register: tempurl
+  when: tempversion.stdout != ""
+
+- name: Install pull-journal-central-client if not installed
+  apt: deb={{ tempurl.stdout }}
+  when: ( tempurl is defined and tempurl.stdout != "" and hostvars[inventory_hostname].pull_journal_central_client is not defined )
+  notify: reload_daemons
+
+- name: Install pull-journal-central-client if newer version
+  apt: deb={{ tempurl.stdout }}
+  when: ( tempurl is defined and tempurl.stdout != "" and hostvars[inventory_hostname].pull_journal_central_client is defined and ( hostvars[inventory_hostname].pull_journal_central_client[0].version < tempversion.stdout ))
+  notify: reload_daemons
+
+- import_tasks: register.yml
+
+- name: install unit for pull-journal-central-client
+  template:
+    dest: /etc/systemd/system
+    src: "{{ item }}"
+  loop:
+    - pull-journal-central-client.service
+  notify: reload_daemons

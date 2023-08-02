@@ -1,0 +1,18 @@
+---
+
+- name: get wallet folder entrys
+  shell: pass ls {{ passwd_wifi_folder }}
+  environment:
+    HOME: "{{ wallet_userhome }}"
+  register: wifi_wallet_entrys
+- name: create wallet entrys if they not exist
+  shell: echo "{{ item.initialpass }}" | pass insert -e {{ passwd_wifi_folder }}/{{ item.ssid }}
+  environment:
+    HOME: "{{ wallet_userhome }}"
+  when: not wifi_wallet_entrys.stdout is search(item.ssid)
+  loop: "{{ ssids }}"
+  no_log: True
+
+- name: create wifis
+  include_tasks: createwifi.yml
+  loop: "{{ ssids }}"

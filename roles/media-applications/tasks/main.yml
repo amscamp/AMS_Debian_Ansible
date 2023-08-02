@@ -31,9 +31,13 @@
   apt: deb={{ tempurl.stdout }}
   when: ( tempurl is defined and tempurl.stdout != "" and hostvars[inventory_hostname].deb_multimedia_keyring is defined and ( hostvars[inventory_hostname].deb_multimedia_keyring[0].version < tempversion.stdout ))
 
+- name: "Ansible | Print 'lsb_release'"
+  debug:
+    msg: "{{ ansible_distribution_release }}"
+
 - name: Add deb-multimedia repository
   ansible.builtin.apt_repository:
-    repo: deb https://www.deb-multimedia.org bullseye main non-free
+    repo: deb https://www.deb-multimedia.org {{ ansible_distribution_release }} main non-free
     state: present
     filename: deb-multimedia
   register: deb_multimedia
@@ -52,3 +56,4 @@
     - avidemux
     - ffmpeg
     - audacity
+    - vlc

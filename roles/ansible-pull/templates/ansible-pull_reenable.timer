@@ -1,0 +1,12 @@
+{{ ansible_managed|comment }}
+
+[Unit]
+Description=ansible pull reenabler
+ 
+[Timer]
+{{ ansible_pull_reenable_timer }}
+Unit=ansible-pull_reenable.service
+Persistent=true
+ 
+[Install]
+WantedBy=multi-user.target

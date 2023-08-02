@@ -1,0 +1,8 @@
+---
+- name: Get MAC address without colons
+  set_fact:
+    mac_address_no_colons: "{{ ansible_default_ipv4.macaddress | replace(':', '') }}"
+
+- name: Set hostname based on MAC address
+  hostname:
+    name: "ams-{{ mac_address_no_colons }}"

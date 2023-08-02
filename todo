@@ -1,7 +1,9 @@
+
+status after reboot is good, even if it should be bad :D
+
 nicer dbus config for Tilix (https://docs.ansible.com/ansible/latest/collections/community/general/dconf_module.html ggf)
 kde style
 startup style
-pull timer zeitcheck
 
 
 nextcloud login (leider manuell :( ))
@@ -11,11 +13,96 @@ prüfen encryption removal
 
 
 Drucker & Scanner
-FS1300D
-https://www.kyoceradocumentsolutions.de/content/download-center/de/drivers/all/Linux_PPDs_FS11001300_zip.download.zip
-FS1128MFP
-https://www.kyoceradocumentsolutions.de/content/download-center/de/drivers/all/Linux_PPDs_FS_1128mfp_zip.download.zip
 
+sollte gehen:
+FS1300D
 brother MFC-J5730DW
+getestet:
 Samsung M2022W
 Brother DS620
+FS1128MFP
+
+
+
+
+
+broken:
+gsettings list-keys org.gnome.desktop.interface | xargs -I % /bin/bash -c "echo % && gsettings get org.gnome.desktop.interface %"                                                                                                                    ░▒▓ 0|127 ↵  02:03:21   
+gtk-color-palette
+'black:white:gray50:red:purple:blue:light blue:green:yellow:orange:lavender:brown:goldenrod4:dodger blue:pink:light green:gray10:gray30:gray75:gray90'
+toolkit-accessibility
+false
+can-change-accels
+false
+text-scaling-factor
+1.0
+cursor-blink
+true
+clock-show-weekday
+false
+icon-theme
+'breeze'
+gtk-im-preedit-style
+'callback'
+menus-have-tearoff
+false
+scaling-factor
+uint32 0
+cursor-size
+24
+gtk-color-scheme
+''
+gtk-im-module
+''
+gtk-timeout-initial
+200
+gtk-theme
+'Breeze'
+clock-show-seconds
+false
+clock-show-date
+true
+cursor-blink-time
+1200
+toolbar-icons-size
+'large'
+gtk-timeout-repeat
+20
+enable-hot-corners
+true
+monospace-font-name
+'Monospace 11'
+toolbar-style
+'text'
+cursor-blink-timeout
+10
+overlay-scrolling
+true
+gtk-key-theme
+'Default'
+toolbar-detachable
+false
+cursor-theme
+'breeze_cursors'
+avatar-directories
+@as []
+menubar-detachable
+false
+gtk-im-status-style
+'callback'
+menubar-accel
+'F10'
+document-font-name
+'Cantarell 11'
+clock-format
+'24h'
+enable-animations
+true
+gtk-enable-primary-paste
+true
+locate-pointer
+false
+font-name
+'Noto Sans,  10'
+show-battery-percentage
+false

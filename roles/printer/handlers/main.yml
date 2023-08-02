@@ -1,0 +1,10 @@
+---
+- name: 'restart cups'
+  ansible.builtin.systemd:
+    state: restarted
+    name: cups
+
+- name: 'restart cups-browsed'
+  ansible.builtin.systemd:
+    state: restarted
+    name: cups-browsed

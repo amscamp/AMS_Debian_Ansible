@@ -1,0 +1,17 @@
+/opt/smfp-common/scanner/.usedby
+/opt/smfp-common/security/.usedby/scanner
+/opt/smfp-common/legacy_compat/.usedby/scanner
+/opt/smfp-common/scanner/lib
+/opt/smfp-common/scanner/lib/libsane-smfp.so.1.0.1
+/usr/lib/sane/libsane-smfp.so.1.0.1
+/usr/lib/sane/libsane-smfp.so.1
+/usr/lib/sane/libsane-smfp.so
+/opt/smfp-common/scanner/share
+/opt/smfp-common/scanner/share/locale
+/opt/smfp-common/scanner/share/locale/fr
+/usr/share/locale/fr/LC_MESSAGES
+/opt/smfp-common/scanner/share/locale/fr/sane-smfp.mo
+/usr/share/locale/fr/LC_MESSAGES//sane-smfp.mo
+/opt/smfp-common/scanner/share/pagesize.xml
+/opt/smfp-common/scanner/share/libsane-smfp.cfg
+/opt/smfp-common/scanner/.version

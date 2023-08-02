@@ -1,63 +1,78 @@
 ---
-- name: install chromium
+
+- name: install apt driver
   apt:
     state: latest
     name: "{{ item }}" 
   loop:
-    - libcupsimage2
-    - libsane1
-    - ghostscript
+    - hplip
+  notify: 'restart cups'
 
-# # - name: Copy PPDs in the ppd folder
-# #   copy:
-# #     src: "ppd/"
-# #     dest: "/usr/share/ppd/"
-# #     owner: root
-# #     group: root
-# #     mode: 0644
+- name: Adding user {{ print_username }} to lp
+  user: name={{ print_username }}
+        groups=lp
+        append=yes
 
-# # - name: Copy filter in the filter folder
-# #   copy:
-# #     src: "filter/"
-# #     dest: "/usr/lib/cups/filter/"
-# #     owner: root
-# #     group: root
-# #     mode: 0755
+- name: Adding user {{ print_username }} to lpadmin
+  user: name={{ print_username }}
+        groups=lpadmin
+        append=yes
 
+# - name: Copy PPDs in the ppd folder
+#   copy:
+#     src: "ppd/"
+#     dest: "/usr/share/ppd/"
+#     owner: root
+#     group: root
+#     mode: 0644
+#   notify: 'restart cups'
 
-# - name: make sure /ansible_distro exists
-#   file:
-#     path: "/ansible_distro"
-#     state: directory
-#     mode: '0755'
+# - name: Copy filter in the filter folder
+#   copy:
+#     src: "filter/"
+#     dest: "/usr/lib/cups/filter/"
+#     owner: root
+#     group: root
+#     mode: 0755
 
-# # - name: copy bad driver
-# #   copy:
-# #     src: bad_driver/uld
-# #     dest: '/ansible_distro/bad_driver/'
+- name: Check if i386 is enabled
+  shell: dpkg --print-foreign-architectures | grep i386
+  register: result_i386_check
+  changed_when: result_i386_check.rc == 1
+  failed_when: result_i386_check.rc > 1
 
-# - name: Find files
-#   find:
-#     paths: /ansible_distro/bad_driver/uld
-#     patterns: "*.sh"
-#   register: files_to_change
+- name: Enable i386 architecture
+  command: dpkg --add-architecture i386
+  when: result_i386_check.rc == 1
 
-# - name: Modify the file permissions
-#   file:
-#     path: "{{ item.path }}"
-#     mode: 755
-#   with_items: "{{ files_to_change.files }}"
+- name: Ensure apt cache is up to date
+  apt: update_cache=yes
+  when: result_i386_check.rc == 1
 
-# - shell: 'cd /ansible_distro/bad_driver/uld && ./install-printer.sh'
-#   args:
-#     executable: /bin/bash
-#   register: uld_install
+- name: Install .deb packages
+  ansible.builtin.apt:
+    deb: "{{ role_path }}/files/deb/{{ item }}"
+  loop:
+    - brother-udev-rule-type1-1.0.2-0.all.deb
+    - brscan4-0.4.11-1.amd64.deb
+    - mfcj5730dwlpr-1.0.1-0.i386.deb
+    - mfcj5730dwcupswrapper-1.0.1-0.i386.deb
+    - libsane-dsseries_1.0.5-1_amd64.deb
+    - kyodialog_9.2-0_amd64.deb
+  notify: 'restart cups'
 
-# - name: debug
-#   debug:
-#     msg: "{{uld_install}}"
+# - name: install gutenprint
+#   apt:
+#     state: latest
+#     name: "{{ item }}" 
+#   loop:
+#     - printer-driver-gutenprint
 
-# - name: Restart cups service
-#   ansible.builtin.systemd:
-#     state: restarted
-#     name: cups
+- import_tasks: uld.yml
+
+- name: Ensure CreateIPPPrinterQueues is set to All
+  ansible.builtin.replace:
+    path: /etc/cups/cups-browsed.conf
+    regexp: '^\s*#*\s*(CreateIPPPrinterQueues All.*)'
+    replace: '\1'
+  notify: 'restart cups-browsed'

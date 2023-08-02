@@ -1,0 +1,3 @@
+printerdetection_timer: |
+  AccuracySec=10s
+  OnCalendar=*-*-* *:*:00

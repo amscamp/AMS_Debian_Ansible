@@ -1,0 +1,26 @@
+---
+
+- name: somerepo |no apt key
+  ansible.builtin.get_url:
+    url: https://updates.signal.org/desktop/apt/keys.asc
+    dest: /etc/apt/keyrings/signal.asc
+
+- name: Add deb-multimedia repository
+  ansible.builtin.apt_repository:
+    repo: deb [arch=amd64 signed-by=/etc/apt/keyrings/signal.asc] https://updates.signal.org/desktop/apt xenial main
+    state: present
+    filename: signal
+  register: signal
+
+- name: Upgrade the OS (apt-get dist-upgrade)
+  ansible.builtin.apt:
+    upgrade: dist
+    update_cache: yes
+  when: signal.changed
+
+- name: install signal
+  apt:
+    state: latest
+    name: "{{ item }}" 
+  loop:
+    - signal-desktop

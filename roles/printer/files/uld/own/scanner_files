@@ -1,0 +1,8 @@
+/opt/samsung/scanner/.usedby
+/opt/smfp-common/scanner/.usedby/samsung
+/etc/sane.d/smfp-samsung.conf
+/etc/udev/rules.d/59-smfp_samsung.rules
+/usr/share/hal/fdi/policy/10osvendor/01_smfp_samsung.fdi
+/opt/samsung/scanner/share
+/opt/samsung/scanner/share//oem.conf
+/opt/samsung/scanner/.version

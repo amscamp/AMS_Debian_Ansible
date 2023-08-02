@@ -1,0 +1,10 @@
+{{ ansible_managed|comment }}
+
+[Unit]
+Description=printer detection service
+After=network-online.target
+ConditionPathExists=!/ansible_distro/printerdetection/disabled
+ 
+[Service]
+ExecStart=/bin/sh -c '/ansible_distro/printerdetection/scripts/printerdetection.sh'
+TimeoutStopSec=600

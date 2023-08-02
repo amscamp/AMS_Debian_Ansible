@@ -1,0 +1,390 @@
+---
+- name: install prereqs
+  apt:
+    state: latest
+    name: "{{ item }}" 
+  loop:
+    - libcupsimage2
+    - libsane1
+    - ghostscript
+    - libusb-0.1-4
+
+- name: make sure /opt/samsung/printer/share/ppd exists
+  file:
+    path: "/opt/samsung/printer/share/ppd"
+    state: directory
+    mode: '0755'
+
+- name: Copy PPDs in the ppd folder
+  copy:
+    src: "uld/noarch/share/ppd/"
+    dest: "/opt/samsung/printer/share/ppd/"
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Copy version info
+  copy:
+    src: "uld/noarch/.version-printer-script"
+    dest: "/opt/samsung/printer/.version"
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Copy file info
+  copy:
+    src: "uld/own/printer_files"
+    dest: "/opt/samsung/printer/.files"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: make sure /opt/samsung/scanner/share exists
+  file:
+    path: "/opt/samsung/scanner/share"
+    state: directory
+    mode: '0755'
+
+- name: Copy oem.conf in the scanner folder
+  copy:
+    src: "uld/noarch/oem.conf"
+    dest: "/opt/samsung/scanner/share/oem.conf"
+    owner: root
+    group: root
+    mode: 0755
+
+
+- name: Copy version info
+  copy:
+    src: "uld/noarch/.version-scanner-script"
+    dest: "/opt/samsung/scanner/.version"
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Copy file info
+  copy:
+    src: "uld/own/scanner_files"
+    dest: "/opt/samsung/scanner/.files"
+    owner: root
+    group: root
+    mode: 0644
+
+
+- name: make sure /opt/smfp-common folders exists
+  file:
+    path: "/opt/smfp-common/{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - printer/bin
+    - mfp/uninstall
+    - printer/lib
+    - printer/.usedby
+    - scanner/share/locale/fr
+    - scanner/lib
+    - scanner/.usedby
+    - security/.usedby
+    - legacy_compat/.usedby
+
+- name: Creating an empty file
+  ansible.builtin.file:
+    path: "/opt/smfp-common/mfp/uninstall/guiuninstall"
+    state: touch
+    mode: 0644
+
+- name: Copy file info
+  copy:
+    src: "uld/own/smfp_printer_files"
+    dest: "/opt/smfp-common/printer/.files"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Copy version info
+  copy:
+    src: "uld/noarch/.version-printer"
+    dest: "/opt/smfp-common/printer/.version"
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Create a samsung link
+  ansible.builtin.file:
+    src: /opt/samsung/printer
+    dest: /opt/smfp-common/printer/.usedby/samsung
+    owner: root
+    group: root
+    state: link
+
+
+- name: Copy bins in the bin folder
+  copy:
+    src: "uld/x86_64/{{ item }}"
+    dest: "/opt/smfp-common/printer/bin/{{ item }}"
+    owner: root
+    group: root
+    mode: 0755
+  loop:
+    - pstosecps
+    - rastertospl
+    - smfpnetdiscovery
+
+- name: Copy libs in the lib folder
+  copy:
+    src: "uld/x86_64/{{ item }}"
+    dest: "/opt/smfp-common/printer/lib/{{ item }}"
+    owner: root
+    group: root
+    mode: 0755
+  loop:
+    - libscmssc.so
+
+
+- name: Copy libs in the lib folder
+  copy:
+    src: "uld/x86_64/{{ item }}"
+    dest: "/opt/smfp-common/scanner/lib/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - libsane-smfp.so.1.0.1
+
+
+- name: Copy share stuff in the share folder
+  copy:
+    src: "uld/noarch/{{ item }}"
+    dest: "/opt/smfp-common/scanner/share/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - libsane-smfp.cfg
+    - pagesize.xml
+
+- name: Copy lcmessages in the share folder
+  copy:
+    src: "uld/noarch/share/locale/fr/LC_MESSAGES/sane-smfp.mo"
+    dest: "/opt/smfp-common/scanner/share/locale/fr/sane-smfp.mo"
+    owner: root
+    group: root
+    mode: 0644
+
+
+- name: Copy file info
+  copy:
+    src: "uld/own/smfp_printer_files"
+    dest: "/opt/smfp-common/scanner/.files"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Copy version info
+  copy:
+    src: "uld/noarch/.version-scanner"
+    dest: "/opt/smfp-common/scanner/.version"
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Create a samsung scanner link
+  ansible.builtin.file:
+    src: /opt/samsung/scanner
+    dest: /opt/smfp-common/scanner/.usedby/samsung
+    owner: root
+    group: root
+    state: link
+
+- name: Copy file info
+  copy:
+    src: "uld/own/security_files"
+    dest: "/opt/smfp-common/security/.files"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Copy version info
+  copy:
+    content: "0.1"
+    dest: "/opt/smfp-common/security/.version"
+    owner: root
+    group: root
+    mode: 0644
+
+
+- name: Create usedby links
+  ansible.builtin.file:
+    src: "/opt/smfp-common/{{ item }}"
+    dest: "/opt/smfp-common/security/.usedby/{{ item }}"
+    owner: root
+    group: root
+    state: link
+  loop:
+    - printer
+    - scanner
+
+
+- name: Copy file info
+  copy:
+    src: "uld/own/legacy_compat_files"
+    dest: "/opt/smfp-common/legacy_compat/.files"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Copy version info
+  copy:
+    content: "0.1"
+    dest: "/opt/smfp-common/legacy_compat/.version"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Create usedby links
+  ansible.builtin.file:
+    src: "/opt/smfp-common/{{ item }}"
+    dest: "/opt/smfp-common/legacy_compat/.usedby/{{ item }}"
+    owner: root
+    group: root
+    state: link
+  loop:
+    - printer
+    - scanner
+    - security
+
+- name: make sure /etc/udev/rules.d exists
+  file:
+    path: "/etc/udev/rules.d"
+    state: directory
+    mode: '0755'
+
+- name: Copy udev file
+  copy:
+    src: "uld/own/59-smfp_samsung.rules"
+    dest: "/etc/udev/rules.d/59-smfp_samsung.rules"
+    owner: root
+    group: root
+    mode: 0755
+
+- name: make sure /etc/sane.d exists
+  file:
+    path: "/etc/sane.d"
+    state: directory
+    mode: '0755'
+
+- name: Copy sane smfp file
+  copy:
+    src: "uld/noarch/etc/smfp.conf"
+    dest: "/etc/sane.d/smfp-samsung.conf"
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Ensure smfp is in dll.conf
+  ansible.builtin.lineinfile:
+    path: /etc/sane.d/dll.conf
+    regexp: '^smfp'
+    line: smfp
+
+
+
+- name: Create smfpnetdiscovery links
+  ansible.builtin.file:
+    src: "/opt/smfp-common/printer/bin/smfpnetdiscovery"
+    dest: "/usr/lib/cups/backend/smfpnetdiscovery"
+    owner: root
+    group: root
+    state: link
+
+- name: Create filter links
+  ansible.builtin.file:
+    src: "/opt/smfp-common/printer/bin/{{ item }}"
+    dest: "/usr/lib/cups/filter/{{ item }}"
+    owner: root
+    group: root
+    state: link
+  loop:
+    - pstosecps
+    - rastertospl
+    
+# legacy
+# - name: Create libsane links
+#   ansible.builtin.file:
+#     src: "/opt/smfp-common/scanner/lib/libsane-smfp.so.1.0.1"
+#     dest: "/usr/lib/sane/libsane-smfp.so.1.0.1"
+#     owner: root
+#     group: root
+#     state: link
+
+# - name: Create libsane links
+#   ansible.builtin.file:
+#     src: "/usr/lib/sane/libsane-smfp.so.1.0.1"
+#     dest: "/usr/lib/sane/libsane-smfp.so.1"
+#     owner: root
+#     group: root
+#     state: link
+
+# - name: Create libsane links
+#   ansible.builtin.file:
+#     src: "/usr/lib/sane/libsane-smfp.so.1"
+#     dest: "/usr/lib/sane/libsane-smfp.so"
+#     owner: root
+#     group: root
+#     state: link
+
+- name: Create libsane links
+  ansible.builtin.file:
+    src: "/opt/smfp-common/scanner/lib/libsane-smfp.so.1.0.1"
+    dest: "/usr/lib/x86_64-linux-gnu/sane/libsane-smfp.so.1.0.1"
+    owner: root
+    group: root
+    state: link
+
+- name: Create libsane links
+  ansible.builtin.file:
+    src: "/usr/lib/x86_64-linux-gnu/sane/libsane-smfp.so.1.0.1"
+    dest: "/usr/lib/x86_64-linux-gnu/sane/libsane-smfp.so.1"
+    owner: root
+    group: root
+    state: link
+
+- name: Create libsane links
+  ansible.builtin.file:
+    src: "/usr/lib/x86_64-linux-gnu/sane/libsane-smfp.so.1"
+    dest: "/usr/lib/x86_64-linux-gnu/sane/libsane-smfp.so"
+    owner: root
+    group: root
+    state: link
+
+
+- name: make sure /usr/share/locale/fr/LC_MESSAGES exists
+  file:
+    path: "/usr/share/locale/fr/LC_MESSAGES"
+    state: directory
+    mode: '0755'
+
+- name: Create LC_MESSAGES links
+  ansible.builtin.file:
+    src: "/opt/smfp-common/scanner/share/locale/fr/sane-smfp.mo"
+    dest: "/usr/share/locale/fr/LC_MESSAGES/sane-smfp.mo"
+    owner: root
+    group: root
+    state: link
+
+- name: Create ppd link
+  ansible.builtin.file:
+    src: "/opt/samsung/printer/share/ppd"
+    dest: "/usr/share/ppd/uld-samsung"
+    owner: root
+    group: root
+    state: link
+
+- name: Create model link
+  ansible.builtin.file:
+    src: "/opt/samsung/printer/share/ppd"
+    dest: "/usr/share/cups/model/uld-samsung"
+    owner: root
+    group: root
+    state: link
+  notify: 'restart cups'

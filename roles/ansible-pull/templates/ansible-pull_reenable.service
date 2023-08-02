@@ -1,0 +1,9 @@
+{{ ansible_managed|comment }}
+
+[Unit]
+Description=system configuration upgrade
+After=network-online.target
+ 
+[Service]
+ExecStart=/bin/bash -c '/ansiblepull/scripts/ansible_pull_reenable.sh'
+TimeoutStopSec=600
