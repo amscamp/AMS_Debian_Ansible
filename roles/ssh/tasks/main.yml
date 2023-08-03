@@ -1,0 +1,19 @@
+---
+- name: Update collection ansible.posix
+  community.general.ansible_galaxy_install:
+    type: collection
+    name: ansible.posix
+
+- name: Ensure ssh is enabled and started
+  service:
+    name: ssh
+    state: started
+    enabled: yes
+
+- name: Ensure authorized keys are set for users
+  ansible.posix.authorized_key:
+    user: "{{ ssh_username }}"
+    state: present
+    key: "{{ item }}"
+  with_items: "{{ authorized_keys }}"
+  notify: restart ssh

@@ -42,6 +42,8 @@
 
   roles:
   - role: computername
+  - role: ssh
+    ssh_username: "{{ username }}"
   - role: kde-desktop
     desktop_username: "{{ username }}"
   - role: kde-desktop-customisation
