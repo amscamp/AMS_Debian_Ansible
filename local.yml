@@ -93,5 +93,8 @@
       - ssid: "fest.spiel.haus"
         initialpass: "password"
         prio: 0
+      - ssid: "AMS-AP01"
+        initialpass: "password"
+        prio: 0
     when: ansible_was_already_executed
 
