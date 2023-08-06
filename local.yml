@@ -15,20 +15,20 @@
     ansible.builtin.debug:
       msg: System {{ hostvars[inventory_hostname].ansible_default_ipv4.macaddress }}  
       
-  - name: not in list
-    ansible.builtin.debug:
-      msg: not in list
-    when: hostvars[inventory_hostname].ansible_default_ipv4.macaddress not in macs  
+  # - name: not in list
+  #   ansible.builtin.debug:
+  #     msg: not in list
+  #   when: hostvars[inventory_hostname].ansible_default_ipv4.macaddress not in macs  
   
-  - name: in list
-    ansible.builtin.debug:
-      msg: in list
-    when: hostvars[inventory_hostname].ansible_default_ipv4.macaddress in macs
+  # - name: in list
+  #   ansible.builtin.debug:
+  #     msg: in list
+  #   when: hostvars[inventory_hostname].ansible_default_ipv4.macaddress in macs
 
-  - name: fail if not in list
-    ansible.builtin.fail:
-      msg: The system is not allowed to run this
-    when: ansible_was_already_executed and hostvars[inventory_hostname].ansible_default_ipv4.macaddress not in macs
+  # - name: fail if not in list
+  #   ansible.builtin.fail:
+  #     msg: The system is not allowed to run this
+  #   when: ansible_was_already_executed and hostvars[inventory_hostname].ansible_default_ipv4.macaddress not in macs
 
   - name: crearte first run file
     file:
