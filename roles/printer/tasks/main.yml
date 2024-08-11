@@ -61,12 +61,12 @@
     - kyodialog_9.2-0_amd64.deb
   notify: 'restart cups'
 
-# - name: install gutenprint
-#   apt:
-#     state: latest
-#     name: "{{ item }}" 
-#   loop:
-#     - printer-driver-gutenprint
+- name: install gutenprint
+  apt:
+    state: latest
+    name: "{{ item }}" 
+  loop:
+    - printer-driver-gutenprint
 
 - import_tasks: uld.yml
 
