@@ -57,6 +57,8 @@
     - brscan4-0.4.11-1.amd64.deb
     - mfcj5730dwlpr-1.0.1-0.i386.deb
     - mfcj5730dwcupswrapper-1.0.1-0.i386.deb
+    - mfcl8690cdwlpr-1.5.0-0.i386.deb
+    - mfcl8690cdwcupswrapper-1.5.0-0.i386.deb
     - libsane-dsseries_1.0.5-1_amd64.deb
     - kyodialog_9.2-0_amd64.deb
   notify: 'restart cups'
