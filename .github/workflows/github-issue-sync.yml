@@ -1,0 +1,25 @@
+name: GitHub Issue Sync
+
+on:
+  issues:
+    types:
+      - opened
+      - labeled
+
+permissions:
+  issues: read
+  contents: read
+
+jobs:
+  add-to-project:
+    name: Add issue to project
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add to project
+        uses: actions/add-to-project@v0.6.0
+        with:
+          # You can target a repository in a different organization
+          # to the issue
+          project-url: https://github.com/orgs/amscamp/projects/1
+          github-token: ${{ secrets.ISSUE_SYNC_TOKEN }}
+          
