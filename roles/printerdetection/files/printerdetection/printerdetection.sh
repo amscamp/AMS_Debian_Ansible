@@ -29,6 +29,35 @@ do
    fi
 done
 
+# add AMS printserver printers (hardcoded list)
+declare -A PRINTERS=(
+    ["Brother MFC-L8690CDW - S/W Simplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-GDI-SW-Simplex"
+    ["Brother MFC-L8690CDW - Farb Simplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-GDI-Farb-Simplex"
+    ["Brother MFC-L8690CDW - S/W Duplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-GDI-SW-Duplex"
+    ["Brother MFC-L8690CDW - Farb Duplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-GDI-Farb-Duplex"
+    ["Brother MFC-L8690CDW - S/W Simplex Hohe Qualität (langsamer)"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-SW-Simplex"
+    ["Brother MFC-L8690CDW - Farb Simplex Hohe Qualität (langsamer)"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-Farb-Simplex"
+    ["Brother MFC-L8690CDW - S/W Duplex Hohe Qualität (langsamer)"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-SW-Duplex"
+    ["Brother MFC-L8690CDW - Farb Duplex Hohe Qualität (langsamer)"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-Farb-Duplex"
+)
+
+PPD="/usr/share/ppd/cupsfilters/Generic-PDF_Printer-PDF.ppd"
+
+for pname in "${!PRINTERS[@]}"; do
+    uri="${PRINTERS[$pname]}"
+
+    if ! lpstat -v 2>/dev/null | grep -q "^device for $pname:"; then
+        lpadmin -p "$pname" -E -v "$uri" -P "$PPD"
+    else
+        # ensure URI matches (update if changed)
+        current_uri=$(lpstat -v 2>/dev/null | awk -v p="$pname" '$3==p":" {print $NF}')
+        if [[ "$current_uri" != "$uri" ]]; then
+            lpadmin -p "$pname" -v "$uri"
+        fi
+    fi
+done
+
+
 #handle cleanup
 cat /ansible_distro/printerdetection/status | while read line 
 do
