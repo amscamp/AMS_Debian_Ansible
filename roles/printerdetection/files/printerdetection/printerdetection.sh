@@ -31,14 +31,14 @@ done
 
 # add AMS printserver printers (hardcoded list)
 declare -A PRINTERS=(
-    ["Brother MFC-L8690CDW - S/W Simplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-GDI-SW-Simplex"
-    ["Brother MFC-L8690CDW - Farb Simplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-GDI-Farb-Simplex"
-    ["Brother MFC-L8690CDW - S/W Duplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-GDI-SW-Duplex"
-    ["Brother MFC-L8690CDW - Farb Duplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-GDI-Farb-Duplex"
-    ["Brother MFC-L8690CDW - S/W Simplex Hohe Qualität (langsamer)"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-SW-Simplex"
-    ["Brother MFC-L8690CDW - Farb Simplex Hohe Qualität (langsamer)"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-Farb-Simplex"
-    ["Brother MFC-L8690CDW - S/W Duplex Hohe Qualität (langsamer)"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-SW-Duplex"
-    ["Brother MFC-L8690CDW - Farb Duplex Hohe Qualität (langsamer)"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-Farb-Duplex"
+    ["Brother_MFC-L8690CDW___Mono_Simplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-GDI-SW-Simplex"
+    ["Brother_MFC-L8690CDW___Farb_Simplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-GDI-Farb-Simplex"
+    ["Brother_MFC-L8690CDW___Mono_Duplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-GDI-SW-Duplex"
+    ["Brother_MFC-L8690CDW___Farb_Duplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-GDI-Farb-Duplex"
+    ["Brother_MFC-L8690CDW___Mono_Simplex_Hohe_Qualität__langsamer"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-SW-Simplex"
+    ["Brother_MFC-L8690CDW___Farb_Simplex_Hohe_Qualität__langsamer"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-Farb-Simplex"
+    ["Brother_MFC-L8690CDW___Mono_Duplex_Hohe_Qualität__langsamer"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-SW-Duplex"
+    ["Brother_MFC-L8690CDW___Farb_Duplex_Hohe_Qualität__langsamer"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-Farb-Duplex"
 )
 
 PPD="/usr/share/ppd/cupsfilters/Generic-PDF_Printer-PDF.ppd"
@@ -47,6 +47,7 @@ for pname in "${!PRINTERS[@]}"; do
     uri="${PRINTERS[$pname]}"
 
     if ! lpstat -v 2>/dev/null | grep -q "^device for $pname:"; then
+        echo "Running: lpadmin -p \"$pname\" -E -v \"$uri\" -P \"$PPD\""
         lpadmin -p "$pname" -E -v "$uri" -P "$PPD"
     else
         # ensure URI matches (update if changed)
