@@ -33,8 +33,6 @@
   notify: reload_daemons
 
 - name: Ensure configuration directory exists
-  become: true
-  become_method: su
   ansible.builtin.file:
     path: /etc/open-friendly-net-detection-client
     state: directory
@@ -43,8 +41,6 @@
     mode: '0755'
 
 - name: Deploy configuration file
-  become: true
-  become_method: su
   ansible.builtin.template:
     src: config.yaml.j2
     dest: /etc/open-friendly-net-detection-client/config.yaml
