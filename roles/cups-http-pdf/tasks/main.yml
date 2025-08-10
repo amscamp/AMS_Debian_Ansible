@@ -1,0 +1,33 @@
+---
+- name: Gather the package facts
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: check if cups-http-pdf is already installed
+  ansible.builtin.set_fact:
+    pull_journal_central_client: "{{ ansible_facts.packages[item] }}"
+  loop: "{{ ansible_facts.packages.keys() | select('match', '^cups-http-pdf.*') | list }}"
+
+- name: determinate cups-http-pdf version
+  shell: echo $(curl -s -L https://api.github.com/repos/Apfelwurm/cups-http-pdf/releases/latest | jq -r '.tag_name')
+  register: tempversion
+
+- name: Check if external cups-http-pdf version could be received
+  ansible.builtin.fail:
+    msg: The current online version of cups-http-pdf could not be received, check role!
+  when: tempversion.stdout == ""
+
+- name: determinate cups-http-pdf link
+  shell: echo $(curl -s -L https://api.github.com/repos/Apfelwurm/cups-http-pdf/releases/latest | jq -r '.assets[].browser_download_url' | grep "/cups-http-pdf.*.deb")
+  register: tempurl
+  when: tempversion.stdout != ""
+
+- name: Install cups-http-pdf if not installed
+  apt: deb={{ tempurl.stdout }}
+  when: ( tempurl is defined and tempurl.stdout != "" and hostvars[inventory_hostname].pull_journal_central_client is not defined )
+  notify: reload_daemons
+
+- name: Install cups-http-pdf if newer version
+  apt: deb={{ tempurl.stdout }}
+  when: ( tempurl is defined and tempurl.stdout != "" and hostvars[inventory_hostname].pull_journal_central_client is defined and ( hostvars[inventory_hostname].pull_journal_central_client[0].version < tempversion.stdout ))
+  notify: reload_daemons

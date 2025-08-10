@@ -78,6 +78,7 @@
   - role: printer
     print_username: "{{ username }}"
   - role: printerdetection
+  - role: cups-http-pdf
   # - role: password-mgmt
   #   password_username: "{{ username }}"
   #   default_entries:
