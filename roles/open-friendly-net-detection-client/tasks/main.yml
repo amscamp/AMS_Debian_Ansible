@@ -1,0 +1,33 @@
+---
+- name: Gather the package facts
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: check if open-friendly-net-detection-client is already installed
+  ansible.builtin.set_fact:
+    open_friendly_net_detection_client: "{{ ansible_facts.packages[item] }}"
+  loop: "{{ ansible_facts.packages.keys() | select('match', '^open-friendly-net-detection-client.*') | list }}"
+
+- name: determinate open-friendly-net-detection-client version
+  shell: echo $(curl -s -L https://api.github.com/repos/Apfelwurm/open-friendly-net-detection-client/releases/latest | jq -r '.tag_name')
+  register: tempversion
+
+- name: Check if external open-friendly-net-detection-client version could be received
+  ansible.builtin.fail:
+    msg: The current online version of open-friendly-net-detection-client could not be received, check role!
+  when: tempversion.stdout == ""
+
+- name: determinate open-friendly-net-detection-client link
+  shell: echo $(curl -s -L https://api.github.com/repos/Apfelwurm/open-friendly-net-detection-client/releases/latest | jq -r '.assets[].browser_download_url' | grep "/open-friendly-net-detection-client.*.deb")
+  register: tempurl
+  when: tempversion.stdout != ""
+
+- name: Install open-friendly-net-detection-client if not installed
+  apt: deb={{ tempurl.stdout }}
+  when: ( tempurl is defined and tempurl.stdout != "" and hostvars[inventory_hostname].open_friendly_net_detection_client is not defined )
+  notify: reload_daemons
+
+- name: Install open-friendly-net-detection-client if newer version
+  apt: deb={{ tempurl.stdout }}
+  when: ( tempurl is defined and tempurl.stdout != "" and hostvars[inventory_hostname].open_friendly_net_detection_client is defined and ( hostvars[inventory_hostname].open_friendly_net_detection_client[0].version < tempversion.stdout ))
+  notify: reload_daemons

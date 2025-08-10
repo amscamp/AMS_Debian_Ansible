@@ -5,7 +5,7 @@
 
 - name: check if cups-http-pdf is already installed
   ansible.builtin.set_fact:
-    pull_journal_central_client: "{{ ansible_facts.packages[item] }}"
+    cups_http_pdf: "{{ ansible_facts.packages[item] }}"
   loop: "{{ ansible_facts.packages.keys() | select('match', '^cups-http-pdf.*') | list }}"
 
 - name: determinate cups-http-pdf version
@@ -24,10 +24,10 @@
 
 - name: Install cups-http-pdf if not installed
   apt: deb={{ tempurl.stdout }}
-  when: ( tempurl is defined and tempurl.stdout != "" and hostvars[inventory_hostname].pull_journal_central_client is not defined )
+  when: ( tempurl is defined and tempurl.stdout != "" and hostvars[inventory_hostname].cups_http_pdf is not defined )
   notify: reload_daemons
 
 - name: Install cups-http-pdf if newer version
   apt: deb={{ tempurl.stdout }}
-  when: ( tempurl is defined and tempurl.stdout != "" and hostvars[inventory_hostname].pull_journal_central_client is defined and ( hostvars[inventory_hostname].pull_journal_central_client[0].version < tempversion.stdout ))
+  when: ( tempurl is defined and tempurl.stdout != "" and hostvars[inventory_hostname].cups_http_pdf is defined and ( hostvars[inventory_hostname].cups_http_pdf[0].version < tempversion.stdout ))
   notify: reload_daemons
