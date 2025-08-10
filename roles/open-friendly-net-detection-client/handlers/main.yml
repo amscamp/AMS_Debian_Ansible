@@ -1,0 +1,10 @@
+---
+- name: reload_daemons
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: restart_open_friendly_net_detection_client
+  ansible.builtin.systemd:
+    name: open-friendly-net-detection-client
+    state: restarted
+    enabled: yes

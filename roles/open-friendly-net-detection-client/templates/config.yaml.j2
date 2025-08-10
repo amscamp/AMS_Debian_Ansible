@@ -1,0 +1,14 @@
+poll_interval_seconds: {{ open_friendly_net_detection_client_config.poll_interval_seconds }}
+react_to_netlink: {{ open_friendly_net_detection_client_config.react_to_netlink | lower }}
+handshake_timeout_seconds: {{ open_friendly_net_detection_client_config.handshake_timeout_seconds }}
+custom_dhcp_option: {{ open_friendly_net_detection_client_config.custom_dhcp_option }}
+log_level: "{{ open_friendly_net_detection_client_config.log_level }}"
+networks:
+{% for network_name, network_config in open_friendly_net_detection_client_config.networks.items() %}
+  {{ network_name }}:
+    pubkey: "{{ network_config.pubkey }}"
+    fallback_servers:
+{% for server in network_config.fallback_servers %}
+      - "{{ server }}"
+{% endfor %}
+{% endfor %}

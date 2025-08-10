@@ -31,3 +31,20 @@
   apt: deb={{ tempurl.stdout }}
   when: ( tempurl is defined and tempurl.stdout != "" and hostvars[inventory_hostname].open_friendly_net_detection_client is defined and ( hostvars[inventory_hostname].open_friendly_net_detection_client[0].version < tempversion.stdout ))
   notify: reload_daemons
+
+- name: Ensure configuration directory exists
+  ansible.builtin.file:
+    path: /etc/open-friendly-net-detection-client
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Deploy configuration file
+  ansible.builtin.template:
+    src: config.yaml.j2
+    dest: /etc/open-friendly-net-detection-client/config.yaml
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart_open_friendly_net_detection_client

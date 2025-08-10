@@ -1,0 +1,14 @@
+---
+# Default configuration for open-friendly-net-detection-client
+
+open_friendly_net_detection_client_config:
+  poll_interval_seconds: 900
+  react_to_netlink: true
+  handshake_timeout_seconds: 10
+  custom_dhcp_option: 224
+  log_level: "debug"
+  networks:
+    ams:
+      pubkey: "GSL9MFOhSa5nNhbpqDSJRX2Hr8+B0CYfCulwoZxG6WU="
+      fallback_servers:
+        - "172.16.0.20"
