@@ -1,17 +1,11 @@
 #!/bin/bash
 
-# Ensure cups-browsed state matches network
-NETID_FILE=/run/fnd/network_id
-NETID="unknown"
-if [[ -f "$NETID_FILE" ]]; then
-  NETID=$(<"$NETID_FILE")
-fi
-
-if [[ "$NETID" == "ams" ]]; then
+# Ensure cups-browsed state matches network (use same logic as below)
+if [[ -f /run/fnd/network_id ]] && [[ $(</run/fnd/network_id) == "ams" ]]; then
   echo "AMS network detected: stopping and disabling cups-browsed"
   systemctl is-active --quiet cups-browsed && systemctl stop cups-browsed || true
   systemctl is-enabled cups-browsed &>/dev/null && systemctl disable cups-browsed || true
-else
+elif [[ -f /run/fnd/network_id ]] && [[ $(</run/fnd/network_id) != "ams" ]]; then
   echo "Non-AMS network detected: enabling and starting cups-browsed"
   systemctl enable cups-browsed || true
   systemctl start cups-browsed || true
