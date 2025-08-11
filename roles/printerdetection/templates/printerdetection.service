@@ -6,5 +6,8 @@ After=network-online.target
 ConditionPathExists=!/ansible_distro/printerdetection/disabled
  
 [Service]
-ExecStart=/bin/sh -c '/ansible_distro/printerdetection/scripts/printerdetection.sh'
+Type=oneshot
+ExecStart=/ansible_distro/printerdetection/scripts/printerdetection.sh
+StandardOutput=journal
+StandardError=journal
 TimeoutStopSec=600
