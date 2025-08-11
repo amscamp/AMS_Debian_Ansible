@@ -3,6 +3,23 @@
 PORT=9100
 socketArray=()
 
+
+
+# add AMS printserver printers (hardcoded list)
+declare -A AMSAMSPRINTERS=(
+    
+["Brother_MFC-L8690CDW___Mono_Simplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-GDI-SW-Simplex"
+    ["Brother_MFC-L8690CDW___Farb_Simplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-GDI-Farb-Simplex"
+    ["Brother_MFC-L8690CDW___Mono_Duplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-GDI-SW-Duplex"
+    ["Brother_MFC-L8690CDW___Farb_Duplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-GDI-Farb-Duplex"
+    ["Brother_MFC-L8690CDW___Mono_Simplex_Hohe_Qualität__langsamer"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-SW-Simplex"
+    ["Brother_MFC-L8690CDW___Farb_Simplex_Hohe_Qualität__langsamer"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-Farb-Simplex"
+    ["Brother_MFC-L8690CDW___Mono_Duplex_Hohe_Qualität__langsamer"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-SW-Duplex"
+    ["Brother_MFC-L8690CDW___Farb_Duplex_Hohe_Qualität__langsamer"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-Farb-Duplex"
+)
+
+AMSAMSPRINTERSPPD="/usr/share/ppd/cupsfilters/Generic-PDF_Printer-PDF.ppd"
+
 #get all available socket printers
 for entry in $(lpinfo -v | cut -c 1-); do
     if [[ $entry =~ ^socket://[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
@@ -29,37 +46,38 @@ do
    fi
 done
 
-# add AMS printserver printers (hardcoded list)
-declare -A PRINTERS=(
-    ["Brother_MFC-L8690CDW___Mono_Simplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-GDI-SW-Simplex"
-    ["Brother_MFC-L8690CDW___Farb_Simplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-GDI-Farb-Simplex"
-    ["Brother_MFC-L8690CDW___Mono_Duplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-GDI-SW-Duplex"
-    ["Brother_MFC-L8690CDW___Farb_Duplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-GDI-Farb-Duplex"
-    ["Brother_MFC-L8690CDW___Mono_Simplex_Hohe_Qualität__langsamer"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-SW-Simplex"
-    ["Brother_MFC-L8690CDW___Farb_Simplex_Hohe_Qualität__langsamer"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-Farb-Simplex"
-    ["Brother_MFC-L8690CDW___Mono_Duplex_Hohe_Qualität__langsamer"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-SW-Duplex"
-    ["Brother_MFC-L8690CDW___Farb_Duplex_Hohe_Qualität__langsamer"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-Farb-Duplex"
-)
+# add AMS printserver printers if network_id is set to "ams"
+if [[ -f /run/fnd/network_id ]] && [[ $(</run/fnd/network_id) == "ams" ]]; then
+    for pname in "${!AMSPRINTERS[@]}"; do
+        uri="${AMSPRINTERS[$pname]}"
 
-PPD="/usr/share/ppd/cupsfilters/Generic-PDF_Printer-PDF.ppd"
-
-for pname in "${!PRINTERS[@]}"; do
-    uri="${PRINTERS[$pname]}"
-
-    if ! lpstat -v 2>/dev/null | grep -q "^device for $pname:"; then
-        echo "Running: lpadmin -p \"$pname\" -E -v \"$uri\" -P \"$PPD\""
-        lpadmin -p "$pname" -E -v "$uri" -P "$PPD"
-    else
-        # ensure URI matches (update if changed)
-        current_uri=$(lpstat -v 2>/dev/null | awk -v p="$pname" '$3==p":" {print $NF}')
-        if [[ "$current_uri" != "$uri" ]]; then
-            lpadmin -p "$pname" -v "$uri"
+        if ! lpstat -v 2>/dev/null | grep -Fq "device for $pname:"; then
+            echo "Running: lpadmin -p \"$pname\" -E -v \"$uri\" -P \"$AMSAMSPRINTERSPPD\""
+            lpadmin -p "$pname" -E -v "$uri" -P "$AMSAMSPRINTERSPPD"
+        else
+            # ensure URI matches (update if changed)
+            current_uri=$(lpstat -v -- "$pname" 2>/dev/null | sed -n 's/^device for .*: //p')
+            if [[ "$current_uri" != "$uri" ]]; then
+                lpadmin -p "$pname" -v "$uri"
+            fi
         fi
-    fi
-done
+    done
+fi
 
 
 #handle cleanup
+
+# remove ams printserver printers if network_id is not set to "ams"
+if [[ -f /run/fnd/network_id ]] && [[ $(</run/fnd/network_id) == "unknown" ]]; then
+    for pname in "${!AMSPRINTERS[@]}"; do
+        if lpstat -v 2>/dev/null | grep -Fq "device for $pname:"; then
+            echo "Removing printer: $pname"
+            lpadmin -x "$pname"
+        fi
+    done
+fi
+
+
 cat /ansible_distro/printerdetection/status | while read line 
 do
     printername=$(echo "$line" | cut -d ":" -f 1)
