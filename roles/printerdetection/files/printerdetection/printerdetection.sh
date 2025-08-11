@@ -7,7 +7,7 @@ socketArray=()
 
 
 # add AMS printserver printers (hardcoded list)
-declare -A AMSAMSPRINTERS=(
+declare -A AMSPRINTERS=(
     
 ["Brother_MFC-L8690CDW___Mono_Simplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-GDI-SW-Simplex"
     ["Brother_MFC-L8690CDW___Farb_Simplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-GDI-Farb-Simplex"
