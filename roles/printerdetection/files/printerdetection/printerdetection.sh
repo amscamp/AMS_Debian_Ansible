@@ -21,6 +21,20 @@ declare -A AMSPRINTERS=(
 
 AMSAMSPRINTERSPPD="/usr/share/ppd/cupsfilters/Generic-PDF_Printer-PDF.ppd"
 
+# Helper: check if a printer queue exists via lpstat -v -- <name>
+printer_exists() {
+    local name="$1"
+    local out
+    out=$(lpstat -v -- "$name" 2>/dev/null | head -n1)
+    [[ -n "$out" ]]
+}
+
+# Helper: get device URI for a queue name (locale-agnostic)
+get_printer_uri() {
+    local name="$1"
+    lpstat -v -- "$name" 2>/dev/null | head -n1 | sed 's/^[^:]*: \(.*\)$/\1/'
+}
+
 #get all available socket printers
 for entry in $(lpinfo -v | cut -c 1-); do
     if [[ $entry =~ ^socket://[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
@@ -53,16 +67,16 @@ if [[ -f /run/fnd/network_id ]] && [[ $(</run/fnd/network_id) == "ams" ]]; then
     for pname in "${!AMSPRINTERS[@]}"; do
         uri="${AMSPRINTERS[$pname]}"
         echo "Processing printer: $pname with URI: $uri"
-        if ! lpstat -v -- "$pname" >/dev/null 2>&1; then
+        if ! printer_exists "$pname"; then
             echo "Running: lpadmin -p \"$pname\" -E -v \"$uri\" -P \"$AMSAMSPRINTERSPPD\""
             lpadmin -p "$pname" -E -v "$uri" -P "$AMSAMSPRINTERSPPD"
         else
             # ensure URI matches (update if changed)
             echo "Checking URI for printer: $pname"
-            current_uri=$(lpstat -v -- "$pname" 2>/dev/null | awk -F': ' 'NR==1{print $2}')
+            current_uri=$(get_printer_uri "$pname" || true)
             echo "Current URI: $current_uri"
             echo "Expected URI: $uri"
-            if [[ "$current_uri" != "$uri" ]]; then
+            if [[ -n "$current_uri" && "$current_uri" != "$uri" ]]; then
                 echo "Updating URI for printer: $pname"
                 lpadmin -p "$pname" -v "$uri"
             fi
@@ -77,7 +91,7 @@ fi
 if [[ -f /run/fnd/network_id ]] && [[ $(</run/fnd/network_id) == "unknown" ]]; then
     echo "Removing AMS printserver printers..."
     for pname in "${!AMSPRINTERS[@]}"; do
-        if lpstat -v -- "$pname" >/dev/null 2>&1; then
+        if printer_exists "$pname"; then
             echo "Removing printer: $pname"
             lpadmin -x "$pname"
         fi
