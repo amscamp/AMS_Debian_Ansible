@@ -34,13 +34,13 @@ AMSPRINTERSPPD="/usr/share/ppd/cupsfilters/Generic-PDF_Printer-PDF.ppd"
 
 # Helper: check if a printer queue exists via lpstat -p (reliable exit code)
 printer_exists() {
-    lpstat -p -- "$1" >/dev/null 2>&1
+    lpstat -p "$1" >/dev/null 2>&1
 }
 
 # Helper: get device URI for a queue name (locale-agnostic)
 get_printer_uri() {
     local name="$1"
-    lpstat -v -- "$name" 2>/dev/null | head -n1 | sed 's/^[^:]*: \(.*\)$/\1/'
+    lpstat -v "$name" 2>/dev/null | head -n1 | sed 's/^[^:]*: \(.*\)$/\1/'
 }
 
 # handle normal printers if network_id is not set to "ams"
