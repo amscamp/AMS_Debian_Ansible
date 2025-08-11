@@ -1,6 +1,7 @@
 #!/bin/bash
 
 echo "hallo"
+cat /run/fnd/network_id
 PORT=9100
 socketArray=()
 
