@@ -72,9 +72,33 @@
 
 - import_tasks: uld.yml
 
+- name: Determine network id file presence
+  ansible.builtin.stat:
+    path: /run/fnd/network_id
+  register: fnd_netid_stat
+
+- name: Read network id from file
+  ansible.builtin.slurp:
+    path: /run/fnd/network_id
+  when: fnd_netid_stat.stat.exists
+  register: fnd_netid_slurp
+
+- name: Set network id fact
+  ansible.builtin.set_fact:
+    fnd_network_id: "{{ (fnd_netid_slurp.content | b64decode | trim) if fnd_netid_stat.stat.exists else 'unknown' }}"
+
+
+- name: Ensure CreateIPPPrinterQueues is set to All
+  ansible.builtin.replace:
+    path: /etc/cups/cups-browsed.conf
+    regexp: '^\s*#*\s*(CreateIPPPrinterQueues All.*)'
+    replace: '\1'
+  when: fnd_network_id == 'ams'
+
 - name: Ensure CreateIPPPrinterQueues is set to All
   ansible.builtin.replace:
     path: /etc/cups/cups-browsed.conf
     regexp: '^\s*#*\s*(CreateIPPPrinterQueues All.*)'
     replace: '\1'
   notify: 'restart cups-browsed'
+  when: fnd_network_id != 'ams'

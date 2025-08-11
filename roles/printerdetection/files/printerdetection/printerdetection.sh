@@ -1,5 +1,22 @@
 #!/bin/bash
 
+# Ensure cups-browsed state matches network
+NETID_FILE=/run/fnd/network_id
+NETID="unknown"
+if [[ -f "$NETID_FILE" ]]; then
+  NETID=$(<"$NETID_FILE")
+fi
+
+if [[ "$NETID" == "ams" ]]; then
+  echo "AMS network detected: stopping and disabling cups-browsed"
+  systemctl is-active --quiet cups-browsed && systemctl stop cups-browsed || true
+  systemctl is-enabled cups-browsed &>/dev/null && systemctl disable cups-browsed || true
+else
+  echo "Non-AMS network detected: enabling and starting cups-browsed"
+  systemctl enable cups-browsed || true
+  systemctl start cups-browsed || true
+fi
+
 echo "hallo"
 PORT=9100
 socketArray=()
