@@ -1,5 +1,6 @@
 #!/bin/bash
 
+echo "hallo"
 PORT=9100
 socketArray=()
 
