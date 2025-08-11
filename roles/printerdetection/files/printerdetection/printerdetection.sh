@@ -19,7 +19,7 @@ declare -A AMSPRINTERS=(
     ["Brother_MFC-L8690CDW___Farb_Duplex_Hohe_Qualität__langsamer"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-Farb-Duplex"
 )
 
-AMSAMSPRINTERSPPD="/usr/share/ppd/cupsfilters/Generic-PDF_Printer-PDF.ppd"
+AMSPRINTERSPPD="/usr/share/ppd/cupsfilters/Generic-PDF_Printer-PDF.ppd"
 
 # Helper: check if a printer queue exists via lpstat -v -- <name>
 printer_exists() {
@@ -35,31 +35,38 @@ get_printer_uri() {
     lpstat -v -- "$name" 2>/dev/null | head -n1 | sed 's/^[^:]*: \(.*\)$/\1/'
 }
 
-#get all available socket printers
-for entry in $(lpinfo -v | cut -c 1-); do
-    if [[ $entry =~ ^socket://[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-    socketArray+=("$entry")
+# handle normal printers if network_id is not set to "ams"
+if [[ -f /run/fnd/network_id ]] && [[ $(</run/fnd/network_id) != "ams" ]]; then
+    echo "Network ID is not set to 'ams', handling normal printers..."
+    
+    #get all available socket printers
+    for entry in $(lpinfo -v | cut -c 1-); do
+        if [[ $entry =~ ^socket://[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+        socketArray+=("$entry")
+        fi
+    done
+
+    #sort and unique output
+    socketArray=( `for i in ${socketArray[@]}; do echo $i; done | sort -u` )
+
+    #handle printers
+    for i in "${socketArray[@]}"
+    do 
+    printerip=$(echo $i | sed 's|socket://||g')
+    printername=$(nmap -sV --script /ansible_distro/printerdetection/scripts/getprintername.nse -p 9100 $printerip | grep _getprintername | sed 's/|_getprintername: //g')
+    availableprinters=$(lpstat -v | grep $printerip | wc -l)
+    if [[ $printername == "FS-1128MFP" && $availableprinters -eq 0 ]]; then
+            echo $printerip
+
+            lpadmin -p "FS1128MFP" -E -v $i -i /usr/share/ppd/kyocera/Kyocera_FS-1128MFP.ppd
+
+            grep -q "FS1128MFP:$printerip" '/ansible_distro/printerdetection/status' || echo  "FS1128MFP:$printerip" >> /ansible_distro/printerdetection/status
+
     fi
-done
+    done
 
-#sort and unique output
-socketArray=( `for i in ${socketArray[@]}; do echo $i; done | sort -u` )
-
-#handle printers
-for i in "${socketArray[@]}"
-do 
-   printerip=$(echo $i | sed 's|socket://||g')
-   printername=$(nmap -sV --script /ansible_distro/printerdetection/scripts/getprintername.nse -p 9100 $printerip | grep _getprintername | sed 's/|_getprintername: //g')
-   availableprinters=$(lpstat -v | grep $printerip | wc -l)
-   if [[ $printername == "FS-1128MFP" && $availableprinters -eq 0 ]]; then
-        echo $printerip
-
-        lpadmin -p "FS1128MFP" -E -v $i -i /usr/share/ppd/kyocera/Kyocera_FS-1128MFP.ppd
-
-        grep -q "FS1128MFP:$printerip" '/ansible_distro/printerdetection/status' || echo  "FS1128MFP:$printerip" >> /ansible_distro/printerdetection/status
-
-   fi
-done
+    echo "Normal printers handled."
+fi
 
 # add AMS printserver printers if network_id is set to "ams"
 if [[ -f /run/fnd/network_id ]] && [[ $(</run/fnd/network_id) == "ams" ]]; then
@@ -68,8 +75,8 @@ if [[ -f /run/fnd/network_id ]] && [[ $(</run/fnd/network_id) == "ams" ]]; then
         uri="${AMSPRINTERS[$pname]}"
         echo "Processing printer: $pname with URI: $uri"
         if ! printer_exists "$pname"; then
-            echo "Running: lpadmin -p \"$pname\" -E -v \"$uri\" -P \"$AMSAMSPRINTERSPPD\""
-            lpadmin -p "$pname" -E -v "$uri" -P "$AMSAMSPRINTERSPPD"
+            echo "Running: lpadmin -p \"$pname\" -E -v \"$uri\" -P \"$AMSPRINTERSPPD\""
+            lpadmin -p "$pname" -E -v "$uri" -P "$AMSPRINTERSPPD"
         else
             # ensure URI matches (update if changed)
             echo "Checking URI for printer: $pname"
@@ -88,7 +95,7 @@ fi
 #handle cleanup
 
 # remove ams printserver printers if network_id is not set to "ams"
-if [[ -f /run/fnd/network_id ]] && [[ $(</run/fnd/network_id) == "unknown" ]]; then
+if [[ -f /run/fnd/network_id ]] && [[ $(</run/fnd/network_id) != "ams" ]]; then
     echo "Removing AMS printserver printers..."
     for pname in "${!AMSPRINTERS[@]}"; do
         if printer_exists "$pname"; then
