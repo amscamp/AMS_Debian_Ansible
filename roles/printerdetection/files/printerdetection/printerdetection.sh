@@ -1,7 +1,6 @@
 #!/bin/bash
 
 echo "hallo"
-cat /run/fnd/network_id
 PORT=9100
 socketArray=()
 
@@ -50,16 +49,22 @@ done
 
 # add AMS printserver printers if network_id is set to "ams"
 if [[ -f /run/fnd/network_id ]] && [[ $(</run/fnd/network_id) == "ams" ]]; then
+    echo "Adding AMS printserver printers..."
     for pname in "${!AMSPRINTERS[@]}"; do
         uri="${AMSPRINTERS[$pname]}"
-
+        echo "Processing printer: $pname with URI: $uri"
         if ! lpstat -v 2>/dev/null | grep -Fq "device for $pname:"; then
             echo "Running: lpadmin -p \"$pname\" -E -v \"$uri\" -P \"$AMSAMSPRINTERSPPD\""
             lpadmin -p "$pname" -E -v "$uri" -P "$AMSAMSPRINTERSPPD"
         else
             # ensure URI matches (update if changed)
+            echo "Checking URI for printer: $pname"
+            echo "Current URI: $(lpstat -v -- "$pname" 2>/dev/null | sed -n 's/^device for .*: //p')"
+            echo "Expected URI: $uri"
+            # get current URI
             current_uri=$(lpstat -v -- "$pname" 2>/dev/null | sed -n 's/^device for .*: //p')
             if [[ "$current_uri" != "$uri" ]]; then
+                echo "Updating URI for printer: $pname"
                 lpadmin -p "$pname" -v "$uri"
             fi
         fi
@@ -71,6 +76,7 @@ fi
 
 # remove ams printserver printers if network_id is not set to "ams"
 if [[ -f /run/fnd/network_id ]] && [[ $(</run/fnd/network_id) == "unknown" ]]; then
+    echo "Removing AMS printserver printers..."
     for pname in "${!AMSPRINTERS[@]}"; do
         if lpstat -v 2>/dev/null | grep -Fq "device for $pname:"; then
             echo "Removing printer: $pname"
