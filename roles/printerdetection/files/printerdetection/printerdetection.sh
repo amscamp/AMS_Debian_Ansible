@@ -32,12 +32,9 @@ declare -A AMSPRINTERS=(
 
 AMSPRINTERSPPD="/usr/share/ppd/cupsfilters/Generic-PDF_Printer-PDF.ppd"
 
-# Helper: check if a printer queue exists via lpstat -v -- <name>
+# Helper: check if a printer queue exists via lpstat -p (reliable exit code)
 printer_exists() {
-    local name="$1"
-    local out
-    out=$(lpstat -v -- "$name" 2>/dev/null | head -n1)
-    [[ -n "$out" ]]
+    lpstat -p -- "$1" >/dev/null 2>&1
 }
 
 # Helper: get device URI for a queue name (locale-agnostic)
