@@ -18,18 +18,36 @@ socketArray=()
 
 
 # add AMS printserver printers (hardcoded list)
-declare -A AMSPRINTERS=(
-    
-["Brother_MFC-L8690CDW___Mono_Simplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-GDI-SW-Simplex"
-    ["Brother_MFC-L8690CDW___Farb_Simplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-GDI-Farb-Simplex"
-    ["Brother_MFC-L8690CDW___Mono_Duplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-GDI-SW-Duplex"
-    ["Brother_MFC-L8690CDW___Farb_Duplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-GDI-Farb-Duplex"
-    ["Brother_MFC-L8690CDW___Mono_Simplex_Hohe_Qualität__langsamer"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-SW-Simplex"
-    ["Brother_MFC-L8690CDW___Farb_Simplex_Hohe_Qualität__langsamer"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-Farb-Simplex"
-    ["Brother_MFC-L8690CDW___Mono_Duplex_Hohe_Qualität__langsamer"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-SW-Duplex"
-    ["Brother_MFC-L8690CDW___Farb_Duplex_Hohe_Qualität__langsamer"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother-MFC-L8690CDW-Farb-Duplex"
-)
 
+declare -A AMSPRINTERS=(
+    ["Brother_MFC-L8690CDW___Mono_Simplex_Hohe_Qualität__langsamer"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-L8690CDW_Mono_Simplex_STD"
+    ["Brother_MFC-L8690CDW___Farb_Simplex_Hohe_Qualität__langsamer"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-L8690CDW_Farb_Simplex_STD"
+    ["Brother_MFC-L8690CDW___Mono_Duplex_Hohe_Qualität__langsamer"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-L8690CDW_Mono_Duplex_STD"
+    ["Brother_MFC-L8690CDW___Farb_Duplex_Hohe_Qualität__langsamer"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-L8690CDW_Farb_Duplex_STD"
+    ["Brother_MFC-L8690CDW___Mono_Simplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-L8690CDW_Mono_Simplex_GDI"
+    ["Brother_MFC-L8690CDW___Farb_Simplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-L8690CDW_Farb_Simplex_GDI"
+    ["Brother_MFC-L8690CDW___Mono_Duplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-L8690CDW_Mono_Duplex_GDI"
+    ["Brother_MFC-L8690CDW___Farb_Duplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-L8690CDW_Farb_Duplex_GDI"
+    ["Brother_MFC-L8690CDW_LOCL___Mono_Simplex_Hohe_Qualität__langsamer"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-L8690CDW_LOCL_Mono_Simplex_STD"
+    ["Brother_MFC-L8690CDW_LOCL___Farb_Simplex_Hohe_Qualität__langsamer"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-L8690CDW_LOCL_Farb_Simplex_STD"
+    ["Brother_MFC-L8690CDW_LOCL___Mono_Duplex_Hohe_Qualität__langsamer"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-L8690CDW_LOCL_Mono_Duplex_STD"
+    ["Brother_MFC-L8690CDW_LOCL___Farb_Duplex_Hohe_Qualität__langsamer"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-L8690CDW_LOCL_Farb_Duplex_STD"
+    ["Brother_MFC-L8690CDW_LOCL___Mono_Simplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-L8690CDW_LOCL_Mono_Simplex_GDI"
+    ["Brother_MFC-L8690CDW_LOCL___Farb_Simplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-L8690CDW_LOCL_Farb_Simplex_GDI"
+    ["Brother_MFC-L8690CDW_LOCL___Mono_Duplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-L8690CDW_LOCL_Mono_Duplex_GDI"
+    ["Brother_MFC-L8690CDW_LOCL___Farb_Duplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-L8690CDW_LOCL_Farb_Duplex_GDI"
+    ["Kyocera_FS-1128MFP___Mono_Simplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Kyocera_FS-1128MFP_Mono_Simplex_STD"
+    ["Kyocera_FS-1128MFP___Mono_Duplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Kyocera_FS-1128MFP_Mono_Duplex_STD"
+    ["Brother_MFC-J5730DW___Mono_Simplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-J5730DW_Mono_Simplex_STD"
+    ["Brother_MFC-J5730DW___Mono_Duplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-J5730DW_Mono_Duplex_STD"
+    ["Brother_MFC-J5730DW___Farb_Simplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-J5730DW_Farb_Simplex_STD"
+    ["Brother_MFC-J5730DW___Farb_Duplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-J5730DW_Farb_Duplex_STD"
+    ["HP_Color-Laserjet-pro-M227dw___Mono_Simplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=HP_Color-Laserjet-pro-M227dw_Mono_Simplex_STD"
+    ["HP_Color-Laserjet-pro-M227dw___Mono_Duplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=HP_Color-Laserjet-pro-M227dw_Mono_Duplex_STD"
+    ["HP_Color-Laserjet-pro-M227dw___Farb_Simplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=HP_Color-Laserjet-pro-M227dw_Farb_Simplex_STD"
+    ["HP_Color-Laserjet-pro-M227dw___Farb_Duplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=HP_Color-Laserjet-pro-M227dw_Farb_Duplex_STD"
+
+)
 AMSPRINTERSPPD="/usr/share/ppd/cupsfilters/Generic-PDF_Printer-PDF.ppd"
 
 # Helper: check if a printer queue exists via lpstat -p (reliable exit code)
