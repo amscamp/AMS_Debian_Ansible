@@ -1,0 +1,53 @@
+---
+- name: Gather the package facts
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: check if veracrypt is already installed
+  ansible.builtin.set_fact:
+    veracrypt: "{{ ansible_facts.packages[item] }}"
+  loop: "{{ ansible_facts.packages.keys() | select('match', '^veracrypt.*') | list }}"
+
+- name: Get Debian version
+  ansible.builtin.shell: |
+    if [ -f /etc/debian_version ]; then
+      grep -o '^[0-9]*' /etc/debian_version
+    else
+      echo "12"  # fallback to Debian 12
+    fi
+  register: debian_version
+  changed_when: false
+
+- name: Get system architecture
+  ansible.builtin.shell: dpkg --print-architecture
+  register: system_arch
+  changed_when: false
+
+- name: Determine VeraCrypt version from website
+  ansible.builtin.shell: |
+    curl -s https://veracrypt.io/en/Downloads.html | grep -o 'Latest Stable Release - [0-9]*\.[0-9]*\.[0-9]*' | head -1 | grep -o '[0-9]*\.[0-9]*\.[0-9]*'
+  register: tempversion
+  changed_when: false
+
+- name: Check if external VeraCrypt version could be received
+  ansible.builtin.fail:
+    msg: The current online version of VeraCrypt could not be received, check role!
+  when: tempversion.stdout == ""
+
+- name: Determine VeraCrypt download URL
+  ansible.builtin.set_fact:
+    veracrypt_url: "https://launchpad.net/veracrypt/trunk/{{ tempversion.stdout }}/+download/veracrypt-{{ tempversion.stdout }}-Debian-{{ debian_version.stdout }}-{{ system_arch.stdout }}.deb"
+
+- name: Install VeraCrypt if not installed
+  ansible.builtin.apt:
+    deb: "{{ veracrypt_url }}"
+    state: present
+  when: hostvars[inventory_hostname].veracrypt is not defined
+
+- name: Install VeraCrypt if newer version
+  ansible.builtin.apt:
+    deb: "{{ veracrypt_url }}"
+    state: present
+  when: 
+    - hostvars[inventory_hostname].veracrypt is defined
+    - hostvars[inventory_hostname].veracrypt[0].version is version(tempversion.stdout, '<')

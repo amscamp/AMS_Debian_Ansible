@@ -80,6 +80,7 @@
   - role: printerdetection
   - role: cups-http-pdf
   - role: open-friendly-net-detection-client
+  - role: veracrypt
   # - role: password-mgmt
   #   password_username: "{{ username }}"
   #   default_entries:
