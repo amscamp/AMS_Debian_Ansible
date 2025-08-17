@@ -166,10 +166,25 @@ fi
 # remove ams printserver printers if network_id is not set to "ams"
 if [[ -f /run/fnd/network_id ]] && [[ $(</run/fnd/network_id) != "ams" ]]; then
     echo "Removing AMS printserver printers..."
+    
+    # Remove printers from AMSPRINTERS array
     for pname in "${!AMSPRINTERS[@]}"; do
         if printer_exists "$pname"; then
             echo "Removing printer: $pname"
             lpadmin -x "$pname"
+        fi
+    done
+    
+    # Remove any printer with AMS print server URI
+    echo "Removing any remaining AMS print server printers..."
+    lpstat -v 2>/dev/null | while read line; do
+        if [[ "$line" =~ http-pdf://ams-print01\.ams\.local:8888 ]]; then
+            # Extract printer name from the line
+            printer_name=$(echo "$line" | sed 's/^[^[:space:]]*[[:space:]]\+\([^:]*\):.*$/\1/')
+            if [[ -n "$printer_name" ]]; then
+                echo "Removing AMS printer by URI: $printer_name"
+                lpadmin -x "$printer_name" || true
+            fi
         fi
     done
 fi
