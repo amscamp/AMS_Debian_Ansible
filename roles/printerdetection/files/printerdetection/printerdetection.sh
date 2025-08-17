@@ -63,6 +63,43 @@ get_printer_uri() {
     lpstat -v "$name" 2>/dev/null | head -n1 | sed 's/^[^:]*: \(.*\)$/\1/'
 }
 
+# Helper: set paper size based on printer name suffix
+set_paper_size() {
+    local pname="$1"
+    local paper_size="A4"  # default
+    
+    if [[ "$pname" == *"_A4BL" ]] || [[ "$pname" == *"_Randlos" ]]; then
+        paper_size="A4.Borderless"
+        echo "Setting paper size to A4 Borderless for printer: $pname"
+    elif [[ "$pname" == *"_A3" ]]; then
+        paper_size="A3"
+        echo "Setting paper size to A3 for printer: $pname"
+    else
+        paper_size="A4"
+        echo "Setting paper size to A4 for printer: $pname"
+    fi
+    
+    # Set the paper size using lpadmin
+    lpadmin -p "$pname" -o media="$paper_size" || true
+    
+    # Also try alternative paper size options if the first fails
+    case "$paper_size" in
+        "A4.Borderless")
+            lpadmin -p "$pname" -o PageSize=A4.Borderless || \
+            lpadmin -p "$pname" -o media=iso_a4_210x297mm.borderless || \
+            lpadmin -p "$pname" -o PageSize=A4Borderless || true
+            ;;
+        "A3")
+            lpadmin -p "$pname" -o PageSize=A3 || \
+            lpadmin -p "$pname" -o media=iso_a3_297x420mm || true
+            ;;
+        "A4")
+            lpadmin -p "$pname" -o PageSize=A4 || \
+            lpadmin -p "$pname" -o media=iso_a4_210x297mm || true
+            ;;
+    esac
+}
+
 # handle normal printers if network_id is not set to "ams"
 if [[ -f /run/fnd/network_id ]] && [[ $(</run/fnd/network_id) != "ams" ]]; then
     echo "Network ID is not set to 'ams', handling normal printers..."
@@ -105,6 +142,8 @@ if [[ -f /run/fnd/network_id ]] && [[ $(</run/fnd/network_id) == "ams" ]]; then
         if ! printer_exists "$pname"; then
             echo "Running: lpadmin -p \"$pname\" -E -v \"$uri\" -P \"$AMSPRINTERSPPD\""
             lpadmin -p "$pname" -E -v "$uri" -P "$AMSPRINTERSPPD"
+            # Set appropriate paper size after creating the printer
+            set_paper_size "$pname"
         else
             # ensure URI matches (update if changed)
             echo "Checking URI for printer: $pname"
@@ -115,6 +154,8 @@ if [[ -f /run/fnd/network_id ]] && [[ $(</run/fnd/network_id) == "ams" ]]; then
                 echo "Updating URI for printer: $pname"
                 lpadmin -p "$pname" -v "$uri"
             fi
+            # Always ensure correct paper size is set
+            set_paper_size "$pname"
         fi
     done
 fi
