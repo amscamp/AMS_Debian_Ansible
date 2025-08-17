@@ -69,8 +69,8 @@ set_paper_size() {
     local paper_size="A4"  # default
     
     if [[ "$pname" == *"_A4BL" ]] || [[ "$pname" == *"_Randlos" ]]; then
-        paper_size="A4.Borderless"
-        echo "Setting paper size to A4 Borderless for printer: $pname"
+        paper_size="A4.Fullbleed"
+        echo "Setting paper size to A4 Fullbleed for printer: $pname"
     elif [[ "$pname" == *"_A3" ]]; then
         paper_size="A3"
         echo "Setting paper size to A3 for printer: $pname"
@@ -83,27 +83,32 @@ set_paper_size() {
     echo "Available options for printer $pname:"
     lpoptions -p "$pname" -l 2>/dev/null || echo "Could not get options for $pname"
     
-    # Set the paper size using lpadmin
+    # Prefer PageSize and PageRegion with PPD tokens, then media as fallback
+    lpadmin -p "$pname" -o PageSize="$paper_size" || true
+    lpadmin -p "$pname" -o PageRegion="$paper_size" || true
     lpadmin -p "$pname" -o media="$paper_size" || true
     
     # Also try alternative paper size options if the first fails
     case "$paper_size" in
-        "A4.Borderless")
-            lpadmin -p "$pname" -o PageSize=A4.Borderless || \
-            lpadmin -p "$pname" -o media=iso_a4_210x297mm.borderless || \
-            lpadmin -p "$pname" -o PageSize=A4Borderless || \
-            lpadmin -p "$pname" -o media=A4.Fullbleed || \
-            lpadmin -p "$pname" -o PageSize=A4Fullbleed || true
+        "A4.Fullbleed")
+            # Explicit borderless options per PPD naming
+            lpadmin -p "$pname" -o PageSize=A4.Fullbleed || true
+            lpadmin -p "$pname" -o PageRegion=A4.Fullbleed || true
+            lpadmin -p "$pname" -o media=A4.Fullbleed || true
+            # Common fallback token used by some filter stacks
+            lpadmin -p "$pname" -o media=iso_a4_210x297mm.borderless || true
+            # Ensure borderless feature flag is on when available
+            lpadmin -p "$pname" -o borderless=on || true
             ;;
         "A3")
-            lpadmin -p "$pname" -o PageSize=A3 || \
-            lpadmin -p "$pname" -o media=iso_a3_297x420mm || \
-            lpadmin -p "$pname" -o media=A3 || true
+            lpadmin -p "$pname" -o PageSize=A3 || true
+            lpadmin -p "$pname" -o PageRegion=A3 || true
+            lpadmin -p "$pname" -o media=A3 || lpadmin -p "$pname" -o media=iso_a3_297x420mm || true
             ;;
         "A4")
-            lpadmin -p "$pname" -o PageSize=A4 || \
-            lpadmin -p "$pname" -o media=iso_a4_210x297mm || \
-            lpadmin -p "$pname" -o media=A4 || true
+            lpadmin -p "$pname" -o PageSize=A4 || true
+            lpadmin -p "$pname" -o PageRegion=A4 || true
+            lpadmin -p "$pname" -o media=A4 || lpadmin -p "$pname" -o media=iso_a4_210x297mm || true
             ;;
     esac
     
