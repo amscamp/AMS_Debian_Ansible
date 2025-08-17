@@ -12,6 +12,7 @@
     - libreoffice-calc
     - libreoffice-base
     - mythes-en-us
+    - libreoffice-l10n-de
 
 - name: install additional packages
   apt:
