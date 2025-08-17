@@ -37,17 +37,10 @@ declare -A AMSPRINTERS=(
     ["Brother_MFC-J5730DW___Farb_Duplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-J5730DW_Farb_Duplex_STD_A4"
     ["Brother_MFC-J5730DW___Mono_Simplex_A3"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-J5730DW_Mono_Simplex_STD_A3"
     ["Brother_MFC-J5730DW___Farb_Simplex_A3"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-J5730DW_Farb_Simplex_STD_A3"
-    ["Brother_MFC-J5730DW___Mono_Duplex_A3"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-J5730DW_Mono_Duplex_STD_A3"
-    ["Brother_MFC-J5730DW___Farb_Duplex_A3"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-J5730DW_Farb_Duplex_STD_A3"
     ["HP_Color-Laserjet-pro-M227dw___Mono_Simplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=HP_Color-Laserjet-pro-M227dw_Mono_Simplex_STD_A4"
     ["HP_Color-Laserjet-pro-M227dw___Mono_Duplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=HP_Color-Laserjet-pro-M227dw_Mono_Duplex_STD_A4"
     ["HP_Color-Laserjet-pro-M227dw___Farb_Simplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=HP_Color-Laserjet-pro-M227dw_Farb_Simplex_STD_A4"
     ["HP_Color-Laserjet-pro-M227dw___Farb_Duplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=HP_Color-Laserjet-pro-M227dw_Farb_Duplex_STD_A4"
-    ["HP_Color-Laserjet-pro-M227dw___Mono_Simplex_Randlos"]="http-pdf://ams-print01.ams.local:8888/print?printer=HP_Color-Laserjet-pro-M227dw_Mono_Simplex_STD_A4BL"
-    ["HP_Color-Laserjet-pro-M227dw___Farb_Simplex_Randlos"]="http-pdf://ams-print01.ams.local:8888/print?printer=HP_Color-Laserjet-pro-M227dw_Farb_Simplex_STD_A4BL"
-    ["HP_Color-Laserjet-pro-M227dw___Mono_Duplex_Randlos"]="http-pdf://ams-print01.ams.local:8888/print?printer=HP_Color-Laserjet-pro-M227dw_Mono_Duplex_STD_A4BL"
-    ["HP_Color-Laserjet-pro-M227dw___Farb_Duplex_Randlos"]="http-pdf://ams-print01.ams.local:8888/print?printer=HP_Color-Laserjet-pro-M227dw_Farb_Duplex_STD_A4BL"
-
 )
 
 AMSPRINTERSPPD="/usr/share/ppd/cupsfilters/Generic-AMS-PDF_Printer-PDF.ppd"
