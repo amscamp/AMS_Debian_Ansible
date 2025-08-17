@@ -18,14 +18,14 @@
         groups=lpadmin
         append=yes
 
-# - name: Copy PPDs in the ppd folder
-#   copy:
-#     src: "ppd/"
-#     dest: "/usr/share/ppd/"
-#     owner: root
-#     group: root
-#     mode: 0644
-#   notify: 'restart cups'
+- name: Copy PPD filters in the ppd folder
+  copy:
+    src: "ppd/"
+    dest: "/usr/share/ppd/cupsfilters/"
+    owner: root
+    group: root
+    mode: 0644
+  notify: 'restart cups'
 
 # - name: Copy filter in the filter folder
 #   copy:

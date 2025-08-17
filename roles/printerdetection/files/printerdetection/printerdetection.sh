@@ -50,7 +50,7 @@ declare -A AMSPRINTERS=(
 
 )
 
-AMSPRINTERSPPD="/usr/share/ppd/cupsfilters/Generic-PDF_Printer-PDF.ppd"
+AMSPRINTERSPPD="/usr/share/ppd/cupsfilters/Generic-AMS-PDF_Printer-PDF.ppd"
 
 # Helper: check if a printer queue exists via lpstat -p (reliable exit code)
 printer_exists() {
@@ -79,6 +79,10 @@ set_paper_size() {
         echo "Setting paper size to A4 for printer: $pname"
     fi
     
+    # Debug: Show available options for this printer
+    echo "Available options for printer $pname:"
+    lpoptions -p "$pname" -l 2>/dev/null || echo "Could not get options for $pname"
+    
     # Set the paper size using lpadmin
     lpadmin -p "$pname" -o media="$paper_size" || true
     
@@ -87,17 +91,25 @@ set_paper_size() {
         "A4.Borderless")
             lpadmin -p "$pname" -o PageSize=A4.Borderless || \
             lpadmin -p "$pname" -o media=iso_a4_210x297mm.borderless || \
-            lpadmin -p "$pname" -o PageSize=A4Borderless || true
+            lpadmin -p "$pname" -o PageSize=A4Borderless || \
+            lpadmin -p "$pname" -o media=A4.Fullbleed || \
+            lpadmin -p "$pname" -o PageSize=A4Fullbleed || true
             ;;
         "A3")
             lpadmin -p "$pname" -o PageSize=A3 || \
-            lpadmin -p "$pname" -o media=iso_a3_297x420mm || true
+            lpadmin -p "$pname" -o media=iso_a3_297x420mm || \
+            lpadmin -p "$pname" -o media=A3 || true
             ;;
         "A4")
             lpadmin -p "$pname" -o PageSize=A4 || \
-            lpadmin -p "$pname" -o media=iso_a4_210x297mm || true
+            lpadmin -p "$pname" -o media=iso_a4_210x297mm || \
+            lpadmin -p "$pname" -o media=A4 || true
             ;;
     esac
+    
+    # Debug: Show what was actually set
+    echo "Current settings for printer $pname:"
+    lpoptions -p "$pname" 2>/dev/null || echo "Could not get current settings for $pname"
 }
 
 # handle normal printers if network_id is not set to "ams"
