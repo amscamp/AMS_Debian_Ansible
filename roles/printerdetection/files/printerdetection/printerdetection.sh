@@ -24,6 +24,8 @@ declare -A AMSPRINTERS=(
     ["Brother_MFC-L8690CDW___Mono_Duplex_Hohe_Qualität__langsamer"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-L8690CDW_Mono_Duplex_STD_A4"
     ["Brother_MFC-L8690CDW___Farb_Duplex_Hohe_Qualität__langsamer"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-L8690CDW_Farb_Duplex_STD_A4"
     ["Brother_MFC-L8690CDW___Mono_Simplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-L8690CDW_Mono_Simplex_GDI_A4"
+    ["Brother_MFC-L8690CDW___Mono_Simplex_70P"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-L8690CDW_Mono_Simplex_STD_A4_70P"
+    ["Brother_MFC-L8690CDW___Mono_Simplex_60P"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-L8690CDW_Mono_Simplex_STD_A4_60P"
     ["Brother_MFC-L8690CDW___Farb_Simplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-L8690CDW_Farb_Simplex_GDI_A4"
     ["Brother_MFC-L8690CDW___Mono_Duplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-L8690CDW_Mono_Duplex_GDI_A4"
     ["Brother_MFC-L8690CDW___Farb_Duplex"]="http-pdf://ams-print01.ams.local:8888/print?printer=Brother_MFC-L8690CDW_Farb_Duplex_GDI_A4"
