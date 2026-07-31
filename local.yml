@@ -66,7 +66,6 @@
   - role: media-applications
     when: ansible_was_already_executed
   - role: master-pdf-editor
-  - role: zoom
   - role: chromium
     extensions:
       - "cjpalhdlnbpafiamejdnhcphjbkeiagm" #ublock  
@@ -100,4 +99,4 @@
         initialpass: "password"
         prio: 0
     when: ansible_was_already_executed
-
+  - role: zoom
