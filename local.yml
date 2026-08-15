@@ -30,6 +30,7 @@
   #     msg: The system is not allowed to run this
   #   when: ansible_was_already_executed and hostvars[inventory_hostname].ansible_default_ipv4.macaddress not in macs
 
+
   - name: crearte first run file
     file:
       path: /etc/ansible_was_already_executed

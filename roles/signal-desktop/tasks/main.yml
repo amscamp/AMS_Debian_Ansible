@@ -15,7 +15,7 @@
 - name: Upgrade the OS (apt-get dist-upgrade)
   ansible.builtin.apt:
     upgrade: dist
-    update_cache: yes
+    update_cache: true
   when: signal.changed
 
 - name: install signal
