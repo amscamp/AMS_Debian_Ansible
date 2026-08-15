@@ -20,13 +20,19 @@
     name: "{{ item }}" 
   loop:
     - gimp
-    - nextcloud-desktop
-    - dolphin-nextcloud
     - simple-scan
     - xournal
-    - thunderbird
     - arandr
 
+- name: install login pc packages
+  apt:
+    state: latest
+    name: "{{ item }}" 
+  loop:
+    - nextcloud-desktop
+    - dolphin-nextcloud
+    - thunderbird
+  when: hostvars[inventory_hostname].ansible_default_ipv4.macaddress not in no_logins_macs
 
 
 - name: install packages

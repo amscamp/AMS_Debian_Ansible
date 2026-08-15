@@ -4,3 +4,5 @@ macs:
  - "c8:5b:76:dd:9b:ae"
  - "c8:5b:76:dd:a5:12"
  - "c8:5b:76:0e:b2:40"
+no_logins_macs:
+ - "c8:5b:76:98:60:d4" 
