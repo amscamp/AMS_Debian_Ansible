@@ -1,0 +1,21 @@
+---
+
+- name: Ensure group "killswitchoperators" exists
+  ansible.builtin.group:
+    name: killswitchoperators
+    state: present
+
+- name: Adding user {{ killswitch_username }}
+  user: name={{ killswitch_username }}
+        groups=killswitchoperators
+        append=yes
+
+- name: create sudoers file
+  copy:
+    content: |
+      %killswitchoperators ALL= NOPASSWD: /usr/sbin/shutdown -P now
+    dest: "/etc/sudoers.d/killswitchoperators"
+    owner: root
+    group: root
+    mode: 0644
+    validate: 'visudo -cf %s'
