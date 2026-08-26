@@ -3,3 +3,9 @@
   ansible.builtin.apt:
     upgrade: dist
     update_cache: true
+- name: install pdfsam
+  apt:
+    state: latest
+    name: "{{ item }}" 
+  loop:
+    - pdfsam
